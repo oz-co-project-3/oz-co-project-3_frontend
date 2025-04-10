@@ -1,4 +1,4 @@
-export default function RegisterPage() {
+export default async function RegisterPage() {
   return (
     <div>
       <h1>Register</h1>

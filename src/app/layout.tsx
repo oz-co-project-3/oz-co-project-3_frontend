@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: '시니어 세대 일자리 플랫폼',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
