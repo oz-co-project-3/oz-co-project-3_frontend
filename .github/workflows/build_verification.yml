@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - '**' # 모든 브랜치 포함
-      # - '!develop' # develop 브랜치 제외
+      - '!develop' # develop 브랜치 제외
       - '!main' # main 브랜치도 제외
 
 jobs:
