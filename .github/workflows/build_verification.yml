@@ -1,0 +1,28 @@
+name: Build Verification
+
+on:
+  push:
+    branches:
+      - '**' # 모든 브랜치 포함
+      - '!develop' # develop 브랜치 제외
+      - '!main' # main 브랜치도 제외
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: GitHub Repository 파일 불러오기
+        uses: actions/checkout@v4
+
+      - name: 의존성 설치
+        run: npm install
+
+      - name: 빌드
+        run: npm run build
+
+      - name: 중간 확인
+        run: |
+          ls
+          echo ".next 폴더 내부 파일 목록:"
+          cd .next
+          ls
