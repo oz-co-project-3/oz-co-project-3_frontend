@@ -50,10 +50,10 @@ export default function Header() {
           <Button className='bg-main-dark hover:bg-main-light cursor-pointer text-white'>MY</Button>
         </Link>
         {/* <Button variant='outline' onClick={logOut}>로그아웃</Button> */}
-        <Link href='/login'>
+        <Link href='/user/login'>
           <Button className='bg-main hover:bg-main-light cursor-pointer text-white'>로그인</Button>
         </Link>
-        <Link href='/register'>
+        <Link href='/user/register'>
           <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
             회원가입
           </Button>
