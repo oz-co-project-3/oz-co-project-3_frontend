@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 
-export default function postDetailPage() {
+export default function PostDetailPage() {
   const searchParams = useSearchParams();
   const postId = searchParams.get('postId');
   return (

@@ -11,7 +11,7 @@ export default async function Home() {
       </nav>
       <div className='flex h-full justify-center pt-30'>
         <main className='max-w-[1400px] flex-row text-center'>
-          <h1 className='text-3xl font-bold'>"내일 뭐하지? 시니어내일에서 찾아봐요!"</h1>
+          <h1 className='text-3xl font-bold'>&quot내일 뭐하지? 시니어내일에서 찾아봐요!&quot</h1>
           <p className='mb-10 text-sm text-gray-700'>
             경험과 가치를 이어가는 새로운 일자리 매칭
             <br />
