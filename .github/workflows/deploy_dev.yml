@@ -71,7 +71,7 @@ jobs:
           script: |
             docker system prune -af
             cd app
-            docker compose -f docker-compose-front-dev.yml pull
+            docker-compose -f docker-compose-front-dev.yml pull
 
 #            docker-compose -f docker-compose.dev.yml down
 #            docker-compose -f docker-compose.dev.yml up -d
