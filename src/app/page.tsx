@@ -1,4 +1,4 @@
-import SearchBar from '@/components/common/searchbar/Searchbar';
+import SearchBarSuspense from '@/components/common/searchbar/Searchbar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
@@ -6,7 +6,7 @@ export default async function Home() {
   return (
     <>
       <nav className='bg-white'>
-        <SearchBar />
+        <SearchBarSuspense />
         <br />
         <hr />
       </nav>
@@ -18,7 +18,7 @@ export default async function Home() {
             <br />
             지금 바로 시작하세요!
           </p>
-          <SearchBar />
+          <SearchBarSuspense />
           <nav className='flex flex-row justify-center space-x-4 pt-10'>
             <Link href='/public-jobs'>
               <div className='rounded-md border px-4 py-2 text-center'>공공일자리</div>
