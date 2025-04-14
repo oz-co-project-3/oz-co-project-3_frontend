@@ -8,8 +8,6 @@ export interface LoginRequest {
 export interface LoginResponse {
     acess_token: string;
     refresh_token: string;
-    user_id: number;
-    user_type: UserType;
-    name: string;
+    user: string;
 }
     

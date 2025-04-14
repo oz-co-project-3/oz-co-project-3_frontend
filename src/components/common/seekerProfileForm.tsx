@@ -22,6 +22,9 @@ import {
   SelectContent,
   SelectItem,
 } from '@/components/ui/select';
+import { SeekerFormData } from '@/types/user';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 const schema = z
   .object({
@@ -36,7 +39,7 @@ const schema = z
       ),
     password_check: z.string(),
     phone: z.string().min(9, '전화번호는 - 제외 한 9자 이상 입력해주세요.'),
-    gender: z.string().optional(),
+    gender: z.enum(['male', 'female', 'none']),
     interests: z.array(z.string()).optional(),
     purposes: z.array(z.string()).optional(),
     sources: z.array(z.string()).optional(),
@@ -46,10 +49,20 @@ const schema = z
     path: ['password_check'],
   });
 
-type FormData = z.infer<typeof schema>;
+type LocalSeekerFormData = z.infer<typeof schema>;
 
-export default function SeekerProfileForm() {
-  const form = useForm<FormData>({
+interface SeekerProfileFormProps {
+  type: 'register' | 'edit';
+  defaultValues?: Partial<LocalSeekerFormData>;
+  onSubmit: (data: LocalSeekerFormData) => void;
+} //이 부분 나중에
+
+export default function SeekerProfileForm({
+  type,
+  defaultValues,
+  onSubmit,
+}: SeekerProfileFormProps) {
+  const form = useForm<LocalSeekerFormData>({
     resolver: zodResolver(schema),
     defaultValues: {
       name: '',
@@ -58,15 +71,24 @@ export default function SeekerProfileForm() {
       password: '',
       password_check: '',
       phone: '',
-      gender: '',
+      gender: 'none',
       interests: [],
       purposes: [],
       sources: [],
+      ...defaultValues, // 회원가입 때 전달된 값
     },
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log('회원가입 데이터:', data);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [image, setImage] = useState<string | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setImage(reader.result as string);
+      reader.readAsDataURL(file);
+    }
   };
 
   const interestOptions = [
@@ -95,7 +117,7 @@ export default function SeekerProfileForm() {
     '기타',
   ];
 
-  const renderCheckboxGroup = (name: keyof FormData, options: string[]) => (
+  const renderCheckboxGroup = (name: keyof SeekerFormData, options: string[]) => (
     <div className='grid grid-cols-2 gap-2'>
       {options.map((item) => (
         <Label key={item} className='cursor-pointer'>
@@ -119,10 +141,38 @@ export default function SeekerProfileForm() {
 
   return (
     <div className='mx-auto w-full max-w-xl rounded-xl bg-gray-100 p-8'>
-      <h2 className='mb-6 text-center text-2xl font-bold'>회원가입</h2>
+      <h2 className='mb-6 text-center text-2xl font-bold'>
+        {type === 'register' ? '회원가입' : '회원 정보 수정'}
+      </h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
+          {/* 프로필 이미지  추가*/}
+          {type === 'edit' && (
+            <div className='mb-6 flex justify-center'>
+              <div
+                className='flex h-32 w-32 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-[#2F4858] bg-white'
+                onClick={() => fileInputRef.current?.click()}
+              >
+                {image ? (
+                  <Image src={image} alt='Profile' className='object-cover' fill />
+                ) : (
+                  <span className='text-center text-sm text-[#2F4858]'>
+                    변경하시려면
+                    <br />
+                    클릭하세요
+                  </span>
+                )}
+                <input
+                  type='file'
+                  accept='image/*'
+                  onChange={handleImageChange}
+                  ref={fileInputRef}
+                  className='hidden'
+                />
+              </div>
+            </div>
+          )}
           {/* 이름 */}
           <FormField
             control={form.control}
@@ -131,27 +181,33 @@ export default function SeekerProfileForm() {
               <FormItem>
                 <FormLabel>이름</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} className= 'bg-white' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* 이메일 + 중복확인 */}
+          {/* 이메일 + 중복확인(회원가입일때만 보임)*/}
           <FormField
             control={form.control}
             name='email'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>이메일</FormLabel>
-                <div className='flex gap-2 '>
+                <div className='flex gap-2'>
                   <FormControl>
-                    <Input type='email' {...field} />
+                    <Input type='email' {...field} className= 'bg-white' />
                   </FormControl>
-                  <Button type='button' variant='outline' className='bg-main-light hover:bg-main-dark text-white'>
-                    중복확인
-                  </Button>
+                  {type === 'register' && (
+                    <Button
+                      type='button'
+                      variant='outline'
+                      className='bg-main-light hover:bg-main-dark text-white'
+                    >
+                      중복확인
+                    </Button>
+                  )}
                 </div>
                 <FormMessage />
               </FormItem>
@@ -166,42 +222,46 @@ export default function SeekerProfileForm() {
               <FormItem>
                 <FormLabel>생년월일</FormLabel>
                 <FormControl>
-                  <Input placeholder='예: 1960-01-01' {...field} />
+                  <Input placeholder='예: 1960-01-01' {...field} className= 'bg-white'/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          {/* 비밀번호 */}
-          <FormField
-            control={form.control}
-            name='password'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>비밀번호</FormLabel>
-                <FormControl>
-                  <Input type='password' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {/* 비밀번호 =회원가입일 경우만 보임*/}
+          {type === 'register' && (
+            <>
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input type='password' {...field} className= 'bg-white' />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          {/* 비밀번호 확인 */}
-          <FormField
-            control={form.control}
-            name='password_check'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>비밀번호 확인</FormLabel>
-                <FormControl>
-                  <Input type='password' {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              {/* 비밀번호 확인 */}
+              <FormField
+                control={form.control}
+                name='password_check'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호 확인</FormLabel>
+                    <FormControl>
+                      <Input type='password' {...field} className= 'bg-white' />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
           {/* 전화번호 */}
           <FormField
@@ -211,7 +271,7 @@ export default function SeekerProfileForm() {
               <FormItem>
                 <FormLabel>전화번호</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} className= 'bg-white' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -260,8 +320,8 @@ export default function SeekerProfileForm() {
             {renderCheckboxGroup('sources', sourceOptions)}
           </div>
 
-          <Button type='submit' className='w-full bg-main-light hover:bg-main-dark'>
-            회원가입
+          <Button type='submit' className='bg-main-light hover:bg-main-dark w-full'>
+            {type === 'register' ? '회원가입' : '회원정보 수정'}
           </Button>
         </form>
       </Form>
