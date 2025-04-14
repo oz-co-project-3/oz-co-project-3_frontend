@@ -3,7 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function SearchBar() {
+function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [search, setsearch] = useState('');
@@ -44,7 +44,7 @@ export default function SearchBar() {
   );
 }
 
-export function SearchBarSuspense() {
+export default function SearchBarSuspense() {
   return (
     <Suspense fallback={<div>로딩중...</div>}>
       <SearchBar />
