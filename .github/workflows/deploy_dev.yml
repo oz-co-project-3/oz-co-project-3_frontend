@@ -45,6 +45,7 @@ jobs:
           docker compose build \
             --build-arg BUILDKIT_INLINE_CACHE=1 \
             --build-arg PLATFORM=linux/amd64
+          docker tag next-app-dev oz-co-frontend-dev.kr.ncr.ntruss.com/next-app-dev:latest
           docker compose push
 
       # - name: Set up Docker Buildx
