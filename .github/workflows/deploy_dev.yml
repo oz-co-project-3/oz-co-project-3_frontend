@@ -70,6 +70,7 @@ jobs:
           key: ${{ secrets.NCP_SSH_KEY }}
           script: |
             docker system prune -af
+            docker login ${{ secrets.CONTAINER_REGISTRY_URL}} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
             cd app
             docker-compose -f docker-compose-front-dev.yml pull
 
