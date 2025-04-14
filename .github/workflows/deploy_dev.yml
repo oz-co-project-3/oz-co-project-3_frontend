@@ -47,7 +47,7 @@ jobs:
             --build-arg PLATFORM=linux/amd64
           docker tag next-app-dev ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
           docker image ls
-          docker compose push ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
+          docker push ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
 
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v3
