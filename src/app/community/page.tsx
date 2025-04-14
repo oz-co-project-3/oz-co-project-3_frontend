@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function CommunityPage() {
   return (
@@ -8,7 +9,9 @@ export default async function CommunityPage() {
           <h1 className='absolute left-1/2 flex-grow -translate-x-1/2 transform text-center text-3xl font-bold'>
             정보공유
           </h1>
-          <Button className='ml-auto rounded px-4 py-2 text-white'>글작성</Button>
+          <Link href='community/create-post' className='ml-auto'>
+            <Button className='rounded px-4 py-2 text-white'>글작성</Button>
+          </Link>
         </div>
         <hr />
         <p className='text-center text-sm text-gray-700'>
