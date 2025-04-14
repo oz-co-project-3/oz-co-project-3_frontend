@@ -1,53 +1,42 @@
+import SearchBar from '@/components/common/searchbar/Searchbar';
+import { Button } from '@/components/ui/button';
+
 export default async function Home() {
   return (
-    <div className='grid min-h-screen grid-rows-[20px_1fr_20px] items-center justify-items-center gap-16 p-8 pb-20 font-[family-name:var(--font-geist-sans)] sm:p-20'>
-      <main className='row-start-2 flex flex-col items-center gap-[32px] sm:items-start'>
-        오즈8 합동 프로젝트. 시니어내일
-        <div className='flex flex-col items-center gap-4 sm:flex-row'>
-          <a
-            className='bg-foreground text-background flex h-10 items-center justify-center gap-2 rounded-full border border-solid border-transparent px-4 text-sm font-medium transition-colors hover:bg-[#383838] sm:h-12 sm:w-auto sm:px-5 sm:text-base dark:hover:bg-[#ccc]'
-            href='https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Deploy now
-          </a>
-          <a
-            className='flex h-10 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm font-medium transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:w-auto sm:px-5 sm:text-base md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]'
-            href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className='row-start-3 flex flex-wrap items-center justify-center gap-[24px]'>
-        <a
-          className='flex items-center gap-2 hover:underline hover:underline-offset-4'
-          href='https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Learn
-        </a>
-        <a
-          className='flex items-center gap-2 hover:underline hover:underline-offset-4'
-          href='https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Examples
-        </a>
-        <a
-          className='flex items-center gap-2 hover:underline hover:underline-offset-4'
-          href='https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-          target='_blank'
-          rel='noopener noreferrer'
-        >
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <>
+      <nav className='bg-white'>
+        <SearchBar />
+        <br />
+        <hr />
+      </nav>
+      <div className='flex h-full justify-center pt-30'>
+        <main className='max-w-[1400px] flex-row text-center'>
+          <h1 className='text-3xl font-bold'>&quot내일 뭐하지? 시니어내일에서 찾아봐요!&quot</h1>
+          <p className='mb-10 text-sm text-gray-700'>
+            경험과 가치를 이어가는 새로운 일자리 매칭
+            <br />
+            지금 바로 시작하세요!
+          </p>
+          <SearchBar />
+          <nav className='flex flex-row justify-center space-x-4 pt-10'>
+            <div className='rounded-md border px-4 py-2 text-center'>공공일자리</div>
+            <div className='rounded-md border px-4 py-2 text-center'>일반채용</div>
+            <div className='rounded-md border px-4 py-2 text-center'>이력서</div>
+            <div className='rounded-md border px-4 py-2 text-center'>커뮤니티</div>
+          </nav>
+          <p>검색 키워드 추천</p>
+          <div className='mb-20 flex justify-center space-x-2'>
+            <Button>경비</Button>
+            <Button>사무보조</Button>
+            <Button>IT개발</Button>
+            <Button>디자인</Button>
+            <Button>서비스</Button>
+          </div>
+          <h1 className='text-2xl font-bold'>최근에 등록된 공고</h1>
+          {/* 로그인되면 추천 공고 뜨게 해야함 */}
+          <div>추천공고 컴포넌트 뜨게 하기</div>
+        </main>
+      </div>
+    </>
   );
 }
