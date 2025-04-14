@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function PostDetailPage() {
   const searchParams = useSearchParams();
-  const postId = searchParams.get('postId');
+  const postId = searchParams.get('Id');
   return (
     <div>
       <h1>글 상세</h1>

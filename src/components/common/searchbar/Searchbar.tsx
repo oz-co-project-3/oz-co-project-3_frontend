@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function SearchBar() {
@@ -41,5 +41,13 @@ export default function SearchBar() {
       />
       <button onClick={onSubmit}>검색</button>
     </div>
+  );
+}
+
+export function SearchBarSuspense() {
+  return (
+    <Suspense fallback={<div>로딩중...</div>}>
+      <SearchBar />
+    </Suspense>
   );
 }
