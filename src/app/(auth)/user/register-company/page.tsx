@@ -16,19 +16,22 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 
 const formSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(6),
-  passwordConfirm: z.string().min(6),
-  companyName: z.string(),
-  establishmentDate: z.string(),
-  businessNumber: z.string(),
-  introduction: z.string().optional(),
-  managerName: z.string(),
-  managerPhone: z.string(),
-  managerEmail: z.string().email(),
-}).refine((data) => data.password === data.passwordConfirm, {
+  email: z.string().email('올바른 이메일 형식을 입력하세요.'),
+  password: z.string().regex(
+    /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=~`[\]{}|\\:;"'<>,.?/]).{8,}$/,
+    '8자 이상, 영문/숫자/특수문자 포함',
+  ),
+  password_check: z.string(),
+  company_name: z.string().min(1, '기업명을 입력해주세요.'),
+  company_start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD 형식으로 입력해주세요'),
+  business_number: z.string(),
+  company_description: z.string().min(10, '소개를 10자 이상 입력해주세요.'),
+  manager_name: z.string().optional(),
+  manager_phone_number: z.string().optional(),
+  manager_email: z.string().email().optional(),
+}).refine((data) => data.password === data.password_check, {
   message: '비밀번호가 일치하지 않습니다.',
-  path: ['passwordConfirm'],
+  path: ['password_check'],
 });
 
 type FormSchema = z.infer<typeof formSchema>;
@@ -39,14 +42,14 @@ export default function CompanyRegisterForm() {
     defaultValues: {
       email: '',
       password: '',
-      passwordConfirm: '',
-      companyName: '',
-      establishmentDate: '',
-      businessNumber: '',
-      introduction: '',
-      managerName: '',
-      managerPhone: '',
-      managerEmail: '',
+      password_check: '',
+      company_name: '',
+      company_start_date: '',
+      business_number: '',
+      company_description: '',
+      manager_name: '',
+      manager_phone_number: '',
+      manager_email: '',
     },
   });
 
@@ -68,8 +71,8 @@ export default function CompanyRegisterForm() {
               <FormItem>
                 <FormLabel>이메일</FormLabel>
                 <div className="flex gap-2">
-                  <FormControl><Input {...field} /></FormControl>
-                  <Button type="button" variant="outline" className='bg-[#57AC5E] hover:bg-[#0c6d2f] text-[#FAFAF5]'>중복확인</Button>
+                  <FormControl><Input {...field} className= 'bg-white' /></FormControl>
+                  <Button type="button" variant="outline" className='bg-main-light hover:bg-main-dark text-[#FAFAF5]'>중복확인</Button>
                 </div>
                 <FormMessage />
               </FormItem>
@@ -82,7 +85,7 @@ export default function CompanyRegisterForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>비밀번호</FormLabel>
-                <FormControl><Input type="password" {...field} /></FormControl>
+                <FormControl><Input type="password" {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -90,11 +93,11 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="passwordConfirm"
+            name="password_check"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>비밀번호 확인</FormLabel>
-                <FormControl><Input type="password" {...field} /></FormControl>
+                <FormControl><Input type="password" {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -104,11 +107,11 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="companyName"
+            name="company_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>기업명</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
+                <FormControl><Input {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -116,11 +119,11 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="establishmentDate"
+            name="company_start_date"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>개업년월일</FormLabel>
-                <FormControl><Input placeholder="YYYY-MM-DD" {...field} /></FormControl>
+                <FormControl><Input placeholder="YYYY-MM-DD" {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -128,13 +131,13 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="businessNumber"
+            name="business_number"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>사업자등록번호</FormLabel>
                 <div className="flex gap-2">
-                  <FormControl><Input {...field} /></FormControl>
-                  <Button type="button" variant="outline" className='bg-[#57AC5E] hover:bg-[#0c6d2f] text-[#FAFAF5]'>중복확인</Button>
+                  <FormControl><Input {...field} className= 'bg-white' /></FormControl>
+                  <Button type="button" variant="outline" className='bg-main-light hover:bg-main-dark text-[#FAFAF5]'>중복확인</Button>
                 </div>
                 <FormMessage />
               </FormItem>
@@ -143,11 +146,11 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="introduction"
+            name="company_description"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>기업 소개</FormLabel>
-                <FormControl><Textarea rows={3} {...field} /></FormControl>
+                <FormControl><Textarea rows={3} {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -155,11 +158,11 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="managerName"
+            name="manager_name"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>담당자 성함</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
+                <FormControl><Input {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -167,11 +170,11 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="managerPhone"
+            name="manager_phone_number"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>담당자 전화번호</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
+                <FormControl><Input {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -179,11 +182,11 @@ export default function CompanyRegisterForm() {
 
           <FormField
             control={form.control}
-            name="managerEmail"
+            name="manager_email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>담당자 이메일</FormLabel>
-                <FormControl><Input {...field} /></FormControl>
+                <FormControl><Input {...field} className= 'bg-white' /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -191,7 +194,7 @@ export default function CompanyRegisterForm() {
 
           <Button
             type="submit"
-            className="w-full bg-[#57AC5E] text-[#FAFAF5] hover:bg-[#0d7a32]"
+            className="w-full bg-main-light text-[#FAFAF5] hover:bg-main-dark"
           >
             회원가입
           </Button>
