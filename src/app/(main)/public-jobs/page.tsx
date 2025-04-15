@@ -7,7 +7,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 
 const PAGE_SIZE = 10;
 
-export default async function PublicJobsPage() {
+export default function PublicJobsPage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
