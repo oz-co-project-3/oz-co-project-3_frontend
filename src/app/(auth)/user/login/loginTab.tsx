@@ -70,7 +70,7 @@ export default function LoginTab() {
             <div className="flex flex-col items-center gap-1 mt-3 text-sm font-semibold text-black">
               <Link href="/user/find-id">아이디 찾기</Link>
               <Link href="/user/reset-password">비밀번호 찾기</Link>
-              <Link href="/user/register">회원가입</Link>
+              <Link href={tab === 'seeker' ? "/user/register" : "/user/register-company"}>회원가입</Link>
             </div>
           </form>
 

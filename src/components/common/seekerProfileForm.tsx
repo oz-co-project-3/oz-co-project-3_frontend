@@ -181,7 +181,13 @@ export default function SeekerProfileForm({
               <FormItem>
                 <FormLabel>이름</FormLabel>
                 <FormControl>
-                  <Input {...field} className= 'bg-white' />
+                  <Input
+                    {...field}
+                    readOnly={type === 'edit'}
+                    className={
+                      type === 'edit' ? 'cursor-not-allowed bg-gray-300 text-gray-700' : 'bg-white'
+                    }
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -197,7 +203,16 @@ export default function SeekerProfileForm({
                 <FormLabel>이메일</FormLabel>
                 <div className='flex gap-2'>
                   <FormControl>
-                    <Input type='email' {...field} className= 'bg-white' />
+                    <Input
+                      type='email'
+                      {...field}
+                      readOnly={type === 'edit'}
+                      className={
+                        type === 'edit'
+                          ? 'cursor-not-allowed bg-gray-300 text-gray-700'
+                          : 'bg-white'
+                      }
+                    />
                   </FormControl>
                   {type === 'register' && (
                     <Button
@@ -222,7 +237,14 @@ export default function SeekerProfileForm({
               <FormItem>
                 <FormLabel>생년월일</FormLabel>
                 <FormControl>
-                  <Input placeholder='예: 1960-01-01' {...field} className= 'bg-white'/>
+                  <Input
+                    placeholder='예: 1960-01-01'
+                    {...field}
+                    readOnly={type === 'edit'}
+                    className={
+                      type === 'edit' ? 'cursor-not-allowed bg-gray-300 text-gray-700' : 'bg-white'
+                    }
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -239,7 +261,7 @@ export default function SeekerProfileForm({
                   <FormItem>
                     <FormLabel>비밀번호</FormLabel>
                     <FormControl>
-                      <Input type='password' {...field} className= 'bg-white' />
+                      <Input type='password' {...field} className='bg-white' />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -254,7 +276,7 @@ export default function SeekerProfileForm({
                   <FormItem>
                     <FormLabel>비밀번호 확인</FormLabel>
                     <FormControl>
-                      <Input type='password' {...field} className= 'bg-white' />
+                      <Input type='password' {...field} className='bg-white' />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -271,7 +293,7 @@ export default function SeekerProfileForm({
               <FormItem>
                 <FormLabel>전화번호</FormLabel>
                 <FormControl>
-                  <Input {...field} className= 'bg-white' />
+                  <Input {...field} className='bg-white' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
