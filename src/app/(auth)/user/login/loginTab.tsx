@@ -38,13 +38,13 @@ export default function LoginTab() {
         <TabsList className="grid grid-cols-2 w-full max-w-sm mx-auto mb-4">
           <TabsTrigger
             value="seeker"
-            className="data-[state=active]:bg-[#0F8C3B] data-[state=active]:text-white text-sm border border-[#0F8C3B] rounded-t-md"
+            className="data-[state=active]:bg-main-light data-[state=active]:text-white text-sm border border-main-light rounded-t-md"
           >
             개인회원
           </TabsTrigger>
           <TabsTrigger
             value="business"
-            className="data-[state=active]:bg-[#0F8C3B] data-[state=active]:text-white text-sm border border-[#0F8C3B] rounded-t-md"
+            className="data-[state=active]:bg-main-light data-[state=active]:text-white text-sm border border-main-light rounded-t-md"
           >
             기업회원
           </TabsTrigger>
@@ -56,21 +56,21 @@ export default function LoginTab() {
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-1">이메일</label>
-              <Input type="email" {...register('email')} />
+              <Input className="bg-white" type="email" {...register('email')} />
             </div>
             <div>
               <label className="block text-sm font-semibold mb-1">비밀번호</label>
-              <Input type="password" {...register('password')} />
+              <Input className="bg-white"type="password" {...register('password')} />
             </div>
 
-            <Button type="submit" className="w-full bg-[#0F8C3B] hover:bg-[#0c6d2f]">
+            <Button type="submit" className="w-full bg-main-light hover:bg-main-dark">
               로그인
             </Button>
 
             <div className="flex flex-col items-center gap-1 mt-3 text-sm font-semibold text-black">
-              <Link href="/find-id">아이디 찾기</Link>
-              <Link href="/find-password">비밀번호 찾기</Link>
-              <Link href="/register">회원가입</Link>
+              <Link href="/user/find-id">아이디 찾기</Link>
+              <Link href="/user/reset-password">비밀번호 찾기</Link>
+              <Link href={tab === 'seeker' ? "/user/register" : "/user/register-company"}>회원가입</Link>
             </div>
           </form>
 
