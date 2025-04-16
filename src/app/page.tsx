@@ -1,15 +1,12 @@
 import SearchBarSuspense from '@/components/common/searchbar/Searchbar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import ScrollShowSearchBar from './ScrollShowSearchbar';
 
 export default async function Home() {
   return (
     <>
-      <nav className='bg-white'>
-        <SearchBarSuspense />
-        <br />
-        <hr />
-      </nav>
+      <ScrollShowSearchBar />
       <div className='flex h-full justify-center pt-30'>
         <main className='max-w-[1400px] flex-row text-center'>
           <h1 className='text-3xl font-bold'>&quot;내일 뭐하지? 시니어내일에서 찾아봐요!&quot;</h1>
@@ -44,6 +41,7 @@ export default async function Home() {
           <h1 className='text-2xl font-bold'>최근에 등록된 공고</h1>
           {/* 로그인되면 추천 공고 뜨게 해야함 */}
           <div>추천공고 컴포넌트 뜨게 하기</div>
+          <p className='h-[1000px]'>문자열을 크게 해서 한번 스클롤을 내려보겠ㅅ브니다</p>
         </main>
       </div>
     </>
