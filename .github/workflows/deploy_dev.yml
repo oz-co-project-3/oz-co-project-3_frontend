@@ -78,6 +78,7 @@ jobs:
             docker login ${{ secrets.CONTAINER_REGISTRY_URL}} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
 
             docker pull ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
+            docker tag ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest next-app-dev:latest
 
             cd app
             docker-compose -f docker-compose.dev.yml up -d --no-deps --build frontend-next
