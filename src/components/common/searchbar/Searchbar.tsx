@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { BsSearchHeart } from 'react-icons/bs';
 
 function SearchBar() {
   const router = useRouter();
@@ -33,13 +34,17 @@ function SearchBar() {
 
   return (
     <div className='flex h-10 w-full items-center justify-center'>
-      <input
-        value={search}
-        onKeyDown={onKeyDown}
-        onChange={onChangeSearch}
-        className='h-10 w-100 rounded-3xl border'
-      />
-      <button onClick={onSubmit}>검색</button>
+      <div className='flex h-10 w-[400px] rounded-3xl border bg-white px-3'>
+        <input
+          value={search}
+          onKeyDown={onKeyDown}
+          onChange={onChangeSearch}
+          className='h-full flex-1 bg-transparent outline-none'
+        />
+        <button onClick={onSubmit} className='ml-2 text-xl text-[#0F8C3B]'>
+          <BsSearchHeart />
+        </button>
+      </div>
     </div>
   );
 }
