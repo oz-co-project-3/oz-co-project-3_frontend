@@ -3,13 +3,21 @@
 import JobPostingItem from '@/components/common/jobposting-item';
 import { Button } from '@/components/ui/button';
 import jobPostings from '@/mock/jobPostings.json';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams, usePathname } from 'next/navigation';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationPrevious,
+  PaginationNext,
+} from '@/components/ui/pagination';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 8;
 
 export default function PublicJobsPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const pathname = usePathname();
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
@@ -19,9 +27,12 @@ export default function PublicJobsPage() {
   const endIndex = startIndex + PAGE_SIZE;
   const currentJobs = jobPostings.slice(startIndex, endIndex);
 
-  const goToPage = (page: number) => {
-    router.push(`/public-jobs?page=${page}`);
+  const createPageURL = (page: number) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('page', page.toString());
+    return `${pathname}?${params.toString()}`;
   };
+
   return (
     <div className='flex h-full justify-center pt-30'>
       <main className='w-full max-w-[1400px] flex-row'>
@@ -52,21 +63,38 @@ export default function PublicJobsPage() {
             </div>
           </section>
           <div className='mt-8 flex justify-center space-x-2'>
-            <Button onClick={() => goToPage(currentPage - 1)} disabled={currentPage === 1}>
-              이전
-            </Button>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <Button
-                key={i + 1}
-                onClick={() => goToPage(i + 1)}
-                variant={currentPage === i + 1 ? 'default' : 'outline'}
-              >
-                {i + 1}
-              </Button>
-            ))}
-            <Button onClick={() => goToPage(currentPage + 1)} disabled={currentPage === totalPages}>
-              다음
-            </Button>
+            <Pagination>
+              <PaginationContent>
+                {/* 이전 버튼 */}
+                <PaginationItem>
+                  <PaginationPrevious
+                    href={createPageURL(currentPage - 1)}
+                    aria-disabled={currentPage === 1}
+                    tabIndex={currentPage === 1 ? -1 : 0}
+                    style={currentPage === 1 ? { pointerEvents: 'none', opacity: 0.5 } : {}}
+                  />
+                </PaginationItem>
+                {/* 페이지 번호 */}
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <PaginationItem key={i + 1}>
+                    <PaginationLink href={createPageURL(i + 1)} isActive={currentPage === i + 1}>
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                {/* 다음 버튼 */}
+                <PaginationItem>
+                  <PaginationNext
+                    href={createPageURL(currentPage + 1)}
+                    aria-disabled={currentPage === totalPages}
+                    tabIndex={currentPage === totalPages ? -1 : 0}
+                    style={
+                      currentPage === totalPages ? { pointerEvents: 'none', opacity: 0.5 } : {}
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           </div>
         </div>
       </main>
