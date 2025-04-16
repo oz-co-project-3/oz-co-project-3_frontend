@@ -7,6 +7,12 @@ RUN npm install
 COPY . .
 RUN npm run build
 
+# 빌드 시 환경 변수 받기
+# ARG NEXT_PUBLIC_API_URL
+
+# 환경 변수 설정
+# ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 FROM node:23-alpine
 WORKDIR /app
 
