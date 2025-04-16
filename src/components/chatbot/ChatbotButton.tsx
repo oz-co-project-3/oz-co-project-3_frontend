@@ -29,7 +29,7 @@ const ChatbotButton = () => {
             <TooltipContent
               side='top'
               sideOffset={8}
-              className='rounded-xl border-none bg-green-500 px-4 py-2 text-sm text-white shadow-none'
+              className='rounded-xl border-none bg-main-light px-4 py-2 text-sm text-white shadow-none'
             >
               <p className='px-3 py-1 text-[16px] text-white'>궁금한 점을 물어보세요!</p>
             </TooltipContent>
