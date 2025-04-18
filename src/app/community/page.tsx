@@ -18,7 +18,7 @@ export default async function CommunityPage() {
           경험과 가치를 이어가는 새로운 일자리 매칭 <br />
           지금 바로 시작하세요!
         </p>
-        <header className='flex flex-row justify-evenly border-b-2 bg-gray-300 py-2'>
+        <header className='flex flex-row justify-evenly border-b-2 py-2'>
           <p>제목</p>
           <p>작성자</p>
           <p>작성일</p>
