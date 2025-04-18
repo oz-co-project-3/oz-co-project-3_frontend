@@ -1,9 +1,9 @@
-name: Deploy to NCP Server with Docker (Dev)
+name: Deploy to NCP Server with Docker (Prod)
 
 on:
   push:
     branches:
-      - develop
+      - main
 
 jobs:
   deploy:
@@ -47,7 +47,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
+          tags: ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-prod:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           # 필요하다면 환경 변수 추가 (Dockerfile에서 받아서 설정하기)
@@ -77,8 +77,8 @@ jobs:
 
             docker login ${{ secrets.CONTAINER_REGISTRY_URL}} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
 
-            docker pull ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
-            docker tag ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest next-app-dev:latest
+            docker pull ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-prod:latest
+            docker tag ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-prod:latest next-app-prod:latest
 
             cd app
-            docker-compose -f docker-compose.dev.yml up -d --no-deps --build frontend-next
+            docker-compose -f docker-compose.prod.yml up -d --no-deps --build frontend-next
