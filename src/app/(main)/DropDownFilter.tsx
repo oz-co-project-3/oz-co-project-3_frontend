@@ -4,11 +4,8 @@ import { FiChevronRight } from 'react-icons/fi';
 
 interface DropDownFilterProps {
   isRegionOpen: boolean;
-  setIsRegionOpen: (v: boolean) => void;
   isJobOpen: boolean;
-  setIsJobOpen: (v: boolean) => void;
   isDetailOpen: boolean;
-  setIsDetailOpen: (v: boolean) => void;
   selectedRegion: keyof typeof REGIONS | null;
   setSelectedRegion: (region: keyof typeof REGIONS) => void;
   selectedJob: keyof typeof JOB_CATEGORIES | null;
@@ -17,11 +14,8 @@ interface DropDownFilterProps {
 
 export default function DropDownFilter({
   isRegionOpen,
-  setIsRegionOpen,
   isJobOpen,
-  setIsJobOpen,
   isDetailOpen,
-  setIsDetailOpen,
   selectedRegion,
   setSelectedRegion,
   selectedJob,
@@ -56,10 +50,9 @@ export default function DropDownFilter({
               <div>
                 <div className='grid grid-cols-4 gap-2'>
                   {REGIONS[selectedRegion].map((district: string) => (
-                    <div>
+                    <div key={district}>
                       <input
                         type='checkbox'
-                        key={district}
                         className='cursor-pointer rounded border px-3 py-1 hover:bg-blue-100'
                       />
                       <label>{district}</label>
@@ -101,10 +94,9 @@ export default function DropDownFilter({
                 <div className='mb-2 font-semibold'>{selectedJob} 전체</div>
                 <div className='grid grid-cols-4 gap-2'>
                   {JOB_CATEGORIES[selectedJob].map((subcategory: string) => (
-                    <div className='flex gap-1'>
+                    <div key={subcategory} className='flex gap-1'>
                       <input
                         type='checkbox'
-                        key={subcategory}
                         className='cursor-pointer rounded border px-3 py-1 hover:bg-blue-100'
                       />
                       <label>{subcategory}</label>

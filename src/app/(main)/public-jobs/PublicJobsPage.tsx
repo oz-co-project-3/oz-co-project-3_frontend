@@ -1,7 +1,6 @@
 'use client';
 
 import JobPostingItem from '@/components/common/jobposting-item';
-import { Button } from '@/components/ui/button';
 import jobPostings from '@/mock/jobPostings.json';
 import { useSearchParams, usePathname } from 'next/navigation';
 import {

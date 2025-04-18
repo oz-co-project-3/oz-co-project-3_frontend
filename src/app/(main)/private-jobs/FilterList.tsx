@@ -60,11 +60,8 @@ export default function FilterList() {
       </div>
       <DropDownFilter
         isRegionOpen={isRegionOpen}
-        setIsRegionOpen={setIsRegionOpen}
         isJobOpen={isJobOpen}
-        setIsJobOpen={setIsJobOpen}
         isDetailOpen={isDetailOpen}
-        setIsDetailOpen={setIsDetailOpen}
         selectedRegion={selectedRegion}
         setSelectedRegion={setSelectedRegion}
         selectedJob={selectedJob}
