@@ -5,15 +5,28 @@ import Link from 'next/link';
 import { Button } from '../ui/button';
 import { usePathname } from 'next/navigation';
 
-const navItems = [
+const userNavItems = [
   { name: '공공 공고', href: '/public-jobs' },
   { name: '일반 공고', href: '/private-jobs' },
   { name: '커뮤니티', href: '/community' },
   { name: 'ADMIN', href: '/admin' }, // 임시
 ];
 
+//관리자용
+const adminNavItems = [
+  { name: '회원관리', href: '/admin/users' },
+  { name: '이력서관리', href: '/admin/resumes' },
+  { name: '공고관리', href: '/admin/jobs' },
+  { name: '챗봇관리', href: '/admin/chatbot' },
+  { name: '커뮤니티', href: '/admin/community' },
+];
+
 export default function Header() {
   const pathname = usePathname();
+
+  //경로가 /admin 시작일때 관리자메뉴
+  const isAdminPage = pathname.startsWith('/admin');
+  const navItems = isAdminPage ? adminNavItems : userNavItems;
 
   return (
     <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between bg-white px-2'>

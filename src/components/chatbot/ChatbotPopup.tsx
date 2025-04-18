@@ -1,27 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { MOCK_RESPONSES } from '@/constants/chatbot';
 import type { ChatbotResponse } from '@/types/chatbot';
 
 export default function ChatbotPopup() {
-  const [stepIndex, setStepIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState('');
-  const data: ChatbotResponse = MOCK_RESPONSES[stepIndex];
+  const socketRef = useRef<WebSocket | null>(null);
+
+  const [chatData, setChatData] = useState<ChatbotResponse | null>(null);
+  const [selectionPath, setSelectionPath] = useState<string[]>([]);
+  const [selectedOption, setSelectedOption] = useState<string>('');
+
+  useEffect(() => {
+    const ws = new WebSocket('ws://localhost:8000/api/ws/');
+    socketRef.current = ws;
+
+    ws.onopen = () => {
+      ws.send(''); // 초기 프롬프트 요청
+    };
+
+    ws.onmessage = (event) => {
+      const data: ChatbotResponse = JSON.parse(event.data);
+      setChatData(data);
+    };
+
+    ws.onerror = (err) => {
+      console.error('WebSocket 에러:', err);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket 연결 종료');
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, []);
 
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    const next = stepIndex + 1;
-    if (next < MOCK_RESPONSES.length) {
-      setStepIndex(next);
-    }
+    const newPath = [...selectionPath, option];
+    setSelectionPath(newPath);
+
+    const fullPath = newPath.join('/');
+    socketRef.current?.send(fullPath);
   };
 
   const handleReset = () => {
-    setStepIndex(0);
+    setSelectionPath([]);
     setSelectedOption('');
+    setChatData(null);
+    socketRef.current?.send('');
   };
 
   return (
@@ -33,7 +63,7 @@ export default function ChatbotPopup() {
         <SheetTitle className='sr-only'>챗봇</SheetTitle>
       </SheetHeader>
 
-      {stepIndex === 0 && (
+      {/* {selectionPath.length === 0 && (
         <div className='mb-4'>
           <h2 className='mb-1 text-xl font-bold'>무엇을 도와드릴까요?</h2>
           <p className='text-sm whitespace-pre-line text-gray-500'>
@@ -42,12 +72,16 @@ export default function ChatbotPopup() {
           </p>
           <div className='mt-2 border-b' />
         </div>
-      )}
+      )} */}
 
-      {!data.title && data.answer && (
+      {chatData && chatData.answer && (
         <div className='mb-4'>
-          <h2 className='mb-1 text-lg font-bold'>이력서 작성을 선택하셨어요!</h2>
-          <p className='text-md font-semibold whitespace-pre-line text-gray-500'>{data.answer}</p>
+          {selectionPath.length > 0 && (
+            <h2 className='mb-1 text-lg font-bold'>선택하신 항목에 대한 안내입니다</h2>
+          )}
+          <p className='text-md font-semibold whitespace-pre-line text-gray-500'>
+            {chatData.answer}
+          </p>
           <div className='mt-2 border-b' />
         </div>
       )}
@@ -58,22 +92,25 @@ export default function ChatbotPopup() {
         </p>
       )}
 
-      {data.options.length > 0 && (
+      {chatData?.options && (
         <div className='mt-4 flex flex-wrap gap-2'>
-          {data.options.map((option) => (
-            <Button
-              key={option}
-              onClick={() => handleSelect(option)}
-              variant='outline'
-              className='hover:bg-main-light rounded-full px-4 py-1 text-sm'
-            >
-              {option}
-            </Button>
-          ))}
+          {chatData.options
+            .split(',')
+            .map((opt) => opt.trim())
+            .map((option) => (
+              <Button
+                key={option}
+                onClick={() => handleSelect(option)}
+                variant='outline'
+                className='hover:bg-main-light rounded-full px-4 py-1 text-sm'
+              >
+                {option}
+              </Button>
+            ))}
         </div>
       )}
 
-      {data.is_terminate && (
+      {chatData?.is_terminate && (
         <div className='mt-6 flex justify-end gap-2'>
           <Button onClick={handleReset} variant='outline' className='rounded-md px-3 py-1 text-sm'>
             돌아가기
