@@ -26,8 +26,8 @@ export default function ChatbotPopup() {
   const [options, setOptions] = useState<string[]>([]);
   const [isTerminate, setIsTerminate] = useState(false);
   const [selectionPath, setSelectionPath] = useState<string[]>([]);
-  const [lastAnswer, setLastAnswer] = useState<string>('');
-  const [step, setStep] = useState<number>(0); // step 상태 저장
+  //   const [lastAnswer, setLastAnswer] = useState<string>('');
+  //   const [step, setStep] = useState<number>(0); // step 상태 저장
 
   useEffect(() => {
     const webSocket = new WebSocket('ws://localhost:8000/api/ws/');
@@ -40,8 +40,8 @@ export default function ChatbotPopup() {
     webSocket.onmessage = (event) => {
       const data: ChatbotResponse = JSON.parse(event.data);
 
-      setStep(data.step); // step 갱신
-      setChatLog((prev) => [...prev, { type: 'bot', message: data.answer }]);
+      //   setStep(data.step); // step 갱신
+      //   setChatLog((prev) => [...prev, { type: 'bot', messag : data.answer }]);
 
       if (typeof data.options === 'string') {
         const parsed = data.options.split(',').map((opt) => opt.trim());
@@ -51,7 +51,7 @@ export default function ChatbotPopup() {
       }
 
       setIsTerminate(data.is_terminate);
-      setLastAnswer(data.answer);
+      //   setLastAnswer(data.answer);
     };
 
     webSocket.onerror = (err) => {
@@ -84,8 +84,8 @@ export default function ChatbotPopup() {
     setOptions([]);
     setIsTerminate(false);
     setSelectionPath([]);
-    setLastAnswer('');
-    setStep(0); // 초기화
+    // setLastAnswer('');
+    // setStep(0); // 초기화
   };
 
   return (
