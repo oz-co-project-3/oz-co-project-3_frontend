@@ -12,6 +12,7 @@ import {
   PaginationPrevious,
   PaginationNext,
 } from '@/components/ui/pagination';
+import FilterList from '../private-jobs/FilterList';
 
 const PAGE_SIZE = 8;
 
@@ -41,10 +42,7 @@ export default function PublicJobsPage() {
         <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
 
         <div className='mb-10 flex space-x-2'>
-          <Button>거리순</Button>
-          <Button>인기순</Button>
-          <Button>최신순</Button>
-          <Button>관심분야</Button>
+          <FilterList />
         </div>
         <div>
           <h2 className='text-2xl font-bold'>채용정보</h2>
