@@ -1,5 +1,7 @@
 'use client';
 
+import { loginUser } from '@/api/user';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -18,22 +20,34 @@ interface LoginFormData {
 export default function LoginTab() {
   const [tab, setTab] = useState<UserType>('seeker');
 
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { },//errors
   } = useForm<LoginFormData>();
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log({
-      ...data,
-      user_type: tab,
-    });
-    alert(`로그인 시도: ${tab}`);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const res = await loginUser({
+        ...data,
+        user_type: tab,
+      });
+
+      console.log('로그인 성공 👌', res);
+      router.push('/');
+
+      localStorage.setItem('access_token', res.access_token);
+      alert(`로그인 시도: ${tab}`);
+    } catch (err) {
+      console.error('❌ 로그인 실패 ❌:', err);
+      alert('이메일 또는 비밀번호가 잘못되었습니다.');
+    }
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full bg--backgroundivory">
       <Tabs defaultValue="seeker" onValueChange={(val) => setTab(val as UserType)}>
         <TabsList className="grid grid-cols-2 w-full max-w-sm mx-auto mb-4">
           <TabsTrigger
@@ -68,8 +82,7 @@ export default function LoginTab() {
             </Button>
 
             <div className="flex flex-col items-center gap-1 mt-3 text-sm font-semibold text-black">
-              <Link href="/user/find-id">아이디 찾기</Link>
-              <Link href="/user/reset-password">비밀번호 찾기</Link>
+              <Link href="/user/find-account">이메일/비밀번호 찾기</Link>
               <Link href={tab === 'seeker' ? "/user/register" : "/user/register-company"}>회원가입</Link>
             </div>
           </form>
