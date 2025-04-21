@@ -29,7 +29,7 @@ export default function Header() {
   const navItems = isAdminPage ? adminNavItems : userNavItems;
 
   return (
-    <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between bg-white px-2'>
+    <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between border-b bg-white px-2'>
       <h1>
         <Link href='/'>
           <Image
