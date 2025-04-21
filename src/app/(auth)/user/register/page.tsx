@@ -12,14 +12,13 @@ export default function SeekerRegisterPage() {
     try {
       console.table(formData);
 
-      const res = await registerUser(formData);
-      console.log('회원가입 성공:', res);
+      await registerUser(formData); 
+      localStorage.setItem('registerFormData', JSON.stringify(formData));
+      router.push('/user/email-verification');
 
-      alert('회원가입이 완료되었습니다!');
-      router.push('/login');
-    } catch (err: unknown) {
-      console.error('회원가입 실패:', err);
-      alert('회원가입 중 오류가 발생했습니다.');
+    } catch (err) {
+      console.error('이메일 인증 요청 실패:', err);
+      alert('이메일 인증 요청 중 오류가 발생했습니다.');
     }
   };
 
