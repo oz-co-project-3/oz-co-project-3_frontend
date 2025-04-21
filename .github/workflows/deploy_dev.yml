@@ -67,8 +67,6 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker system prune -af
-
             # .env 파일 생성
             # cat > .env << EOL
             # NAVER_MAP_KEY=${{ secrets.NAVER_MAP_KEY }}
