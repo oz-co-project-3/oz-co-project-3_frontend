@@ -67,14 +67,15 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo docker system prune -af
-
             # .env 파일 생성
             # cat > .env << EOL
             # NAVER_MAP_KEY=${{ secrets.NAVER_MAP_KEY }}
             # EOL
 
             cd app
-            docker pull nagi2/oz-co-front-dev:latest
-            docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
-            docker-compose -f docker-compose.dev.yml up -d --no-deps --build frontend-next
+            sudo docker pull nagi2/oz-co-front-dev:latest
+            sudo docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
+            sudo docker image rm nagi2/oz-co-front-dev:latest
+            sudo docker compose -f docker-compose.dev.yml down
+            sudo docker compose -f docker-compose.dev.yml up -d
+            sudo docker system prune -f
