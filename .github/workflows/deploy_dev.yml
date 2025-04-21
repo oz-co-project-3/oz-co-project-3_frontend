@@ -77,4 +77,5 @@ jobs:
             cd app
             docker pull nagi2/oz-co-front-dev:latest
             docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
-            docker-compose -f docker-compose.dev.yml up -d --no-deps --build frontend-next
+            docker image rm nagi2/oz-co-front-dev:latest
+            docker compose -f docker-compose.dev.yml up -d --no-deps --build frontend-next
