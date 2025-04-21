@@ -1,9 +1,6 @@
 import { SeekerFormData, CompanyFormData, LoginFormData } from '@/types/user';
 import axiosInstance from '@/lib/axios';
 
-// export const sendEmailCode = (data: { email: string }) => {
-//   return axiosInstance.post('/api/user/verify-email', data);
-// };
 
 export const verifyEmailCode = (data: { email: string; verification_code: string }) => {
   return axiosInstance.post('/api/user/verify-email', data);
