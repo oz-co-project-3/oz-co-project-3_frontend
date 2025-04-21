@@ -7,7 +7,7 @@ services:
     ports:
       - '8000:8000'
     env_file:
-      - .env/.dev.env
+      - .envs/.dev.env
     environment:
       - ENV=dev
       - PYTHONPATH=/app
