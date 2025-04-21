@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import type { Metadata } from 'next';
 import Header from '@/components/header/Header';
 
-export const pretendard = localFont({
+const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
   weight: '100 900',
