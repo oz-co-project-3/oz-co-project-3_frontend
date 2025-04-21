@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+main {
+  scrollbar-gutter: stable;
+}
+
 @theme {
   /* 주어진 색 */
   --color-main: #059f38;
