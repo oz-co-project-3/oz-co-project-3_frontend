@@ -73,7 +73,9 @@ jobs:
             # EOL
 
             cd app
-            docker pull nagi2/oz-co-front-dev:latest
-            docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
-            docker image rm nagi2/oz-co-front-dev:latest
-            docker compose -f docker-compose.dev.yml up -d --no-deps --build frontend-next
+            sudo docker pull nagi2/oz-co-front-dev:latest
+            sudo docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
+            sudo docker image rm nagi2/oz-co-front-dev:latest
+            sudo docker compose -f docker-compose.dev.yml down
+            sudo docker compose -f docker-compose.dev.yml up -d
+            sudo docker system prune -f
