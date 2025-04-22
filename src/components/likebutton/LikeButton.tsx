@@ -1,3 +1,5 @@
+'use client';
+//클라이언트에서 페칭 (자동 새로고침)
 import { useState } from 'react';
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 
