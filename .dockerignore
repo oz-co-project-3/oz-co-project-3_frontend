@@ -10,5 +10,8 @@ node_modules
 # 기타 문서
 README.md
 Dockerfile
-compose.yml
 .dockerignore
+
+# 백엔드
+docker-compose.dev.yml
+nginx

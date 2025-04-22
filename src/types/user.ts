@@ -4,11 +4,12 @@ export interface SeekerFormData {
     birth: string;
     password: string;
     password_check: string;
-    phone: string;
+    phone_number: string;
     gender?: 'male' | 'female'|'none';
     interests?: string[];
     purposes?: string[];
     sources?: string[];
+    status: 'seeking' | 'not_seeking' | 'employed';
 }
 
 export interface CompanyFormData {
@@ -23,3 +24,11 @@ export interface CompanyFormData {
     manager_phone_number: string;
     manager_email: string;
 }
+
+type UserType = 'seeker' | 'business';
+
+export interface LoginFormData {
+    email: string;
+    password: string;
+    user_type: UserType; 
+  }
