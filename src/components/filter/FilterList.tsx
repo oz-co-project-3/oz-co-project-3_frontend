@@ -1,6 +1,8 @@
+'use client';
+
 import useDropdown from '@/hooks/useDropdown';
 import { MdOutlineArrowDropDownCircle } from 'react-icons/md';
-import DropDownFilter from '../DropDownFilter';
+import DropDownFilter from './DropDownFilter';
 export default function FilterList() {
   const {
     isRegionOpen,
@@ -19,7 +21,7 @@ export default function FilterList() {
     <div>
       <div className='relative flex w-[1400px] justify-between gap-5 rounded-2xl bg-white'>
         <div
-          className='flex h-[70px] w-[450px] items-center justify-center rounded-l-2xl border'
+          className='flex h-[70px] w-[450px] items-center justify-center rounded-2xl border'
           onClick={() => {
             setIsRegionOpen(!isRegionOpen);
             setIsJobOpen(false);
@@ -32,7 +34,7 @@ export default function FilterList() {
           </span>
         </div>
         <div
-          className='relative flex w-[450px] items-center justify-center border'
+          className='relative flex w-[450px] items-center justify-center rounded-2xl border'
           onClick={() => {
             setIsJobOpen(!isJobOpen);
             setIsRegionOpen(false);
@@ -45,7 +47,7 @@ export default function FilterList() {
           </span>
         </div>
         <div
-          className='relative flex w-[450px] items-center justify-center rounded-r-2xl border'
+          className='relative flex w-[450px] items-center justify-center rounded-2xl border'
           onClick={() => {
             setIsDetailOpen(!isDetailOpen);
             setIsRegionOpen(false);
@@ -56,6 +58,9 @@ export default function FilterList() {
           <span className='text-xl text-[#0F8C3B]'>
             <MdOutlineArrowDropDownCircle />
           </span>
+        </div>
+        <div className='relative flex w-[450px] items-center justify-center rounded-2xl border bg-[#0F8C3B]'>
+          <button>검색하기</button>
         </div>
       </div>
       <DropDownFilter

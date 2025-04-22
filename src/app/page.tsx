@@ -1,9 +1,11 @@
+'use client';
+
 import SearchBarSuspense from '@/components/common/searchbar/Searchbar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import ScrollShowSearchBar from './ScrollShowSearchbar';
 
-export default async function Home() {
+export default function Home() {
   return (
     <>
       <ScrollShowSearchBar />
