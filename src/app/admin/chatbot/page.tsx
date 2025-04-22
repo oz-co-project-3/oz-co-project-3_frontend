@@ -1,4 +1,4 @@
-import ChatbotAdminClient from './ChatbotAdminClient';
+import ChatbotAdminClient from '../../../components/admin/chatbot/ChatbotAdminClient';
 
 export default async function ChatbotAdminPage() {
   return (
