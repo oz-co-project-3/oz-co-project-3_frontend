@@ -1,34 +1,43 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CHATBOT_API } from '@/constants/chatbot';
-import { KeyedMutator } from 'swr';
-import { ChatbotPrompt } from '@/types/chatbot';
+import type { ChatbotPrompt } from '@/types/chatbot';
+import type { KeyedMutator } from 'swr';
 
 interface Props {
   open: boolean;
-  onClose: () => void; //닫기 누르면 호출되는거
-  onSuccess: KeyedMutator<ChatbotPrompt[]>; //SWR mutate 함수(데이터 새로고침용)
+  onClose: () => void;
+  onSuccess: KeyedMutator<ChatbotPrompt[]>;
+  editTarget?: ChatbotPrompt | null;
 }
 
-export default function ChatbotAddModal({ open, onClose, onSuccess }: Props) {
-  const [step, setStep] = useState<number>(1);
+export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: Props) {
+  const [step, setStep] = useState(1);
   const [selectionPath, setSelectionPath] = useState('');
   const [answer, setAnswer] = useState('');
   const [options, setOptions] = useState('');
   const [isTerminate, setIsTerminate] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // 모달 열릴 때 초기화
+  // 모달 열릴 때 초기값
   useEffect(() => {
     if (open) {
-      resetForm();
+      if (editTarget) {
+        setStep(editTarget.step);
+        setSelectionPath(editTarget.selection_path);
+        setAnswer(editTarget.answer);
+        setOptions(editTarget.options || '');
+        setIsTerminate(editTarget.is_terminate);
+      } else {
+        resetForm();
+      }
     }
-  }, [open]);
+  }, [open, editTarget]);
 
   const resetForm = () => {
     setStep(1);
@@ -42,8 +51,11 @@ export default function ChatbotAddModal({ open, onClose, onSuccess }: Props) {
     setLoading(true);
     try {
       const token = process.env.NEXT_PUBLIC_ADMIN_TOKEN!;
-      const res = await fetch(CHATBOT_API.BASE, {
-        method: 'POST',
+      const url = editTarget ? CHATBOT_API.DETAIL(editTarget.id) : CHATBOT_API.BASE;
+      const method = editTarget ? 'PATCH' : 'POST';
+
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -57,11 +69,11 @@ export default function ChatbotAddModal({ open, onClose, onSuccess }: Props) {
         }),
       });
 
-      if (!res.ok) throw new Error('응답 추가 실패');
+      if (!res.ok) throw new Error(editTarget ? '수정 실패' : '추가 실패');
 
-      await onSuccess(); //SWR 캐시 갱신
-      resetForm();
-      onClose();
+      await onSuccess(); // SWR 새로고침 (목록을 최신화시킴)
+      resetForm(); //폼도 초기화
+      onClose(); //닫기
     } catch (err) {
       console.error(err);
     } finally {
@@ -73,7 +85,7 @@ export default function ChatbotAddModal({ open, onClose, onSuccess }: Props) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>새 응답 추가</DialogTitle>
+          <DialogTitle>{editTarget ? '응답 수정' : '새 응답 추가'}</DialogTitle>
         </DialogHeader>
 
         <div className='space-y-3'>

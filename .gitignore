@@ -42,7 +42,6 @@ next-env.d.ts
 
 # docker
 docker-compose.dev.yml
-.dockerignore
 
 # backend settings
 .envs

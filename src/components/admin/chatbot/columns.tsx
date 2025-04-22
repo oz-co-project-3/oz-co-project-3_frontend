@@ -3,9 +3,13 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ChatbotPrompt } from '@/types/chatbot';
 import { Button } from '@/components/ui/button';
-import { CHATBOT_API } from '@/constants/chatbot';
 
-export const columns: ColumnDef<ChatbotPrompt>[] = [
+interface ActionsProps {
+  onEdit: (row: ChatbotPrompt) => void;
+  onDelete: (id: number) => void;
+}
+
+export const getColumns = ({ onEdit, onDelete }: ActionsProps): ColumnDef<ChatbotPrompt>[] => [
   {
     accessorKey: 'step',
     header: 'STEP',
@@ -30,41 +34,15 @@ export const columns: ColumnDef<ChatbotPrompt>[] = [
   {
     id: 'actions',
     header: '관리',
-    cell: ({ row }) => {
-      const handleEdit = () => {
-        console.log('수정 클릭:', row.original.id);
-        // TODO: 수정 모달 열기
-      };
-  
-      const handleDelete = async () => {
-        const token = process.env.NEXT_PUBLIC_ADMIN_TOKEN!;
-        const confirmed = window.confirm('정말 삭제하시겠습니까?');
-        if (!confirmed) return;
-  
-        try {
-          const res = await fetch(CHATBOT_API.DETAIL(row.original.id), {
-            method: 'DELETE',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          if (!res.ok) throw new Error('삭제 실패');
-          window.location.reload(); // 또는 외부에서 props.onSuccess() 호출
-        } catch (err) {
-          console.error('삭제 오류:', err);
-        }
-      };
-  
-      return (
-        <div className='flex justify-end gap-2'>
-          <Button size='sm' variant='outline' onClick={handleEdit}>
-            수정
-          </Button>
-          <Button size='sm' variant='destructive' onClick={handleDelete}>
-            삭제
-          </Button>
-        </div>
-      );
-    },
-  }
+    cell: ({ row }) => (
+      <div className='flex justify-end gap-2'>
+        <Button size='sm' variant='outline' onClick={() => onEdit(row.original)}>
+          수정
+        </Button>
+        <Button size='sm' variant='destructive' onClick={() => onDelete(row.original.id)}>
+          삭제
+        </Button>
+      </div>
+    ),
+  },
 ];
