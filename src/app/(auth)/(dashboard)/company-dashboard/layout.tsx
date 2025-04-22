@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 
 const navItems = [
   { name: '프로필', href: '/company-dashboard/profile' },
-  { name: '이전 채용공고', href: '/company-dashboard/previous-job-postings' },
   { name: '현재 채용공고', href: '/company-dashboard/current-job-postings' },
+  { name: '이전 채용공고', href: '/company-dashboard/previous-job-postings' },
 ];
 
 export default function CompanyDashboardLayout({ children }: { children: React.ReactNode }) {

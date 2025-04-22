@@ -1,4 +1,4 @@
-import ResumeCard from '@/components/resume/ResumeCard';
+import ResumeCard from '@/components/dashboard/seeker/resume/ResumeCard';
 
 export default async function ResumePage() {
   return (
