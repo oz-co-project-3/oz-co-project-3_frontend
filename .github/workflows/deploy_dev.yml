@@ -25,13 +25,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      # NCP 로그인
-      - name: Login to NCP
+      # Docker Hub 로그인
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ${{ secrets.CONTAINER_REGISTRY_URL }}
-          username: ${{ secrets.NCP_ACCESS_KEY }}
-          password: ${{ secrets.NCP_SECRET_KEY }}
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       # 환경 변수 파일 생성 (필요한 경우)
       # - name: Create .env file
@@ -47,7 +46,7 @@ jobs:
           file: ./Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
+          tags: nagi2/oz-co-front-dev:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           # 필요하다면 환경 변수 추가 (Dockerfile에서 받아서 설정하기)
@@ -60,25 +59,23 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache || true
 
-      # NCP 서버로 이미지 받아와서 프론트엔드 컨테이너만 빌드 후 재시작
-      - name: Deploy to NCP via SSH
+      # EC2 서버로 이미지 받아와서 프론트엔드 컨테이너만 빌드 후 재시작
+      - name: Deploy to EC2 via SSH
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.SERVER_IP }}
-          username: root
-          key: ${{ secrets.NCP_SSH_KEY }}
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker system prune -af
-
             # .env 파일 생성
             # cat > .env << EOL
             # NAVER_MAP_KEY=${{ secrets.NAVER_MAP_KEY }}
             # EOL
 
-            docker login ${{ secrets.CONTAINER_REGISTRY_URL}} -u ${{ secrets.NCP_ACCESS_KEY }} -p ${{ secrets.NCP_SECRET_KEY }}
-
-            docker pull ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest
-            docker tag ${{ secrets.CONTAINER_REGISTRY_URL }}/next-app-dev:latest next-app-dev:latest
-
             cd app
-            docker-compose -f docker-compose.dev.yml up -d --no-deps --build frontend-next
+            sudo docker pull nagi2/oz-co-front-dev:latest
+            sudo docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
+            sudo docker image rm nagi2/oz-co-front-dev:latest
+            sudo docker compose -f docker-compose.dev.yml down
+            sudo docker compose -f docker-compose.dev.yml up -d
+            sudo docker system prune -f

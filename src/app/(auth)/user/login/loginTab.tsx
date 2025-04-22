@@ -25,10 +25,11 @@ export default function LoginTab() {
   const {
     register,
     handleSubmit,
-    formState: { },//errors
+    formState: {}, //errors
   } = useForm<LoginFormData>();
 
   const onSubmit = async (data: LoginFormData) => {
+    console.log('보내는 데이터', data);
     try {
       const res = await loginUser({
         ...data,
@@ -47,53 +48,55 @@ export default function LoginTab() {
   };
 
   return (
-    <div className="w-full bg--backgroundivory">
-      <Tabs defaultValue="seeker" onValueChange={(val) => setTab(val as UserType)}>
-        <TabsList className="grid grid-cols-2 w-full max-w-sm mx-auto mb-4">
+    <div className='bg--backgroundivory w-full'>
+      <Tabs defaultValue='seeker' onValueChange={(val) => setTab(val as UserType)}>
+        <TabsList className='mx-auto mb-4 grid w-full max-w-sm grid-cols-2'>
           <TabsTrigger
-            value="seeker"
-            className="data-[state=active]:bg-main-light data-[state=active]:text-white text-sm border border-main-light rounded-t-md"
+            value='seeker'
+            className='data-[state=active]:bg-main-light border-main-light rounded-t-md border text-sm data-[state=active]:text-white'
           >
             개인회원
           </TabsTrigger>
           <TabsTrigger
-            value="business"
-            className="data-[state=active]:bg-main-light data-[state=active]:text-white text-sm border border-main-light rounded-t-md"
+            value='business'
+            className='data-[state=active]:bg-main-light border-main-light rounded-t-md border text-sm data-[state=active]:text-white'
           >
             기업회원
           </TabsTrigger>
         </TabsList>
 
-        <div className="bg-gray-100 rounded-xl p-8">
-          <h2 className="text-xl font-bold text-center mb-6">로그인</h2>
+        <div className='rounded-xl bg-gray-100 p-8'>
+          <h2 className='mb-6 text-center text-xl font-bold'>로그인</h2>
 
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
             <div>
-              <label className="block text-sm font-semibold mb-1">이메일</label>
-              <Input className="bg-white" type="email" {...register('email')} />
+              <label className='mb-1 block text-sm font-semibold'>이메일</label>
+              <Input className='bg-white' type='email' {...register('email')} />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-1">비밀번호</label>
-              <Input className="bg-white"type="password" {...register('password')} />
+              <label className='mb-1 block text-sm font-semibold'>비밀번호</label>
+              <Input className='bg-white' type='password' {...register('password')} />
             </div>
 
-            <Button type="submit" className="w-full bg-main-light hover:bg-main-dark">
+            <Button type='submit' className='bg-main-light hover:bg-main-dark w-full'>
               로그인
             </Button>
 
-            <div className="flex flex-col items-center gap-1 mt-3 text-sm font-semibold text-black">
-              <Link href="/user/find-account">이메일/비밀번호 찾기</Link>
-              <Link href={tab === 'seeker' ? "/user/register" : "/user/register-company"}>회원가입</Link>
+            <div className='mt-3 flex flex-col items-center gap-1 text-sm font-semibold text-black'>
+              <Link href='/user/find-account'>이메일/비밀번호 찾기</Link>
+              <Link href={tab === 'seeker' ? '/user/register' : '/user/register-company'}>
+                회원가입
+              </Link>
             </div>
           </form>
 
           {/* ✅ 개인회원일 때만 소셜 로그인 보여주기 */}
           {tab === 'seeker' && (
             <>
-              <hr className="my-5" />
-              <div className="flex flex-col gap-3 items-center">
-                <Image src="/kakao.png" alt="카카오 로그인" width={300} height={45} />
-                <Image src="/naver.png" alt="네이버 로그인" width={300} height={45} />
+              <hr className='my-5' />
+              <div className='flex flex-col items-center gap-3'>
+                <Image src='/kakao.png' alt='카카오 로그인' width={300} height={45} />
+                <Image src='/naver.png' alt='네이버 로그인' width={300} height={45} />
               </div>
             </>
           )}
