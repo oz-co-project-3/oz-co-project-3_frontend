@@ -5,7 +5,7 @@ export default function JobPostingItem({
   title,
   location,
   employment_type,
-  company_name,
+  company,
   deadline,
   summary,
 }: JobPosting) {
@@ -18,7 +18,7 @@ export default function JobPostingItem({
       {/* 모집제목/기업명 */}
       <div className='flex h-[80px] w-[400px] flex-col justify-center'>
         <span className='text-xl font-black'>{title}</span>
-        <span>{company_name}</span>
+        <span>{company}</span>
       </div>
       {/* 근무요약 */}
       <div className='flex h-[80px] w-[300px] flex-col justify-center'>
