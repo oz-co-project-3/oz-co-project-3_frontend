@@ -2,7 +2,7 @@
 
 import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import { SeekerFormData } from '@/types/user';
-import { registerUser } from '@/api/user';
+import { registerSeeker } from '@/api/user';
 import { useRouter } from 'next/navigation';
 
 export default function SeekerRegisterPage() {
@@ -12,7 +12,7 @@ export default function SeekerRegisterPage() {
     try {
       console.table(formData);
 
-      await registerUser(formData); 
+      await registerSeeker(formData); 
       localStorage.setItem('registerFormData', JSON.stringify(formData));
       router.push('/user/email-verification');
 
