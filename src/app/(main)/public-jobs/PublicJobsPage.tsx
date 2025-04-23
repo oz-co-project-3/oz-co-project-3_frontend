@@ -1,9 +1,10 @@
-'use client';
-
 import FilterList from '@/components/filter/FilterList';
-import JobPostingList from '../private-jobs/JobPostingList';
+import JobPostingList from './PublicJobList';
+import { Suspense } from 'react';
 
-export default function PrivateJobsPage() {
+export default async function PrivateJobsPage() {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/postings/?employment_type=공공`);
+  const data = await res.json();
   return (
     <div className='flex h-full justify-center pt-30'>
       <main className='w-full max-w-[1400px] flex-row'>
@@ -13,7 +14,9 @@ export default function PrivateJobsPage() {
         <div className='mb-10 flex space-x-2'>
           <FilterList />
         </div>
-        <JobPostingList />
+        <Suspense fallback={<div>로딩 중...</div>}>
+          <JobPostingList data={data} />
+        </Suspense>
       </main>
     </div>
   );

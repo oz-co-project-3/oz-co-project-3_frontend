@@ -1,7 +1,6 @@
 'use client';
 
 import JobPostingItem from '@/components/common/jobposting-item';
-import jobPostings from '@/mock/jobPostings.json';
 import { useSearchParams, usePathname } from 'next/navigation';
 import {
   Pagination,
@@ -11,20 +10,18 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { JobPostingListResponse } from '@/types/jobPosting';
 
-const PAGE_SIZE = 8;
-
-export default function JobPostingList() {
+export default function JobPostingList({
+  data: { data: posts, total, limit },
+}: {
+  data: JobPostingListResponse;
+}) {
   const searchParams = useSearchParams(); //쿼리 파라미터 가져와서
   const pathname = usePathname(); //현재 경로 가져와서
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10); //현재 페이지 가져오기(쿼리파라미터 페이지로) 근데 없으면 1로 시작하기
-
-  const totalPages = Math.ceil(jobPostings.length / PAGE_SIZE); //전체 페이지 수 구하는데 올림하기
-
-  const startIndex = (currentPage - 1) * PAGE_SIZE; //현재 페이지에 시작하는 인덱스(인덱스는 0부터 시작하니까 -1)
-  const endIndex = startIndex + PAGE_SIZE; //현재 페이지에 끝나는 인덱스(한페이지에 8개)
-  const currentJobs = jobPostings.slice(startIndex, endIndex); //현재 페이지에 해당하는 채용정보만 가져오기
+  const totalPages = Math.ceil(total / limit); //전체 페이지 수 구하는데 올림하기
 
   const createPageURL = (page: number) => {
     //이동하는 Url 생성할거야
@@ -44,8 +41,8 @@ export default function JobPostingList() {
           <span className='w-[280px] text-center'>마감일</span>
         </header>
         <div className='gap-4'>
-          {currentJobs.map((jobPosting) => (
-            <JobPostingItem key={jobPosting.id} {...jobPosting} />
+          {posts.map((post) => (
+            <JobPostingItem key={post.id} {...post} />
           ))}
         </div>
       </section>
@@ -58,7 +55,9 @@ export default function JobPostingList() {
                 href={createPageURL(currentPage - 1)}
                 aria-disabled={currentPage === 1}
                 tabIndex={currentPage === 1 ? -1 : 0}
-                style={currentPage === 1 ? { pointerEvents: 'none', opacity: 0.5 } : {}}
+                className={
+                  currentPage === 1 ? 'pointer-events-none opacity-50' : 'hover:bg-gray-100'
+                }
               />
             </PaginationItem>
             {/* 페이지 번호 */}
@@ -75,7 +74,11 @@ export default function JobPostingList() {
                 href={createPageURL(currentPage + 1)}
                 aria-disabled={currentPage === totalPages}
                 tabIndex={currentPage === totalPages ? -1 : 0}
-                style={currentPage === totalPages ? { pointerEvents: 'none', opacity: 0.5 } : {}}
+                className={
+                  currentPage === totalPages
+                    ? 'pointer-events-none opacity-50'
+                    : 'hover:bg-gray-100'
+                }
               />
             </PaginationItem>
           </PaginationContent>
