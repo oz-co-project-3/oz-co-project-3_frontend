@@ -3,7 +3,7 @@ import JobPostingList from './PublicJobList';
 import { Suspense } from 'react';
 
 export default async function PrivateJobsPage() {
-  const res = await fetch(`http://localhost:8000/api/postings/?employment_type=공공`);
+  const res = await fetch(`https://senior-tomorrow.o-r.kr/api/postings/?employment_type=공공`);
   const data = await res.json();
   return (
     <div className='flex h-full justify-center pt-30'>

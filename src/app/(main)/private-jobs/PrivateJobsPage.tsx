@@ -3,7 +3,7 @@ import JobPostingList from './PrivateJobList';
 import { Suspense } from 'react';
 
 export default async function PrivateJobsPage() {
-  const res = await fetch(`http://localhost:8000/api/postings/?employment_type=일반`);
+  const res = await fetch(`https://senior-tomorrow.o-r.kr/api/postings/?employment_type=일반`);
   const data = await res.json();
 
   return (
