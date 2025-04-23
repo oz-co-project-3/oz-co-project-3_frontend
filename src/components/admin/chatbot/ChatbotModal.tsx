@@ -8,6 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { CHATBOT_API } from '@/constants/chatbot';
 import type { ChatbotPrompt } from '@/types/chatbot';
 import type { KeyedMutator } from 'swr';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Props {
   open: boolean;
@@ -62,9 +63,10 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
         },
         body: JSON.stringify({
           step,
-          selection_path: selectionPath,
+          selection_path: selectionPath.trim(),
           answer,
-          options,
+          options: options.trim(),
+          // .replace(/^"|"$/g, ''),
           is_terminate: isTerminate,
         }),
       });
@@ -98,9 +100,12 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
           <Input
             placeholder='선택 경로 (예: 기업/회원가입)'
             value={selectionPath}
-            onChange={(e) => setSelectionPath(e.target.value)}
+            onChange={(e) => {
+              console.log('[Admin] 입력한 selection_path:', e.target.value);
+              setSelectionPath(e.target.value);
+            }}
           />
-          <Input placeholder='응답' value={answer} onChange={(e) => setAnswer(e.target.value)} />
+          <Textarea placeholder='응답' value={answer} onChange={(e) => setAnswer(e.target.value)} />
           <Input
             placeholder='옵션 (쉼표로 구분)'
             value={options}

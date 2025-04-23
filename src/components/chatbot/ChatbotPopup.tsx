@@ -10,7 +10,6 @@ export default function ChatbotPopup() {
 
   const [chatData, setChatData] = useState<ChatbotResponse | null>(null);
   const [selectionPath, setSelectionPath] = useState<string[]>([]);
-  const [selectedOption, setSelectedOption] = useState<string>('');
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8000/api/ws/');
@@ -21,16 +20,20 @@ export default function ChatbotPopup() {
     };
 
     ws.onmessage = (event) => {
-      const data: ChatbotResponse = JSON.parse(event.data);
-      setChatData(data);
+      try {
+        const data: ChatbotResponse = JSON.parse(event.data);
+        setChatData(data);
+      } catch (err) {
+        console.error('JSON 파싱 오류:', err);
+      }
     };
 
     ws.onerror = (err) => {
-      console.error('WebSocket 에러:', err);
+      console.error('WebSocket 에러 발생:', err);
     };
 
-    ws.onclose = () => {
-      console.log('WebSocket 연결 종료');
+    ws.onclose = (event) => {
+      console.log(`WebSocket 연결 종료 (code: ${event.code})`);
     };
 
     return () => {
@@ -39,17 +42,15 @@ export default function ChatbotPopup() {
   }, []);
 
   const handleSelect = (option: string) => {
-    setSelectedOption(option);
+    const trimmed = option.trim();
     const newPath = [...selectionPath, option];
-    setSelectionPath(newPath);
 
-    const fullPath = newPath.join('/');
-    socketRef.current?.send(fullPath);
+    setSelectionPath(newPath);
+    socketRef.current?.send(trimmed);
   };
 
   const handleReset = () => {
     setSelectionPath([]);
-    setSelectedOption('');
     setChatData(null);
     socketRef.current?.send('');
   };
@@ -63,32 +64,13 @@ export default function ChatbotPopup() {
         <SheetTitle className='sr-only'>챗봇</SheetTitle>
       </SheetHeader>
 
-      {/* {selectionPath.length === 0 && (
-        <div className='mb-4'>
-          <h2 className='mb-1 text-xl font-bold'>무엇을 도와드릴까요?</h2>
-          <p className='text-sm whitespace-pre-line text-gray-500'>
-            궁금한 점을 선택해주시면 <br />
-            빠르게 해결해드려요!
-          </p>
-        </div>
-      )} */}
-
       {chatData && chatData.answer && (
         <div className='mb-4'>
-          {selectionPath.length > 0 && (
-            <h2 className='mb-1 text-lg font-bold'>선택하신 항목에 대한 안내입니다</h2>
-          )}
-          <p className='text-md font-semibold whitespace-pre-line text-gray-500'>
+          <p className='text-lg font-semibold whitespace-pre-line text-gray-600'>
             {chatData.answer}
           </p>
           <div className='mt-2 border-b' />
         </div>
-      )}
-
-      {selectedOption && (
-        <p className='mt-2 text-right text-sm font-medium text-gray-600'>
-          &quot;{selectedOption}&quot;
-        </p>
       )}
 
       {chatData?.options && (
