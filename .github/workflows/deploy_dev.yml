@@ -54,8 +54,8 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           # 필요하다면 환경 변수 추가 (Dockerfile에서 받아서 설정하기)
-          # build-args: |
-          #   NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          build-args: |
+            BASE_URL=${{ secrets.BASE_URL }}
 
       # 캐시 최적화 (선택사항)
       - name: Move cache
@@ -76,9 +76,9 @@ jobs:
             # NAVER_MAP_KEY=${{ secrets.NAVER_MAP_KEY }}
             # EOL
 
-            cat > .env << EOL
-            BASE_URL=${{ secrets.BASE_URL }}
-            EOL
+            # cat > .env << EOL
+            # BASE_URL=${{ secrets.BASE_URL }}
+            # EOL
 
             cd app
             sudo docker pull nagi2/oz-co-front-dev:latest
