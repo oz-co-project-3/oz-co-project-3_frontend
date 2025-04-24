@@ -3,7 +3,7 @@ import PrivateJobList from './PrivateJobList';
 import { Suspense } from 'react';
 
 export default async function PrivateJobsPage() {
-  const res = await fetch(`http://backend-fast:8000/api/postings/?employment_type=일반`);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/postings/?employment_type=일반`);
   const data = await res.json();
   // console.log(data);
 

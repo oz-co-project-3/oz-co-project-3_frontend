@@ -13,6 +13,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set environment variables
+        run: |
+          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> $GITHUB_ENV
+
       # 빌드 캐싱 설정
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -71,6 +75,10 @@ jobs:
             # cat > .env << EOL
             # NAVER_MAP_KEY=${{ secrets.NAVER_MAP_KEY }}
             # EOL
+
+            cat > .env << EOL
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            EOL
 
             cd app
             sudo docker pull nagi2/oz-co-front-dev:latest
