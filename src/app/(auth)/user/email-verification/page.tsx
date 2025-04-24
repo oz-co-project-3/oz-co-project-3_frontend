@@ -11,25 +11,23 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
-import { useState, useEffect } from 'react';
-import { verifyEmailCode, registerUser } from '@/api/user';
+import { useState, useEffect, useCallback } from 'react';
+import { verifyEmailCode } from '@/api/user';
 import { useRouter } from 'next/navigation';
 import { AxiosError } from 'axios';
 
 interface VerificationFormValues {
-  email: string;
   verification_code: string;
 }
 
 export default function EmailVerificationPage() {
   const form = useForm<VerificationFormValues>({
     defaultValues: {
-      email: '',
       verification_code: '',
     },
   });
 
-  const [timeLeft, setTimeLeft] = useState(600);//유효시간 10분
+  const [timeLeft, setTimeLeft] = useState(600);
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -40,40 +38,45 @@ export default function EmailVerificationPage() {
     }
   }, [timeLeft]);
 
-  const formatTime = (seconds: number) => {
+  const formatTime = useCallback((seconds: number) => {
     const m = Math.floor(seconds / 60);
     const s = seconds % 60;
     return `${m}:${s < 10 ? `0${s}` : s}`;
-  };
+  }, []);
 
-  const handleSubmit = async (data: VerificationFormValues) => {
-    try {
-      const savedFormData = JSON.parse(localStorage.getItem('registerFormData') || '{}');
-  
-      if (!savedFormData.email) {
-        setError('잘못된 접근입니다. 다시 회원가입을 진행해주세요.');
-        return;
+  const handleSubmit = useCallback(
+    async (data: VerificationFormValues) => {
+      try {
+        const savedFormData = JSON.parse(localStorage.getItem('registerFormData') || '{}');
+
+        if (!savedFormData.email) {
+          setError('잘못된 접근입니다. 다시 회원가입을 진행해주세요.');
+          return;
+        }
+
+        await verifyEmailCode({
+          email: savedFormData.email,
+          verification_code: data.verification_code.trim(),
+        });
+
+        localStorage.setItem('emailVerified', 'true');
+
+        alert('회원가입이 완료되었습니다!');
+        // localStorage.removeItem('registerFormData');
+        router.push('/');
+      } catch (err) {
+        const error = err as AxiosError;
+
+        if (error.response?.status === 400) {
+          setError('이미 가입된 이메일이거나 인증 실패했습니다.');
+        } else {
+          console.error('에러:', error);
+          setError('인증 실패 또는 회원가입 실패했습니다.');
+        }
       }
-  
-      const payload = ({
-        email: savedFormData.email,
-        verification_code: data.verification_code, 
-      });
-      
-      await verifyEmailCode(payload);
-  
-      await registerUser(savedFormData);
-  
-      alert('회원가입이 완료되었습니다!');
-      localStorage.removeItem('registerFormData');
-      router.push('/');
-    } catch (err) {
-      const error = err as AxiosError;
-      console.error('에러:', error);
-      setError('인증 실패 또는 회원가입 실패했습니다.');
-    }
-  };
-  
+    },
+    [router],
+  );
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-100 px-4'>

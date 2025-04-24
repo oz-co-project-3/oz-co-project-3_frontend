@@ -9,23 +9,17 @@ export default function CompanyEditPage() {
     // 나중에 API 호출할 것...
   };
 
-  const handlePasswordChange = () => {
-    alert('비밀번호 변경누름');
-  };
 
-  const handleWithdraw = () => {
-    alert('탈퇴해~~~~');
-  };
-
-  const defaultValues = {
+  const defaultValues: Partial<CompanyProfileFormSchema> = {
     email: '471EH@gmail.com',
     company_name: '기태쓰낙원상가',
-    company_start_date: '2020-01-01',
+    business_start_date: '2020-01-01',
     business_number: '123-45-67890',
     company_description: 'Gold teeth sittin on the dash. she a rockstar',
     manager_name: '마요누아',
     manager_phone_number: '010-1111-1111',
     manager_email: 'mayoandnoir@gmail.com',
+    gender: 'male',
   };
 
   return (
@@ -33,8 +27,6 @@ export default function CompanyEditPage() {
       type="edit"
       defaultValues={defaultValues}
       onSubmit={handleEditSubmit}
-      onPasswordChange={handlePasswordChange}
-      onWithdraw={handleWithdraw}
     />
   );
 }
