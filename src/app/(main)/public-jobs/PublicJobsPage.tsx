@@ -2,8 +2,10 @@ import FilterList from '@/components/filter/FilterList';
 import JobPostingList from './PublicJobList';
 import { Suspense } from 'react';
 
-export default async function PrivateJobsPage() {
+export default async function PublicJobsPage() {
   const res = await fetch(`https://senior-tomorrow.o-r.kr/api/postings/?employment_type=공공`);
+  //임시로 배포 주소로 보냄 8000으로 해야함
+  // https://senior-tomorrow.o-r.kr/
   const data = await res.json();
   return (
     <div className='flex h-full justify-center pt-30'>

@@ -1,6 +1,6 @@
 'use client';
 
-import JobPostingItem from '@/components/common/jobposting-item';
+import JobPostingItem from '@/components/common/jobPostingItem';
 import { useSearchParams, usePathname } from 'next/navigation';
 import {
   Pagination,
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/pagination';
 import { JobPostingListResponse } from '@/types/jobPosting';
 
-export default function JobPostingList({
+export default function PrivateJobList({
   data: { data: posts, total, limit },
 }: {
   data: JobPostingListResponse;
@@ -42,7 +42,7 @@ export default function JobPostingList({
         </header>
         <div className='gap-4'>
           {posts.map((post) => (
-            <JobPostingItem key={post.id} {...post} />
+            <JobPostingItem key={post.id} {...post} detailPagePath='/private-jobs' />
           ))}
         </div>
       </section>

@@ -1,10 +1,15 @@
 import FilterList from '@/components/filter/FilterList';
-import JobPostingList from './PrivateJobList';
+import PrivateJobList from './PrivateJobList';
 import { Suspense } from 'react';
 
 export default async function PrivateJobsPage() {
   const res = await fetch(`https://senior-tomorrow.o-r.kr/api/postings/?employment_type=일반`);
   const data = await res.json();
+  console.log(data);
+
+  // const response = await fetch(`http://localhost:8000/api/postings/`);
+  // const data2 = await response.json();
+  // console.log(data2);
 
   return (
     <div className='flex h-full justify-center pt-30'>
@@ -16,7 +21,7 @@ export default async function PrivateJobsPage() {
           <FilterList />
         </div>
         <Suspense fallback={<div>로딩 중...</div>}>
-          <JobPostingList data={data} />
+          <PrivateJobList data={data} />
         </Suspense>
       </main>
     </div>
