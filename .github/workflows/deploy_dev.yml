@@ -13,9 +13,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set environment variables
-        run: |
-          echo "NEXT_PUBLIC_BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
+      # - name: Set environment variables
+      #   run: |
+      #     echo "NEXT_PUBLIC_BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
 
       # 빌드 캐싱 설정
       - name: Set up Docker Buildx
@@ -76,9 +76,10 @@ jobs:
             # NAVER_MAP_KEY=${{ secrets.NAVER_MAP_KEY }}
             # EOL
 
-            # cat > .env << EOL
-            # BASE_URL=${{ secrets.BASE_URL }}
-            # EOL
+            cat > .env << EOL
+            INTERNAL_BASE_URL=${{ secrets.INTERNAL_BASE_URL }}
+            NEXT_PUBLIC_EXTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_EXTERNAL_BASE_URL }}
+            EOL
 
             cd app
             sudo docker pull nagi2/oz-co-front-dev:latest
