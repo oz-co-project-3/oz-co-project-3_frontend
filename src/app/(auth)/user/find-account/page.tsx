@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/dialog';
 import { useState } from 'react';
 
-
 //이메일 찾기용 모달 추가해야 함
 
 export default function FindAccountTab() {
@@ -97,7 +96,7 @@ export default function FindAccountTab() {
               <DialogHeader>
                 <DialogTitle>비밀번호 확인</DialogTitle>
               </DialogHeader>
-              <p className='mt-3 text-m text-gray-600'>
+              <p className='text-m mt-3 text-gray-600'>
                 비밀번호를 변경하시려면 현재 비밀번호를 입력해주세요.
               </p>
               <div className='mt-4 space-y-4'>

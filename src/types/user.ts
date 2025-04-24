@@ -11,18 +11,18 @@ export interface SeekerFormData {
   sources?: string[];
   status: 'seeking' | 'not_seeking' | 'employed';
 }
-
 export interface CompanyFormData {
   email: string;
   password: string;
   password_check: string;
   company_name: string;
-  company_start_date: string;
-  company_end_date: string;
+  business_number: string;
+  business_start_date: string;
   company_description: string;
-  manager_name: string;
-  manager_phone_number: string;
-  manager_email: string;
+  gender: 'male' | 'female' | 'none';
+  manager_name?: string;
+  manager_phone_number?: string;
+  manager_email?: string;
 }
 
 type UserType = 'seeker' | 'business';

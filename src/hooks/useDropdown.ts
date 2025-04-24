@@ -1,5 +1,5 @@
-import { JOB_CATEGORIES } from '@/app/(main)/jobCategories';
-import { REGIONS } from '@/app/(main)/region';
+import { JOB_CATEGORIES } from '@/constants/jobCategories';
+import { REGIONS } from '@/constants/region';
 import { useState } from 'react';
 
 type RegionKey = keyof typeof REGIONS;

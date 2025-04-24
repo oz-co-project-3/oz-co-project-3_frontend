@@ -1,10 +1,5 @@
-import { Suspense } from 'react';
-import PriviteJobsPage from './PriviteJobsPage';
+import PriviteJobsPage from './PrivateJobsPage';
 
 export default function Page() {
-  return (
-    <Suspense fallback={<div>로딩 중...</div>}>
-      <PriviteJobsPage />
-    </Suspense>
-  );
+  return <PriviteJobsPage />;
 }

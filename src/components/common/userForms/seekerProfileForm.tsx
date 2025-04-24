@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { seekerProfileSchema, SeekerProfileFormValues } from '@/types/Schema/seekerSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { checkEmailDuplicate } from '@/api/user';
 import { CheckboxGroup } from '@/components/common/userForms/checkboxGroupForm';
 import {
   Form,
@@ -28,7 +29,7 @@ import { useRef, useState } from 'react';
 interface SeekerProfileFormProps {
   type: 'register' | 'edit';
   defaultValues?: Partial<SeekerProfileFormValues>;
-  onSubmit: (data: SeekerProfileFormValues) => void;
+  onSubmit: (data: SeekerProfileFormValues, isEmailVerified: boolean) => void;
 }
 
 export default function SeekerProfileForm({
@@ -56,6 +57,7 @@ export default function SeekerProfileForm({
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [image, setImage] = useState<string | null>(null);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,6 +68,31 @@ export default function SeekerProfileForm({
     }
   };
 
+  const handleCheckEmail = async () => {
+    const email = form.getValues('email');
+
+    if (!email) {
+      alert('이메일을 입력해주세요.');
+      return;
+    }
+
+    try {
+      const isAvailable = await checkEmailDuplicate(email);
+
+      if (isAvailable) {
+        alert('사용 가능한 이메일입니다.');
+        setIsEmailVerified(true);
+      } else {
+        alert('이미 사용 중인 이메일입니다.');
+        setIsEmailVerified(false);
+      }
+    } catch (error) {
+      console.error('이메일 확인 오류:', error);
+      alert('이메일 중복확인 중 오류가 발생했습니다.');
+      setIsEmailVerified(false);
+    }
+  };
+
   return (
     <div className='mx-auto w-full max-w-xl rounded-xl bg-gray-100 p-8'>
       <h2 className='mb-6 text-center text-2xl font-bold'>
@@ -73,7 +100,10 @@ export default function SeekerProfileForm({
       </h2>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
+        <form
+          onSubmit={form.handleSubmit((data) => onSubmit(data, isEmailVerified))}
+          className='space-y-5'
+        >
           {/* 프로필 이미지 (수정일 때만) */}
           {type === 'edit' && (
             <div className='mb-6 flex justify-center'>
@@ -145,7 +175,7 @@ export default function SeekerProfileForm({
                   {type === 'register' && (
                     <Button
                       type='button'
-                      variant='outline'
+                      onClick={handleCheckEmail}
                       className='bg-main-light hover:bg-main-dark text-white'
                     >
                       중복확인

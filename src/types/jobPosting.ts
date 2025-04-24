@@ -1,19 +1,33 @@
+export interface User {
+  id: number;
+}
+
 export interface JobPosting {
   id: number;
-  user: string;
+  user: User;
+  company: string;
   title: string;
   location: string;
-  employment_type: string;
+  employment_type: string; //
+  employ_method: string;
+  work_time: string;
+  position: string;
   history: string;
-  recruitment_count: string;
-  company_name: string;
+  recruitment_count: number;
+  education: string;
   deadline: string;
   salary: string;
-  education: string;
   summary: string;
   description: string;
-  created_at: string;
-  updated_at: string;
   status: string;
-  applied: boolean;
+  view_count: number;
+  report: number;
+  detailPagePath: string;
+}
+
+export interface JobPostingListResponse {
+  total: number;
+  offset: number;
+  limit: number;
+  data: JobPosting[];
 }
