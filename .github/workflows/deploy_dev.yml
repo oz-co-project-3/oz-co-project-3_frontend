@@ -55,7 +55,7 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
           # 필요하다면 환경 변수 추가 (Dockerfile에서 받아서 설정하기)
           build-args: |
-            BASE_URL=${{ secrets.BASE_URL }}
+            NEXT_PUBLIC_BASE_URL=${{ secrets.BASE_URL }}
 
       # 캐시 최적화 (선택사항)
       - name: Move cache

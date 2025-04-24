@@ -5,10 +5,10 @@ COPY package.json package-lock.json ./
 RUN npm install
 
 # 빌드 시 환경 변수 받기
-ARG BASE_URL
+ARG NEXT_PUBLIC_BASE_URL
 
 # 환경 변수 설정
-ENV BASE_URL=$BASE_URL
+ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
 
 COPY . .
 RUN npm run build
