@@ -22,6 +22,7 @@ export interface JobPosting {
   status: string;
   view_count: number;
   report: number;
+  detailPagePath: string;
 }
 
 export interface JobPostingListResponse {

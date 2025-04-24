@@ -1,6 +1,6 @@
 'use client';
 
-import JobPostingItem from '@/components/common/jobposting-item';
+import JobPostingItem from '@/components/common/jobPostingItem';
 import { useSearchParams, usePathname } from 'next/navigation';
 import {
   Pagination,
@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/pagination';
 import { JobPostingListResponse } from '@/types/jobPosting';
 
-export default function JobPostingList({
+export default function PublicJobList({
   data: { data: posts, total, limit },
 }: {
   data: JobPostingListResponse;
