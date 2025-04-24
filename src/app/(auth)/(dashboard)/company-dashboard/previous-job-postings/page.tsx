@@ -1,4 +1,4 @@
-import JobPostingCard from '@/components/dashboard/company/job-posting/JobPostingCard';
+import ExpiredJobPostingCardTemp from '@/components/dashboard/company/job-posting/ExpiredJobPostingCardTemp';
 import { Button } from '@/components/ui/button';
 
 export default async function PreviousJobPostingsPage() {
@@ -12,12 +12,13 @@ export default async function PreviousJobPostingsPage() {
           </Button>
         </div>
 
-        <JobPostingCard />
-        <JobPostingCard />
-        <JobPostingCard />
-        <JobPostingCard />
-        <JobPostingCard />
-        <JobPostingCard />
+        <ExpiredJobPostingCardTemp />
+        <ExpiredJobPostingCardTemp />
+        <ExpiredJobPostingCardTemp />
+        <ExpiredJobPostingCardTemp />
+        <ExpiredJobPostingCardTemp />
+        <ExpiredJobPostingCardTemp />
+        <ExpiredJobPostingCardTemp />
       </section>
     </>
   );

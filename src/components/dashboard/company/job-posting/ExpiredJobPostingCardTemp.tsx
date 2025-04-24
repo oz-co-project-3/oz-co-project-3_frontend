@@ -24,21 +24,12 @@ export default async function JobPostingCard() {
           </div>
         </div>
 
-        {/* 컴포넌트 분리 */}
-        {/* job_posting 받아온거에서 status가 open 이면 이걸로 렌더링 */}
-        <div className='flex gap-2 sm:flex-wrap sm:justify-end'>
-          <Button className='sm:w-[48%]'>지원자 보기</Button>
-          <Button className='sm:w-[48%]'>마감일 연장</Button>
-          <Button className='sm:w-[48%]'>수정</Button>
-          <Button className='sm:w-[48%]'>삭제</Button>
-        </div>
-
         {/* job_posting 받아온거에서 status가 closed 이면 이걸로 렌더링 */}
-        {/* <div className='flex min-w-40 gap-2 sm:flex-col sm:justify-end'>
-          <Button>지원자 보기</Button> */}
-        {/* 공고 수정 페이지로 */}
-        {/* <Button>재등록</Button>
-        </div> */}
+        <div className='flex min-w-40 gap-2 sm:flex-col sm:justify-end'>
+          <Button>지원자 보기</Button>
+          {/* 공고 수정 페이지로 */}
+          <Button>재등록</Button>
+        </div>
       </Link>
     </section>
   );
