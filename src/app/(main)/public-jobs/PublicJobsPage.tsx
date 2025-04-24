@@ -3,7 +3,9 @@ import JobPostingList from './PublicJobList';
 import { Suspense } from 'react';
 
 export default async function PublicJobsPage() {
-  const res = await fetch(`${process.env.INTERNAL_BASE_URL}/api/postings/?employment_type=공공`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=공공`,
+  );
   //임시로 배포 주소로 보냄 8000으로 해야함
   // https://senior-tomorrow.o-r.kr/
   // http://localhost:8000/

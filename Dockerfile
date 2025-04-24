@@ -4,6 +4,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 
+# build-args와 같이 사용해야함
 # 빌드 시 환경 변수 받기
 # ARG NEXT_PUBLIC_BASE_URL
 
