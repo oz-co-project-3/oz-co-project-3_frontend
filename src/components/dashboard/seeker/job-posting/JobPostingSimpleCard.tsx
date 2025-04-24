@@ -1,7 +1,7 @@
 import { Bookmark } from 'lucide-react';
 import Image from 'next/image';
 
-export default async function JobPostingCard() {
+export default async function JobPostingSimpleCard() {
   return (
     <div className='relative flex w-[31%] cursor-pointer flex-col overflow-hidden rounded-md border transition-all duration-150 hover:scale-105'>
       <div className='relative h-[150px] w-full'>

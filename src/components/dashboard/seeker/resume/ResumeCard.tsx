@@ -8,16 +8,13 @@ export default async function ResumeCard({ id }: { id: string }) {
         <span className='sr-only'>이력서 상세보기</span>
       </Link>
 
-      <div className='grow p-4'>
-        <h3 className='pb-2 text-lg font-bold'>이력서 제목 (id: {id})</h3>
+      <div className='flex grow flex-col gap-4 p-4'>
+        <h3 className='text-lg font-bold'>이력서 제목 (id: {id})</h3>
         <p>메모 내용 (알바지원용 등)</p>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam eligendi recusandae ullam
-          architecto fuga cumque tempora provident excepturi aspernatur cupiditate. Aut quae
-          voluptatum atque consequuntur dolor aliquam earum, excepturi tempore. Laboriosam quo
-          molestiae veniam voluptatibus corrupti deleniti ipsa sunt unde quisquam, porro odit in,
-          reprehenderit laudantium, a facere fugit atque eaque labore aspernatur. Impedit, tenetur
-          soluta id ipsa tempore qui!
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam quo ipsam, fugiat dolores
+          iste, totam nemo harum mollitia tempore, consectetur provident excepturi eveniet delectus
+          eum odio voluptatem temporibus ratione.
         </p>
         <p className='text-sm text-gray-500'>최종 수정일</p>
       </div>
