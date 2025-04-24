@@ -70,15 +70,15 @@ export default function SeekerProfileForm({
 
   const handleCheckEmail = async () => {
     const email = form.getValues('email');
-  
+
     if (!email) {
       alert('이메일을 입력해주세요.');
       return;
     }
-  
+
     try {
       const isAvailable = await checkEmailDuplicate(email);
-  
+
       if (isAvailable) {
         alert('사용 가능한 이메일입니다.');
         setIsEmailVerified(true);
@@ -100,7 +100,10 @@ export default function SeekerProfileForm({
       </h2>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit((data) => onSubmit(data, isEmailVerified))} className='space-y-5'>
+        <form
+          onSubmit={form.handleSubmit((data) => onSubmit(data, isEmailVerified))}
+          className='space-y-5'
+        >
           {/* 프로필 이미지 (수정일 때만) */}
           {type === 'edit' && (
             <div className='mb-6 flex justify-center'>

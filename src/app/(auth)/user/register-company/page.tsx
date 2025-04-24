@@ -21,10 +21,5 @@ export default function CompanyRegisterPage() {
     }
   };
 
-  return (
-    <CompanyProfileForm
-      type="register"
-      onSubmit={handleRegisterSubmit}
-    />
-  );
+  return <CompanyProfileForm type='register' onSubmit={handleRegisterSubmit} />;
 }

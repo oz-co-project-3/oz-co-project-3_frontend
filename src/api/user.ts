@@ -31,6 +31,6 @@ export const loginUser = async (formData: LoginFormData) => {
 };
 
 export const checkEmailDuplicate = async (email: string) => {
-    const res = await axiosInstance.post('/api/user/check-email/', { email });
-    return res.data.is_available;
-  };
+  const res = await axiosInstance.post('/api/user/check-email/', { email });
+  return res.data.is_available;
+};

@@ -12,10 +12,9 @@ export default function SeekerRegisterPage() {
     try {
       console.table(formData);
 
-      await registerSeeker(formData); 
+      await registerSeeker(formData);
       localStorage.setItem('registerFormData', JSON.stringify(formData));
       router.push('/user/email-verification');
-
     } catch (err) {
       console.error('이메일 인증 요청 실패:', err);
       alert('이메일 인증 요청 중 오류가 발생했습니다.');
