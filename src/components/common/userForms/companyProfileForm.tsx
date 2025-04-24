@@ -164,10 +164,7 @@ export default function CompanyProfileForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>성별</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder='성별선택' />
