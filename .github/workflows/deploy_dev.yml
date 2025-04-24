@@ -15,7 +15,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> $GITHUB_ENV
+          echo "NEXT_PUBLIC_BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
 
       # 빌드 캐싱 설정
       - name: Set up Docker Buildx
