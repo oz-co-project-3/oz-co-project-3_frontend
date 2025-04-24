@@ -7,6 +7,9 @@ RUN npm install
 # 빌드 시 환경 변수 받기
 ARG NEXT_PUBLIC_BASE_URL
 
+# 디버깅용 출력
+RUN echo "ENV Debug: NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}"
+
 # 환경 변수 설정
 ENV NEXT_PUBLIC_BASE_URL=$NEXT_PUBLIC_BASE_URL
 
