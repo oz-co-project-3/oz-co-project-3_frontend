@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
 import Header from '@/components/header/Header';
+import SwrProvider from '@/store/SwrProvider';
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -28,8 +29,10 @@ export default async function RootLayout({
       <body
         className={`${pretendard.className} bg-background-ivory h-full min-h-screen antialiased`}
       >
-        <Header />
-        <main className='h-full pt-[70px]'>{children}</main>
+        <SwrProvider>
+          <Header />
+          <main className='h-full pt-[70px]'>{children}</main>
+        </SwrProvider>
       </body>
     </html>
   );
