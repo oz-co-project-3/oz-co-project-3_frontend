@@ -42,7 +42,7 @@ export default function PublicJobList({
         </header>
         <div className='gap-4'>
           {posts.map((post) => (
-            <JobPostingItem key={post.id} {...post} />
+            <JobPostingItem key={post.id} {...post} detailPagePath='/public-jobs' />
           ))}
         </div>
       </section>
