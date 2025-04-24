@@ -8,6 +8,8 @@ export default async function PublicJobsPage() {
   // https://senior-tomorrow.o-r.kr/
   // http://localhost:8000/
   const data = await res.json();
+  console.log(data);
+
   return (
     <div className='flex h-full justify-center pt-30'>
       <main className='w-full max-w-[1400px] flex-row'>
