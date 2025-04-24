@@ -5,7 +5,8 @@ import { Suspense } from 'react';
 export default async function PrivateJobsPage() {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/postings/?employment_type=일반`);
   const data = await res.json();
-  // console.log(data);
+  console.log(res);
+  console.log(data);
 
   // https://senior-tomorrow.o-r.kr/
   // const response = await fetch(`http://localhost:8000/api/postings/`);
@@ -21,6 +22,8 @@ export default async function PrivateJobsPage() {
         <div className='mb-10 flex space-x-2'>
           <FilterList />
         </div>
+        <pre>{JSON.stringify(res, null, 2)}</pre>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
         <Suspense fallback={<div>로딩 중...</div>}>
           <PrivateJobList data={data} />
         </Suspense>

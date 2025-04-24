@@ -8,7 +8,8 @@ export default async function PublicJobsPage() {
   // https://senior-tomorrow.o-r.kr/
   // http://localhost:8000/
   const data = await res.json();
-  // console.log(data);
+  console.log(res);
+  console.log(data);
 
   return (
     <div className='flex h-full justify-center pt-30'>
@@ -19,6 +20,8 @@ export default async function PublicJobsPage() {
         <div className='mb-10 flex space-x-2'>
           <FilterList />
         </div>
+        <pre>{JSON.stringify(res, null, 2)}</pre>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
         <Suspense fallback={<div>로딩 중...</div>}>
           <JobPostingList data={data} />
         </Suspense>
