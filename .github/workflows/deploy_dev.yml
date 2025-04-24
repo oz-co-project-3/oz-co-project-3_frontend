@@ -77,7 +77,7 @@ jobs:
             # EOL
 
             cat > .env << EOL
-            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            BASE_URL=${{ secrets.BASE_URL }}
             EOL
 
             cd app
