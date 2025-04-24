@@ -7,16 +7,16 @@ import { BsSearchHeart } from 'react-icons/bs';
 function SearchBar() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [search, setsearch] = useState('');
+  const [search, setSearch] = useState('');
 
   const q = searchParams.get('q');
 
   useEffect(() => {
-    setsearch(q || '');
+    setSearch(q || '');
   }, [q]);
 
   const onChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setsearch(e.target.value);
+    setSearch(e.target.value);
   };
 
   // 검색어가 없거나 기존 검색어와 같으면 이동하지 않음
