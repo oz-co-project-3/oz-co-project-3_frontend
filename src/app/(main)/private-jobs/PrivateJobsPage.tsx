@@ -2,16 +2,24 @@ import FilterList from '@/components/filter/FilterList';
 import PrivateJobList from './PrivateJobList';
 import { Suspense } from 'react';
 
-export default async function PrivateJobsPage() {
+export default async function PrivateJobsPage({ searchParams }: { searchParams?: string }) {
+  // const searchKeyword = Array.isArray(searchParams?.search_keyword)
+  //   ? searchParams.search_keyword[0]
+  //   : searchParams?.search_keyword || '';
+
+  console.log(searchParams);
+
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=일반`,
+    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings?employment_type=일반` +
+      (searchParams ? `&search_keyword=${encodeURIComponent(searchParams)}` : ''),
   );
   const data = await res.json();
-  console.log(res);
-  console.log(data);
+
+  // console.log(res);
+  // console.log(data);
 
   // https://senior-tomorrow.o-r.kr/
-  // const response = await fetch(`http://localhost:8000/api/postings/`);
+  // const response = await fetch(`http ://localhost:8000/api/postings/`);
   // const data2 = await response.json();
   // console.log(data2);
 
@@ -24,9 +32,6 @@ export default async function PrivateJobsPage() {
         <div className='mb-10 flex space-x-2'>
           <FilterList />
         </div>
-        {/* 임시 출력 */}
-        <pre>{JSON.stringify(res, null, 2)}</pre>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
         <Suspense fallback={<div>로딩 중...</div>}>
           <PrivateJobList data={data} />
         </Suspense>
