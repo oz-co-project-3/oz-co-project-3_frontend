@@ -10,6 +10,7 @@ export default function ChatbotPopup() {
 
   const [chatData, setChatData] = useState<ChatbotResponse | null>(null);
   const [selectionPath, setSelectionPath] = useState<string[]>([]);
+  const [resetFlag, setResetFlag] = useState(false); // 돌아가기 눌렀을 때 초기화
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8000/api/ws/');
@@ -21,6 +22,7 @@ export default function ChatbotPopup() {
 
     ws.onmessage = (event) => {
       try {
+        console.log('WebSocket 응답 도착:', event.data);
         const data: ChatbotResponse = JSON.parse(event.data);
         setChatData(data);
       } catch (err) {
@@ -39,20 +41,29 @@ export default function ChatbotPopup() {
     return () => {
       ws.close();
     };
-  }, []);
+  }, [resetFlag]);
 
+  //옵션 선택 후 처리
   const handleSelect = (option: string) => {
     const trimmed = option.trim();
     const newPath = [...selectionPath, option];
-
     setSelectionPath(newPath);
     socketRef.current?.send(trimmed);
+    console.log(trimmed);
   };
 
+  //뒤로가기
+  const handleBack = () => {
+    if (selectionPath.length === 0) return;
+    setSelectionPath((prev) => prev.slice(0, -1)); // 상태는 유지
+    socketRef.current?.send('reverse'); // 서버에 뒤로가기 요청 전송
+  };
+
+  //전체 리셋
   const handleReset = () => {
     setSelectionPath([]);
     setChatData(null);
-    socketRef.current?.send('');
+    setResetFlag((prev) => !prev); //useEffect 재실행
   };
 
   return (
@@ -60,9 +71,15 @@ export default function ChatbotPopup() {
       side='bottom'
       className='!right-26 bottom-[170px] !left-auto w-full max-w-[360px] rounded-2xl border bg-white p-6 shadow-lg'
     >
-      <SheetHeader>
-        <SheetTitle className='sr-only'>챗봇</SheetTitle>
-      </SheetHeader>
+      {/* 뒤로가기 버튼 */}
+      <div className='flex items-center justify-between'>
+        <button onClick={handleBack} disabled={selectionPath.length === 0}>
+          <span className='text-xl text-gray-500'>{'←'}</span>
+        </button>
+        <SheetHeader>
+          <SheetTitle className='sr-only'>챗봇</SheetTitle>
+        </SheetHeader>
+      </div>
 
       {chatData && chatData.answer && (
         <div className='mb-4'>
@@ -96,9 +113,17 @@ export default function ChatbotPopup() {
           <Button onClick={handleReset} variant='outline' className='rounded-md px-3 py-1 text-sm'>
             돌아가기
           </Button>
-          <Button className='bg-main-light rounded-md px-3 py-1 text-sm text-white hover:bg-green-600'>
-            이동하기
-          </Button>
+
+          {chatData.url && (
+            <Button
+              onClick={() => {
+                window.location.href = chatData.url!; // undefined 아님
+              }}
+              className='bg-main-light rounded-md px-3 py-1 text-sm text-white hover:bg-green-600'
+            >
+              이동하기
+            </Button>
+          )}
         </div>
       )}
     </SheetContent>

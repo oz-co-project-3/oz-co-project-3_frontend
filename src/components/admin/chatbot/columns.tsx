@@ -32,8 +32,11 @@ export const getColumns = ({ onEdit, onDelete }: ActionsProps): ColumnDef<Chatbo
     cell: ({ row }) => (row.original.is_terminate ? '✅' : ''),
   },
   {
+    accessorKey: 'url',
+    header: 'URL',
+  },
+  {
     id: 'actions',
-    header: '관리',
     cell: ({ row }) => (
       <div className='flex justify-end gap-2'>
         <Button size='sm' variant='outline' onClick={() => onEdit(row.original)}>

@@ -15,7 +15,7 @@ const fetcher = async (url: string): Promise<ChatbotPrompt[]> => {
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  });
+  });//GET 요청 + 토큰 인증 + JSON 파싱
 
   if (!res.ok) throw new Error('데이터 불러오기 실패');
   const data = await res.json();
