@@ -24,6 +24,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
   const [options, setOptions] = useState('');
   const [isTerminate, setIsTerminate] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState('');
 
   // 모달 열릴 때 초기값
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
         setAnswer(editTarget.answer);
         setOptions(editTarget.options || '');
         setIsTerminate(editTarget.is_terminate);
+        setRedirectUrl(editTarget.url || '');
       } else {
         resetForm();
       }
@@ -46,6 +48,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
     setAnswer('');
     setOptions('');
     setIsTerminate(false);
+    setRedirectUrl('');
   };
 
   const handleSubmit = async () => {
@@ -66,8 +69,8 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
           selection_path: selectionPath.trim(),
           answer,
           options: options.trim(),
-          // .replace(/^"|"$/g, ''),
           is_terminate: isTerminate,
+          url: redirectUrl.trim(),
         }),
       });
 
@@ -115,6 +118,11 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
             <Checkbox checked={isTerminate} onCheckedChange={(v) => setIsTerminate(!!v)} />
             종료 응답 여부
           </label>
+          <Input
+            placeholder='이동할 URL (예: /free-board)'
+            value={redirectUrl}
+            onChange={(e) => setRedirectUrl(e.target.value)}
+          />
           <div className='mt-4 text-right'>
             <Button onClick={handleSubmit} disabled={loading}>
               {loading ? '저장 중...' : '저장'}
