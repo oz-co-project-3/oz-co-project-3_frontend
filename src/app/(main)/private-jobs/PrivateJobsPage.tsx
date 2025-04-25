@@ -24,6 +24,7 @@ export default async function PrivateJobsPage() {
         <div className='mb-10 flex space-x-2'>
           <FilterList />
         </div>
+        {/* 임시 출력 */}
         <pre>{JSON.stringify(res, null, 2)}</pre>
         <pre>{JSON.stringify(data, null, 2)}</pre>
         <Suspense fallback={<div>로딩 중...</div>}>
