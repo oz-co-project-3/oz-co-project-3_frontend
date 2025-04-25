@@ -2,9 +2,10 @@ import FilterList from '@/components/filter/FilterList';
 import JobPostingList from './PublicJobList';
 import { Suspense } from 'react';
 
-export default async function PublicJobsPage() {
+export default async function PublicJobsPage({ searchParams }: { searchParams?: string }) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=공공`,
+    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=공공` +
+      (searchParams ? `&search_keyword=${encodeURIComponent(searchParams)}` : ''),
   );
   //임시로 배포 주소로 보냄 8000으로 해야함
   // https://senior-tomorrow.o-r.kr/
@@ -22,9 +23,6 @@ export default async function PublicJobsPage() {
         <div className='mb-10 flex space-x-2'>
           <FilterList />
         </div>
-        {/* 임시 출력 */}
-        <pre>{JSON.stringify(res, null, 2)}</pre>
-        <pre>{JSON.stringify(data, null, 2)}</pre>
         <Suspense fallback={<div>로딩 중...</div>}>
           <JobPostingList data={data} />
         </Suspense>
