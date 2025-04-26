@@ -46,3 +46,6 @@ docker-compose.dev.yml
 # backend settings
 .envs
 nginx
+
+# cursor
+.cursor
