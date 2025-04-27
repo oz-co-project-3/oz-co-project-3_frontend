@@ -19,7 +19,9 @@ export default async function AllJobsPage({
   return (
     <div className='flex h-full justify-center pt-30'>
       <main className='w-full max-w-[1400px] flex-row'>
-        <h1 className='text-center text-3xl font-bold'>{searchKeyword}에 대한 검색 결과입니다 </h1>
+        <h1 className='text-center text-3xl font-bold'>
+          <span className='text-main'>{searchKeyword}</span>에 대한 검색 결과입니다
+        </h1>
         <hr />
         <div className='mb-10 flex space-x-2'></div>
         <Suspense fallback={<div>로딩 중...</div>}>
