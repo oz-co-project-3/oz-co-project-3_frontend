@@ -13,57 +13,69 @@ export default async function JobPosting() {
   // id나 공고 객체를 인자로 받아오기
 
   return (
-    <article className='rounded-md4 flex flex-col gap-8'>
+    <article className='flex flex-col gap-8'>
       <h2 className='border-b pb-4 text-2xl font-bold'>공고 제목</h2>
 
       {/* 모집 조건 */}
       <div className='flex min-w-[300px] grow flex-col gap-6 rounded-md border p-4 sm:p-8 md:p-12'>
         <h3 className='text-main-light text-lg font-extrabold'>모집 조건</h3>
-        <div className='flex items-center justify-between'>
-          <h3 className='flex items-center gap-4 text-lg font-bold'>
-            <Briefcase className='size-4' />
-            <span>모집 직무</span>
-          </h3>
-          <span className='text-zinc-800'>프론트엔드</span>
-        </div>
-        <div className='flex items-center justify-between'>
-          <h3 className='flex items-center gap-4 text-lg font-bold'>
-            <Calendar className='size-4' />
-            <span>근무 형태</span>
-          </h3>
-          <span className='text-zinc-800'>정규직</span>
-        </div>
-        <div className='flex items-start justify-between'>
-          <h3 className='flex items-center gap-4 text-lg font-bold'>
-            <BookCheck className='size-4' />
-            <span>자격 요건</span>
-          </h3>
-          <span className='text-zinc-800'>
-            프론트엔드 개발자 경력 2년 이상
-            <br />
-            React, TypeScript, Next.js 경험
-          </span>
-        </div>
-        <div className='flex items-center justify-between'>
-          <h3 className='flex items-center gap-4 text-lg font-bold'>
-            <Calendar className='size-4' />
-            <span>마감일</span>
-          </h3>
-          <span className='text-zinc-800'>2025-05-01</span>
-        </div>
-        <div className='flex items-center justify-between'>
-          <h3 className='flex items-center gap-4 text-lg font-bold'>
-            <UsersRound className='size-4' />
-            <span>모집 인원</span>
-          </h3>
-          <span className='text-zinc-800'>0명</span>
-        </div>
-        <div className='flex items-center justify-between'>
-          <h3 className='flex items-center gap-4 text-lg font-bold'>
-            <CircleDollarSign className='size-4' />
-            <span>급여</span>
-          </h3>
-          <span className='text-zinc-800'>면접 후 결정</span>
+
+        <div className='flex flex-col gap-4 lg:flex-row lg:gap-48'>
+          <div className='flex flex-col gap-4'>
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <Briefcase className='size-4' />
+                <span>모집 직무</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>프론트엔드</span>
+            </div>
+
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <Calendar className='size-4' />
+                <span>근무 형태</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>정규직</span>
+            </div>
+
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <BookCheck className='size-4' />
+                <span>자격 요건</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>
+                프론트엔드 개발자 경력 2년 이상
+                <br />
+                React, TypeScript, Next.js 경험
+              </span>
+            </div>
+          </div>
+
+          <div className='flex flex-col gap-4'>
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <Calendar className='size-4' />
+                <span>마감일</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>2025-05-01</span>
+            </div>
+
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <UsersRound className='size-4' />
+                <span>모집 인원</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>0명</span>
+            </div>
+
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <CircleDollarSign className='size-4' />
+                <span>급여</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>면접 후 결정</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -96,8 +108,8 @@ export default async function JobPosting() {
           <MapPin className='size-4' />
           <span className='text-main-light'>근무지 정보</span>
         </h3>
-        <p className='text-zinc-800'>서울시 강남구 ㅁㄴㄹㅇ로 123-456</p>
         <div className='flex h-60 items-center justify-center rounded-md border'>지도</div>
+        <p className='text-zinc-800'>서울시 강남구 ㅁㄴㄹㅇ로 123-456</p>
       </div>
 
       {/* 상세 모집 내용 */}

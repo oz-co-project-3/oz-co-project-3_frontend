@@ -8,7 +8,7 @@ export default async function ProfilePage() {
           <h2 className='text-2xl font-bold'>프로필</h2>
           <Link
             href='/dashboard/profile/edit'
-            className='bg-main-light hover:bg-main-dark cursor-pointer rounded-md px-6 py-2 text-white'
+            className='bg-main-light hover:bg-main-dark cursor-pointer rounded-md px-5 py-1.5 text-white'
           >
             회원정보 수정
           </Link>
