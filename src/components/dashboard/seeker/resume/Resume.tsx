@@ -15,12 +15,15 @@ import {
 import Image from 'next/image';
 
 export default async function Resume() {
+  // id나 이력서 객체를 인자로 받아오기
+
   return (
-    <article className='flex flex-col gap-8 rounded-md border p-4'>
+    <article className='flex flex-col gap-8 rounded-md'>
       {/* 사진, 기본정보 */}
       <div className='flex justify-between gap-8'>
         <div className='relative aspect-[7/9] w-full max-w-[300px] border'>
-          <Image src='/defaultProfile.png' alt='profile' fill className='object-cover' />
+          {/* 디폴트 이미지 */}
+          <Image src='/defaultProfile.png' alt='profile' fill className='object-cover p-12' />
         </div>
         <div className='flex min-w-[300px] grow flex-col gap-6 rounded-md border p-4 sm:p-8 md:p-12'>
           <div className='flex items-center justify-between'>
