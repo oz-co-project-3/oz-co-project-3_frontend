@@ -90,13 +90,15 @@ export default function DropDownFilter({
                   <div className='grid grid-cols-4 gap-2'>
                     {REGIONS[selectedRegion].map((district: string) => (
                       <div key={district}>
-                        <input
-                          type='checkbox'
-                          checked={selectedDistricts.includes(district)}
-                          className='cursor-pointer rounded border px-3 py-1'
-                          onChange={() => toggleDistrict(district)}
-                        />
-                        <label>{district}</label>
+                        <label>
+                          <input
+                            type='checkbox'
+                            checked={selectedDistricts.includes(district)}
+                            className='cursor-pointer rounded border px-3 py-1'
+                            onChange={() => toggleDistrict(district)}
+                          />
+                          {district}
+                        </label>
                       </div>
                     ))}
                   </div>
@@ -136,13 +138,15 @@ export default function DropDownFilter({
                   <div className='grid grid-cols-4 gap-2'>
                     {JOB_CATEGORIES[selectedJob].map((subcategory: string) => (
                       <div key={subcategory} className='flex gap-1'>
-                        <input
-                          type='checkbox'
-                          checked={selectedSubcategories.includes(subcategory)}
-                          onChange={() => toggleSubcategory(subcategory)}
-                          className='cursor-pointer rounded border px-3 py-1 hover:bg-blue-100'
-                        />
-                        <label>{subcategory}</label>
+                        <label>
+                          <input
+                            type='checkbox'
+                            checked={selectedSubcategories.includes(subcategory)}
+                            onChange={() => toggleSubcategory(subcategory)}
+                            className='cursor-pointer rounded border px-3 py-1 hover:bg-blue-100'
+                          />
+                          {subcategory}
+                        </label>
                       </div>
                     ))}
                   </div>
@@ -163,85 +167,109 @@ export default function DropDownFilter({
             <div>
               <div className='font-semibold'>고용형태</div>
               <div className='flex flex-wrap gap-2'>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('정규직')}
-                  onChange={() => toggleDetail('정규직')}
-                />
-                <label>정규직</label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('계약직')}
-                  onChange={() => toggleDetail('계약직')}
-                />
-                <label>계약직</label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('프리랜서')}
-                  onChange={() => toggleDetail('프리랜서')}
-                />
-                <label>프리랜서</label>
+                <label>
+                  <input
+                    type='checkbox'
+                    checked={selectedDetails.includes('정규직')}
+                    onChange={() => toggleDetail('정규직')}
+                  />
+                  정규직
+                </label>
+                <label>
+                  <input
+                    type='checkbox'
+                    checked={selectedDetails.includes('계약직')}
+                    onChange={() => toggleDetail('계약직')}
+                  />
+                  계약직
+                </label>
+                <label>
+                  <input
+                    type='checkbox'
+                    checked={selectedDetails.includes('프리랜서')}
+                    onChange={() => toggleDetail('프리랜서')}
+                  />
+                  프리랜서
+                </label>
               </div>
             </div>
             <div className='font-semibold'>경력여부</div>
             <div className='flex flex-wrap gap-2'>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('신입')}
-                onChange={() => toggleDetail('신입')}
-              />
-              <label>신입</label>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('경력')}
-                onChange={() => toggleDetail('경력')}
-              />
-              <label>경력</label>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('경력무관')}
-                onChange={() => toggleDetail('경력무관')}
-              />
-              <label>경력무관</label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('신입')}
+                  onChange={() => toggleDetail('신입')}
+                />
+                신입
+              </label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('경력')}
+                  onChange={() => toggleDetail('경력')}
+                />
+                경력
+              </label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('경력무관')}
+                  onChange={() => toggleDetail('경력무관')}
+                />
+                경력무관
+              </label>
             </div>
             <div className='font-semibold'>학력</div>
             <div className='flex flex-wrap gap-2'>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('학력무관')}
-                onChange={() => toggleDetail('학력무관')}
-              />
-              <label>학력무관</label>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('고등학교 졸업')}
-                onChange={() => toggleDetail('고등학교 졸업')}
-              />
-              <label>고등학교 졸업</label>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('대학교 졸업(2,3년제)')}
-                onChange={() => toggleDetail('대학교 졸업(2,3년제)')}
-              />
-              <label>대학교 졸업(2,3년제)</label>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('대학교 졸업(4년제)')}
-                onChange={() => toggleDetail('대학교 졸업(4년제)')}
-              />
-              <label>대학교 졸업(4년제)</label>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('대학원 석사 졸업')}
-                onChange={() => toggleDetail('대학원 석사 졸업')}
-              />
-              <label>대학원 석사 졸업</label>
-              <input
-                type='checkbox'
-                checked={selectedDetails.includes('대학원 박사 졸업')}
-                onChange={() => toggleDetail('대학원 박사 졸업')}
-              />
-              <label>대학원 박사 졸업</label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('학력무관')}
+                  onChange={() => toggleDetail('학력무관')}
+                />
+                학력무관
+              </label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('고등학교 졸업')}
+                  onChange={() => toggleDetail('고등학교 졸업')}
+                />
+                고등학교 졸업
+              </label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('대학교 졸업(2,3년제)')}
+                  onChange={() => toggleDetail('대학교 졸업(2,3년제)')}
+                />
+                대학교 졸업(2,3년제)
+              </label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('대학교 졸업(4년제)')}
+                  onChange={() => toggleDetail('대학교 졸업(4년제)')}
+                />
+                대학교 졸업(4년제)
+              </label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('대학원 석사 졸업')}
+                  onChange={() => toggleDetail('대학원 석사 졸업')}
+                />
+                대학원 석사 졸업
+              </label>
+              <label>
+                <input
+                  type='checkbox'
+                  checked={selectedDetails.includes('대학원 박사 졸업')}
+                  onChange={() => toggleDetail('대학원 박사 졸업')}
+                />
+                대학원 박사 졸업
+              </label>
             </div>
           </div>
         )}

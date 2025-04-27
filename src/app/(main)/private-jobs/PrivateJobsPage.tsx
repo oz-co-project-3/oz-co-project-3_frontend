@@ -3,10 +3,14 @@ import PrivateJobList from './PrivateJobList';
 import { Suspense } from 'react';
 
 export default async function PrivateJobsPage() {
-  const res = await fetch(`https://senior-tomorrow.o-r.kr/api/postings/?employment_type=일반`);
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=일반`,
+  );
   const data = await res.json();
+  console.log(res);
   console.log(data);
 
+  // https://senior-tomorrow.o-r.kr/
   // const response = await fetch(`http://localhost:8000/api/postings/`);
   // const data2 = await response.json();
   // console.log(data2);
@@ -20,6 +24,9 @@ export default async function PrivateJobsPage() {
         <div className='mb-10 flex space-x-2'>
           <FilterList />
         </div>
+        {/* 임시 출력 */}
+        <pre>{JSON.stringify(res, null, 2)}</pre>
+        <pre>{JSON.stringify(data, null, 2)}</pre>
         <Suspense fallback={<div>로딩 중...</div>}>
           <PrivateJobList data={data} />
         </Suspense>

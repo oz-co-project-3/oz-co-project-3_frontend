@@ -13,6 +13,10 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # - name: Set environment variables (GitHub Actions 환경변수 설정)
+      #   run: |
+      #     echo "NEXT_PUBLIC_BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
+
       # 빌드 캐싱 설정
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -49,9 +53,9 @@ jobs:
           tags: nagi2/oz-co-front-dev:latest
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache-new,mode=max
-          # 필요하다면 환경 변수 추가 (Dockerfile에서 받아서 설정하기)
+          # 필요하다면 환경 변수 추가 (Dockerfile에서 받아서 설정하기) (어차피 이미지에 포함)
           # build-args: |
-          #   NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+          #   NEXT_PUBLIC_INTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_INTERNAL_BASE_URL }}
 
       # 캐시 최적화 (선택사항)
       - name: Move cache
@@ -68,9 +72,11 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # .env 파일 생성
-            # cat > .env << EOL
-            # NAVER_MAP_KEY=${{ secrets.NAVER_MAP_KEY }}
-            # EOL
+            cat > .env << EOL
+            NEXT_PUBLIC_INTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_INTERNAL_BASE_URL }}
+            NEXT_PUBLIC_EXTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_EXTERNAL_BASE_URL }}
+            # NEXT_PUBLIC_NAVER_MAP_KEY=${{ secrets.NEXT_PUBLIC_NAVER_MAP_KEY }}
+            EOL
 
             cd app
             sudo docker pull nagi2/oz-co-front-dev:latest
