@@ -23,7 +23,8 @@ function SearchBar() {
   // 검색어가 없거나 기존 검색어와 같으면 이동하지 않음
   const onSubmit = () => {
     if (!search || q === search) return;
-    router.push(`${pathname}?search_keyword=${encodeURIComponent(search)}`);
+    const targetPath = pathname === '/' ? '/all-jobs' : pathname;
+    router.push(`${targetPath}?search_keyword=${encodeURIComponent(search)}`);
   };
 
   // 엔터키로 검색

@@ -1,15 +1,39 @@
+// app/private-jobs/page.tsx
+
+import FilterList from '@/components/filter/FilterList';
+import PrivateJobList from './PrivateJobList';
+import { Suspense } from 'react';
+
 export const dynamic = 'force-dynamic';
 
-import PriviteJobsPage from './PrivateJobsPage';
-
-export default async function Page({
+export default async function PrivateJobsPage({
   searchParams,
 }: {
   searchParams?: Promise<{ [key: string]: string }>;
 }) {
-  // console.log(await searchParams);
+  // searchParams가 Promise이므로 await 필요
   const resolvedSearchParams = await searchParams;
   const searchKeyword = resolvedSearchParams?.search_keyword;
-  return <PriviteJobsPage searchParams={searchKeyword} />;
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=일반` +
+      (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
+  );
+  const data = await res.json();
+
+  return (
+    <div className='flex h-full justify-center pt-30'>
+      <main className='w-full max-w-[1400px] flex-row'>
+        <h1 className='text-center text-3xl font-bold'>일반채용 정보</h1>
+        <hr />
+        <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
+        <div className='mb-10 flex space-x-2'>
+          <FilterList />
+        </div>
+        <Suspense fallback={<div>로딩 중...</div>}>
+          <PrivateJobList data={data} />
+        </Suspense>
+      </main>
+    </div>
+  );
 }
-//searchParams와 params가 Promise로 제공되어,프로퍼티를 사용하기 전에 반드시 await로 언래핑해야 함

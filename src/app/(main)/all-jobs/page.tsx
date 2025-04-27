@@ -1,10 +1,9 @@
+import { Suspense } from 'react';
+import AllJobList from './AllJobList';
+
 export const dynamic = 'force-dynamic';
 
-import FilterList from '@/components/filter/FilterList';
-import PublicJobList from './PublicJobList';
-import { Suspense } from 'react';
-
-export default async function PublicJobsPage({
+export default async function AllJobsPage({
   searchParams,
 }: {
   searchParams?: Promise<{ [key: string]: string }>;
@@ -13,22 +12,18 @@ export default async function PublicJobsPage({
   const searchKeyword = resolvedSearchParams?.search_keyword;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=공공` +
+    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?` +
       (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
   );
   const data = await res.json();
-
   return (
     <div className='flex h-full justify-center pt-30'>
       <main className='w-full max-w-[1400px] flex-row'>
-        <h1 className='text-center text-3xl font-bold'>공공일자리 정보</h1>
+        <h1 className='text-center text-3xl font-bold'>{searchKeyword}에 대한 검색 결과입니다 </h1>
         <hr />
-        <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
-        <div className='mb-10 flex space-x-2'>
-          <FilterList />
-        </div>
+        <div className='mb-10 flex space-x-2'></div>
         <Suspense fallback={<div>로딩 중...</div>}>
-          <PublicJobList data={data} />
+          <AllJobList data={data} />
         </Suspense>
       </main>
     </div>
