@@ -4,16 +4,18 @@ import Link from 'next/link';
 export default async function CompanyProfilePage() {
   return (
     <>
-      <section className='flex flex-col gap-4 rounded-md bg-white px-4 py-10'>
+      <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
         <div className='flex justify-between border-b pb-4'>
           <h2 className='text-2xl font-bold'>기업 프로필</h2>
           {/* 컴포넌트 분리 (클라이언트 컴포넌트) */}
           <div className='flex gap-2'>
             <Button className='bg-danger cursor-pointer hover:bg-amber-700'>회원 탈퇴</Button>
-            {/* 이건 링크로 가도 괜찮을듯? */}
-            <Button className='bg-main-light hover:bg-main-dark cursor-pointer'>
+            <Link
+              href='/company-dashboard/profile/edit'
+              className='bg-main-light hover:bg-main-dark cursor-pointer rounded-md px-5 py-1.5 text-white'
+            >
               회사 정보 수정
-            </Button>
+            </Link>
           </div>
         </div>
 
