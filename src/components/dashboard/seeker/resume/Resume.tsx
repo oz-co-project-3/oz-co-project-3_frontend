@@ -20,7 +20,7 @@ export default async function Resume() {
       {/* 사진, 기본정보 */}
       <div className='flex justify-between gap-8'>
         <div className='relative aspect-[7/9] w-full max-w-[300px] border'>
-          <Image src='/images/resume/profile.png' alt='profile' fill className='object-cover' />
+          <Image src='/defaultProfile.png' alt='profile' fill className='object-cover' />
         </div>
         <div className='flex min-w-[300px] grow flex-col gap-6 rounded-md border p-4 sm:p-8 md:p-12'>
           <div className='flex items-center justify-between'>
@@ -64,7 +64,7 @@ export default async function Resume() {
       {/* 경력, 학력 */}
       <div className='flex flex-col gap-8 rounded-md border p-4 sm:p-8 md:p-12'>
         <div className='sm:flex'>
-          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6'>
+          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6 md:w-1/5 lg:w-1/4'>
             <Briefcase className='size-5 pt-1.5' />
             <span>경력</span>
           </h3>
@@ -89,7 +89,7 @@ export default async function Resume() {
         </div>
 
         <div className='sm:flex'>
-          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6'>
+          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6 md:w-1/5 lg:w-1/4'>
             <GraduationCap className='size-5 pt-1.5' />
             <span>학력</span>
           </h3>
@@ -109,20 +109,28 @@ export default async function Resume() {
       {/* 스킬, 수상, 언어 */}
       <div className='flex flex-col gap-8 rounded-md border p-4 sm:p-8 md:p-12'>
         <div className='sm:flex'>
-          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6'>
+          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6 md:w-1/5 lg:w-1/4'>
             <Hammer className='size-5 pt-1.5' />
             <span>스킬</span>
           </h3>
           <div className='flex w-full flex-col gap-2'>
             <div className='flex justify-between text-zinc-800'>
+              <span>프론트엔드</span>
               <span>Next.js, React, TypeScript, Tailwind CSS</span>
-              {/* <span>??</span> */}
+            </div>
+            <div className='flex justify-between text-zinc-800'>
+              <span>백엔드</span>
+              <span>Node.js, Express, PostgreSQL</span>
+            </div>
+            <div className='flex justify-between text-zinc-800'>
+              <span>데브옵스</span>
+              <span>Docker, Kubernetes, CI/CD</span>
             </div>
           </div>
         </div>
 
         <div className='sm:flex'>
-          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6'>
+          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6 md:w-1/5 lg:w-1/4'>
             <TicketCheck className='size-5 pt-1.5' />
             <span>자격증</span>
           </h3>
@@ -139,7 +147,7 @@ export default async function Resume() {
         </div>
 
         <div className='sm:flex'>
-          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6'>
+          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6 md:w-1/5 lg:w-1/4'>
             <Medal className='size-5 pt-1.5' />
             <span>수상</span>
           </h3>
@@ -156,7 +164,7 @@ export default async function Resume() {
         </div>
 
         <div className='sm:flex'>
-          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6'>
+          <h3 className='flex gap-4 text-lg font-bold sm:w-1/6 md:w-1/5 lg:w-1/4'>
             <Languages className='size-5 pt-1.5' />
             <span>언어</span>
           </h3>
