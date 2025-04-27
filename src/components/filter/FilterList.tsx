@@ -1,6 +1,6 @@
 'use client';
 
-import useDropdown from '@/hooks/useDropdown';
+import useDropdown from '@/types/useDropdown';
 import { MdOutlineArrowDropDownCircle } from 'react-icons/md';
 import DropDownFilter from './DropDownFilter';
 export default function FilterList() {
