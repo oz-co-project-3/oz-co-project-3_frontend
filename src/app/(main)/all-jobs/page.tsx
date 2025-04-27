@@ -25,7 +25,7 @@ export default async function AllJobsPage({
         <hr />
         <div className='mb-10 flex space-x-2'></div>
         <Suspense fallback={<div>로딩 중...</div>}>
-          <AllJobList data={data} />
+          {data.data.length > 0 ? <AllJobList data={data} /> : <div>검색 결과가 없습니다.</div>}
         </Suspense>
       </main>
     </div>

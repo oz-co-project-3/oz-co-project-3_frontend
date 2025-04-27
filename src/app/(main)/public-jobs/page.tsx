@@ -28,7 +28,7 @@ export default async function PublicJobsPage({
           <FilterList />
         </div>
         <Suspense fallback={<div>로딩 중...</div>}>
-          <PublicJobList data={data} />
+          {data.data.length > 0 ? <PublicJobList data={data} /> : <div>검색 결과가 없습니다.</div>}
         </Suspense>
       </main>
     </div>

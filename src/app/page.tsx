@@ -54,11 +54,9 @@ export default function Home() {
               </div>
             </Link>
           </nav>
-
           <h1 className='text-2xl font-bold'>최근에 등록된 공고</h1>
           {/* 로그인되면 추천 공고 뜨게 해야함 */}
-          <div>추천공고 컴포넌트 뜨게 하기</div>
-          <p className='h-[1000px]'>문자열을 크게 해서 한번 스클롤을 내려보겠ㅅ브니다</p>
+          <p>이 부분은 디벨롭 머지 후 컴포넌트를 가져와 만들겠습니다 0428</p>
         </main>
       </div>
     </>

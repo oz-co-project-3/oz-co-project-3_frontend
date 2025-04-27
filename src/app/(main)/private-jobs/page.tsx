@@ -20,6 +20,7 @@ export default async function PrivateJobsPage({
       (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
   );
   const data = await res.json();
+  console.log(data);
 
   return (
     <div className='flex h-full justify-center pt-30'>
@@ -31,7 +32,7 @@ export default async function PrivateJobsPage({
           <FilterList />
         </div>
         <Suspense fallback={<div>로딩 중...</div>}>
-          <PrivateJobList data={data} />
+          {data.data.length > 0 ? <PrivateJobList data={data} /> : <div>검색 결과가 없습니다.</div>}
         </Suspense>
       </main>
     </div>
