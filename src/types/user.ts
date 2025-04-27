@@ -25,10 +25,16 @@ export interface CompanyFormData {
   manager_email?: string;
 }
 
-type UserType = 'seeker' | 'business';
-
 export interface LoginFormData {
   email: string;
   password: string;
-  user_type: UserType;
+}
+
+export interface LoginResponseData {
+  access_token: string;
+  user: {
+    id: number;
+    email: string;
+    user_type: ('seeker' | 'business' | 'admin')[];
+  };
 }
