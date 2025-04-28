@@ -1,10 +1,10 @@
 import { SeekerFormData, CompanyFormData, LoginFormData } from '@/types/user';
-import { apiFetch } from '@/api/fetcher'
+import { fetchApi } from '@/lib/fetcher'
 
 // 이메일 인증 코드 검증
 export const verifyEmailCode = async (data: { email: string; verification_code: string }) => {
   try {
-    const res = await apiFetch('/api/user/verify-email', {
+    const res = await fetchApi('/api/user/verify-email', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -18,7 +18,7 @@ export const verifyEmailCode = async (data: { email: string; verification_code: 
 // 구직자 회원가입
 export const registerSeeker = async (formData: SeekerFormData) => {
   try {
-    const res = await apiFetch('/api/user/register/', {
+    const res = await fetchApi('/api/user/register/', {
       method: 'POST',
       body: JSON.stringify(formData),
     });
@@ -32,7 +32,7 @@ export const registerSeeker = async (formData: SeekerFormData) => {
 // 기업 회원가입
 export const registerCompany = async (formData: CompanyFormData) => {
   try {
-    const res = await apiFetch('/api/user/register-company/', {
+    const res = await fetchApi('/api/user/register-company/', {
       method: 'POST',
       body: JSON.stringify(formData),
     });
@@ -46,7 +46,7 @@ export const registerCompany = async (formData: CompanyFormData) => {
 // 로그인
 export const loginUser = async (formData: LoginFormData) => {
   try {
-    const res = await apiFetch('/api/user/login/', {
+    const res = await fetchApi('/api/user/login/', {
       method: 'POST',
       body: JSON.stringify(formData),
     });
@@ -59,7 +59,7 @@ export const loginUser = async (formData: LoginFormData) => {
 
 //이메일 중복확인
 export async function checkEmailDuplicate(email: string): Promise<boolean> {
-  return apiFetch<boolean>(`/api/user/check-email/`, {
+  return fetchApi<boolean>(`/api/user/check-email/`, {
     method: "POST",
     body: JSON.stringify({ email }),
   });

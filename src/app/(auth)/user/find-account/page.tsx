@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useCallback } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,40 +11,56 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { useState } from 'react';
-
-//이메일 찾기용 모달 추가해야 함
+import { findEmail, findPassword } from '@/lib/findAccount';
 
 export default function FindAccountTab() {
-  const [emailForm, setEmailForm] = useState({ name: '', phone: '' });
-  const [pwForm, setPwForm] = useState({ name: '', phone: '', email: '' });
-  const [showPwModal, setShowPwModal] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [emailForm, setEmailForm] = useState({ name: '', phone_number: '' });
+  const [pwForm, setPwForm] = useState({ name: '', phone_number: '', email: '' });
+  const [showPwSuccessModal, setShowPwSuccessModal] = useState(false);
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [foundEmail, setFoundEmail] = useState('');
   const [tabValue, setTabValue] = useState('find-id');
-  const handleFindEmail = () => {
-    alert('이메일 까먹은 새럼 🙋');
-  };
 
   const handleTabChange = (value: string) => {
     setTabValue(value);
-    if (value === 'find-password') {
-      setShowPwModal(true); // 비번변경 탭으로 바뀌자마자 모달 나오게
-    }
   };
 
-  const handleConfirmPassword = () => {
-    if (confirmPassword.trim() === '') {
-      alert('비밀번호를 입력해주세요.');
-      return;
-    }
-    alert(`입력한 비밀번호를 확인하세요: ${confirmPassword}`);
-    setShowPwModal(false); // 입력 완료 후 모달 닫아줌
-    setConfirmPassword(''); // 입력 초기화해줘야 함
-  };
+  const handleFindEmail = useCallback(async () => {
+    try {
+      if (!emailForm.name.trim() || !emailForm.phone_number.trim()) {
+        alert('이름과 전화번호를 모두 입력해주세요.');
+        return;
+      }
 
-  const handleFindPw = () => {
-    alert('비밀번호 까먹은 새럼 🙋‍♀️');
-  };
+      const email = await findEmail(emailForm);
+      setFoundEmail(email);
+      setShowEmailModal(true);
+    } catch (error) {
+      console.error('이메일 찾기 실패:', error);
+      alert('이메일 찾기에 실패했습니다.');
+    }
+  }, [emailForm]);
+
+  const handleFindPw = useCallback(async () => {
+    try {
+      if (!pwForm.name.trim() || !pwForm.phone_number.trim() || !pwForm.email.trim()) {
+        alert('이름, 전화번호, 이메일을 모두 입력해주세요.');
+        return;
+      }
+
+      await findPassword(pwForm);
+
+      setShowPwSuccessModal(true);
+    } catch (error: unknown) {
+      console.error('비밀번호 찾기 실패:', error);
+
+      if (error instanceof Error && error.message.includes('user_not_found')) {
+        alert('입력한 정보와 일치하는 사용자가 없습니다.');
+      } else {
+        alert('비밀번호 찾기 중 오류가 발생했습니다.');
+      }
+    }
+  }, [pwForm]);
 
   return (
     <div className='bg--backgroundivory relative min-h-screen px-4'>
@@ -69,6 +86,7 @@ export default function FindAccountTab() {
             </TabsTrigger>
           </TabsList>
 
+          {/* 이메일 찾기 탭 */}
           <TabsContent value='find-id' className='mt-4 space-y-4'>
             <Input
               placeholder='이름'
@@ -78,9 +96,9 @@ export default function FindAccountTab() {
             />
             <Input
               placeholder='전화번호'
-              value={emailForm.phone}
+              value={emailForm.phone_number}
               className='bg-white'
-              onChange={(e) => setEmailForm({ ...emailForm, phone: e.target.value })}
+              onChange={(e) => setEmailForm({ ...emailForm, phone_number: e.target.value })}
             />
             <Button
               className='bg-main-light hover:bg-main-dark w-full text-white'
@@ -90,35 +108,7 @@ export default function FindAccountTab() {
             </Button>
           </TabsContent>
 
-          {/* +++++++++++!!!!!!!비밀번호 확인 모달 부분!!!!!!*/}
-          <Dialog open={showPwModal} onOpenChange={setShowPwModal}>
-            <DialogContent className='max-w-sm'>
-              <DialogHeader>
-                <DialogTitle>비밀번호 확인</DialogTitle>
-              </DialogHeader>
-              <p className='text-m mt-3 text-gray-600'>
-                비밀번호를 변경하시려면 현재 비밀번호를 입력해주세요.
-              </p>
-              <div className='mt-4 space-y-4'>
-                <Input
-                  type='password'
-                  placeholder='비밀번호를 입력하세요.'
-                  value={confirmPassword}
-                  className='bg-white'
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-              <DialogFooter className='mt-4'>
-                <Button
-                  className='bg-main-light hover:bg-main-dark w-full text-white'
-                  onClick={handleConfirmPassword}
-                >
-                  확인
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-
+          {/* 비밀번호 찾기 탭 */}
           <TabsContent value='find-password' className='mt-4 space-y-4'>
             <Input
               placeholder='이름'
@@ -128,9 +118,9 @@ export default function FindAccountTab() {
             />
             <Input
               placeholder='전화번호'
-              value={pwForm.phone}
+              value={pwForm.phone_number}
               className='bg-white'
-              onChange={(e) => setPwForm({ ...pwForm, phone: e.target.value })}
+              onChange={(e) => setPwForm({ ...pwForm, phone_number: e.target.value })}
             />
             <Input
               placeholder='이메일'
@@ -147,6 +137,44 @@ export default function FindAccountTab() {
             </Button>
           </TabsContent>
         </Tabs>
+
+        {/* 찾은 이메일 보여주는 모달쓰*/}
+        <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
+          <DialogContent className='max-w-sm'>
+            <DialogHeader>
+              <DialogTitle>찾은 이메일</DialogTitle>
+            </DialogHeader>
+            <p className='mt-4 text-center text-lg font-semibold'>{foundEmail}</p>
+            <DialogFooter className='mt-6'>
+              <Button
+                className='bg-main-light hover:bg-main-dark w-full text-white'
+                onClick={() => setShowEmailModal(false)}
+              >
+                확인
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        {/* 비밀번호 찾기 모달쓰 */}
+        <Dialog open={showPwSuccessModal} onOpenChange={setShowPwSuccessModal}>
+          <DialogContent className='max-w-sm'>
+            <DialogHeader>
+              <DialogTitle>비밀번호 재설정 메일 발송</DialogTitle>
+            </DialogHeader>
+            <p className='mt-4 text-center text-lg font-semibold'>
+              입력하신 이메일로 비밀번호 재설정 링크를 발송했습니다.
+            </p>
+            <DialogFooter className='mt-6'>
+              <Button
+                className='bg-main-light hover:bg-main-dark w-full text-white'
+                onClick={() => setShowPwSuccessModal(false)}
+              >
+                확인
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
