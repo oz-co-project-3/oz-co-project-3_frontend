@@ -68,7 +68,7 @@ export default function ChatbotPopup() {
   const handleBack = () => {
     if (selectionPath.length === 0) return;
     setSelectionPath((prev) => prev.slice(0, -1));
-    socketRef.current?.send('reverse'); // 서버에 'reverse' 요청해 뒤로가기
+    socketRef.current?.send('reverse'); // 서버에 'reverse' 요청해서 뒤로가기
   };
 
   // 전체 리셋
@@ -95,7 +95,7 @@ export default function ChatbotPopup() {
       </div>
 
       {/* 누적된 채팅 로그 */}
-      <div className='mb-4 flex flex-col gap-4'>
+      <div className='flex flex-col gap-4'>
         {chatLog.map((chat, idx) => (
           <div key={idx} className={chat.sender === 'user' ? 'text-right' : 'text-left'}>
             <p
@@ -111,7 +111,7 @@ export default function ChatbotPopup() {
 
       {/* 옵션 버튼들 */}
       {chatData?.options && (
-        <div className='mt-4 flex flex-wrap gap-2'>
+        <div className='flex flex-wrap gap-2'>
           {chatData.options
             .split(',')
             .map((opt) => opt.trim())
