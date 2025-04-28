@@ -5,12 +5,18 @@ import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import type { ChatbotResponse } from '@/types/chatbot';
 
+interface ChatMessage {
+  sender: 'user' | 'bot';
+  message: string;
+}
+
 export default function ChatbotPopup() {
   const socketRef = useRef<WebSocket | null>(null);
 
   const [chatData, setChatData] = useState<ChatbotResponse | null>(null);
   const [selectionPath, setSelectionPath] = useState<string[]>([]);
-  const [resetFlag, setResetFlag] = useState(false); // 돌아가기 눌렀을 때 초기화
+  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
+  const [resetFlag, setResetFlag] = useState(false); // 리셋용
 
   useEffect(() => {
     const ws = new WebSocket('ws://localhost:8000/api/ws/');
@@ -25,6 +31,10 @@ export default function ChatbotPopup() {
         console.log('WebSocket 응답 도착:', event.data);
         const data: ChatbotResponse = JSON.parse(event.data);
         setChatData(data);
+
+        if (data.answer) {
+          setChatLog((prev) => [...prev, { sender: 'bot', message: data.answer }]); // bot 응답 누적
+        }
       } catch (err) {
         console.error('JSON 파싱 오류:', err);
       }
@@ -41,35 +51,38 @@ export default function ChatbotPopup() {
     return () => {
       ws.close();
     };
-  }, [resetFlag]);
+  }, [resetFlag]); // resetFlag로 연결 재설정
 
-  //옵션 선택 후 처리
+  // 옵션 선택
   const handleSelect = (option: string) => {
     const trimmed = option.trim();
-    const newPath = [...selectionPath, option];
+    const newPath = [...selectionPath, trimmed];
     setSelectionPath(newPath);
+
+    setChatLog((prev) => [...prev, { sender: 'user', message: `"${trimmed}"` }]); // 유저 선택 누적
     socketRef.current?.send(trimmed);
-    console.log(trimmed);
+    console.log('[선택한 옵션 전송]:', trimmed);
   };
 
-  //뒤로가기
+  // 뒤로가기
   const handleBack = () => {
     if (selectionPath.length === 0) return;
-    setSelectionPath((prev) => prev.slice(0, -1)); // 상태는 유지
-    socketRef.current?.send('reverse'); // 서버에 뒤로가기 요청 전송
+    setSelectionPath((prev) => prev.slice(0, -1));
+    socketRef.current?.send('reverse'); // 서버에 'reverse' 요청해 뒤로가기
   };
 
-  //전체 리셋
+  // 전체 리셋
   const handleReset = () => {
     setSelectionPath([]);
     setChatData(null);
-    setResetFlag((prev) => !prev); //useEffect 재실행
+    setChatLog([]); // 대화 기록 초기화
+    setResetFlag((prev) => !prev); // WebSocket 재연결
   };
 
   return (
     <SheetContent
       side='bottom'
-      className='!right-26 bottom-[170px] !left-auto w-full max-w-[360px] rounded-2xl border bg-white p-6 shadow-lg'
+      className='!right-26 bottom-[170px] !left-auto w-full max-w-[360px] overflow-y-auto rounded-2xl border bg-white p-6 shadow-lg'
     >
       {/* 뒤로가기 버튼 */}
       <div className='flex items-center justify-between'>
@@ -81,15 +94,22 @@ export default function ChatbotPopup() {
         </SheetHeader>
       </div>
 
-      {chatData && chatData.answer && (
-        <div className='mb-4'>
-          <p className='text-lg font-semibold whitespace-pre-line text-gray-600'>
-            {chatData.answer}
-          </p>
-          <div className='mt-2 border-b' />
-        </div>
-      )}
+      {/* 누적된 채팅 로그 */}
+      <div className='mb-4 flex flex-col gap-4'>
+        {chatLog.map((chat, idx) => (
+          <div key={idx} className={chat.sender === 'user' ? 'text-right' : 'text-left'}>
+            <p
+              className={`inline-block rounded-lg px-4 py-2 ${
+                chat.sender === 'user' ? 'bg-green-100 text-gray-700' : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              {chat.message}
+            </p>
+          </div>
+        ))}
+      </div>
 
+      {/* 옵션 버튼들 */}
       {chatData?.options && (
         <div className='mt-4 flex flex-wrap gap-2'>
           {chatData.options
@@ -108,24 +128,26 @@ export default function ChatbotPopup() {
         </div>
       )}
 
-      {chatData?.is_terminate && (
-        <div className='mt-6 flex justify-end gap-2'>
+      {/* 종료 버튼 및 이동 버튼 */}
+      <div className='mt-6 flex justify-end gap-2'>
+        {chatData?.is_terminate && (
           <Button onClick={handleReset} variant='outline' className='rounded-md px-3 py-1 text-sm'>
             돌아가기
           </Button>
-
-          {chatData.url && (
-            <Button
-              onClick={() => {
-                window.location.href = chatData.url!; // undefined 아님
-              }}
-              className='bg-main-light rounded-md px-3 py-1 text-sm text-white hover:bg-green-600'
-            >
-              이동하기
-            </Button>
-          )}
-        </div>
-      )}
+        )}
+        {chatData?.url && chatData.url.trim() !== '' && (
+          <Button
+            onClick={() => {
+              if (chatData.url) {
+                window.location.href = chatData.url;
+              }
+            }}
+            className='bg-main-light rounded-md px-3 py-1 text-sm text-white hover:bg-green-600'
+          >
+            이동하기
+          </Button>
+        )}
+      </div>
     </SheetContent>
   );
 }
