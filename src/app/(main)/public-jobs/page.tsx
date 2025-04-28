@@ -1,7 +1,36 @@
 export const dynamic = 'force-dynamic';
 
-import PublicJobsPage from './PublicJobsPage';
+import FilterList from '@/components/filter/FilterList';
+import PublicJobList from './PublicJobList';
+import { Suspense } from 'react';
 
-export default async function Page() {
-  return <PublicJobsPage />;
+export default async function PublicJobsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ [key: string]: string }>;
+}) {
+  const resolvedSearchParams = await searchParams;
+  const searchKeyword = resolvedSearchParams?.search_keyword;
+
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=공공` +
+      (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
+  );
+  const data = await res.json();
+
+  return (
+    <div className='flex h-full justify-center pt-30'>
+      <main className='w-full max-w-[1400px] flex-row'>
+        <h1 className='text-center text-3xl font-bold'>공공일자리 정보</h1>
+        <hr />
+        <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
+        <div className='mb-10 flex space-x-2'>
+          <FilterList />
+        </div>
+        <Suspense fallback={<div>로딩 중...</div>}>
+          {data.data.length > 0 ? <PublicJobList data={data} /> : <div>검색 결과가 없습니다.</div>}
+        </Suspense>
+      </main>
+    </div>
+  );
 }

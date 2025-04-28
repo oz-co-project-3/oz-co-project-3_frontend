@@ -3,7 +3,7 @@ import JobPostingSimpleCard from '@/components/dashboard/seeker/job-posting/JobP
 export default async function FavoriteJobPostingsPage() {
   return (
     <>
-      <section className='flex flex-col gap-4 rounded-md bg-white px-4 py-10'>
+      <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
         <h2 className='border-b pb-4 text-2xl font-bold'>찜한 채용공고</h2>
         <div className='flex flex-wrap justify-center gap-4 py-4'>
           <JobPostingSimpleCard />

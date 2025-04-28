@@ -1,9 +1,13 @@
 'use client';
 
+import ScrollShowSearchBar from '@/components/common/searchbar/ScrollShowSearchbar';
 import SearchBarSuspense from '@/components/common/searchbar/Searchbar';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import ScrollShowSearchBar from './ScrollShowSearchbar';
+import { MdOutlineWorkOutline } from 'react-icons/md';
+import { AiOutlineFileSearch } from 'react-icons/ai';
+import { VscAccount } from 'react-icons/vsc';
+import { FaRegComments } from 'react-icons/fa';
+import KeywordRecommand from '@/components/common/searchbar/KeywordRecommand';
 
 export default function Home() {
   return (
@@ -18,32 +22,41 @@ export default function Home() {
             지금 바로 시작하세요!
           </p>
           <SearchBarSuspense />
-          <nav className='flex flex-row justify-center space-x-4 pt-10'>
+          <div className='mt-1 mb-10 flex flex-row justify-center'>
+            <p className='mr-5 text-gray-500'>검색 키워드 추천</p>
+            <div className='mb-1 flex justify-center'>
+              <KeywordRecommand />
+            </div>
+          </div>
+          <nav className='mb-10 flex flex-row justify-center space-x-4'>
             <Link href='/public-jobs'>
-              <div className='rounded-md border px-4 py-2 text-center'>공공일자리</div>
+              <div className='flex h-[120px] w-[120px] flex-col gap-5 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100'>
+                <AiOutlineFileSearch className='text-[#2B90D9]' />
+                <span className='text-xl'>공공 공고</span>
+              </div>
             </Link>
             <Link href='/private-jobs'>
-              <div className='rounded-md border px-4 py-2 text-center'>일반채용</div>
+              <div className='flex h-[120px] w-[120px] flex-col gap-5 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100'>
+                <MdOutlineWorkOutline className='text-[#22C55E]' />
+                <span className='text-xl'>일반 공고</span>
+              </div>
             </Link>
             <Link href='/dashboard'>
-              <div className='rounded-md border px-4 py-2 text-center'>이력서</div>
+              <div className='flex h-[120px] w-[120px] flex-col gap-5 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100'>
+                <VscAccount className='text-[#A881AF]' />
+                <span className='text-xl'>이력서</span>
+              </div>
             </Link>
             <Link href='/community'>
-              <div className='rounded-md border px-4 py-2 text-center'>커뮤니티</div>
+              <div className='flex h-[120px] w-[120px] flex-col gap-5 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100'>
+                <FaRegComments className='text-[#FFBA0D]' />
+                <span className='text-xl'>커뮤니티</span>
+              </div>
             </Link>
           </nav>
-          <p>검색 키워드 추천</p>
-          <div className='mb-20 flex justify-center space-x-2'>
-            <Button>경비</Button>
-            <Button>사무보조</Button>
-            <Button>IT개발</Button>
-            <Button>디자인</Button>
-            <Button>서비스</Button>
-          </div>
           <h1 className='text-2xl font-bold'>최근에 등록된 공고</h1>
           {/* 로그인되면 추천 공고 뜨게 해야함 */}
-          <div>추천공고 컴포넌트 뜨게 하기</div>
-          <p className='h-[1000px]'>문자열을 크게 해서 한번 스클롤을 내려보겠ㅅ브니다</p>
+          <p>이 부분은 디벨롭 머지 후 컴포넌트를 가져와 만들겠습니다 0428</p>
         </main>
       </div>
     </>

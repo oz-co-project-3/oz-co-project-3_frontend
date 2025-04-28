@@ -4,6 +4,7 @@ export interface ChatbotBase {
   answer: string;
   options: string | null;
   is_terminate: boolean;
+  url?: string;
 }
 
 export interface ChatbotPrompt extends ChatbotBase {
