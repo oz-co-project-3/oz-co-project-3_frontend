@@ -51,6 +51,7 @@ export default function SeekerProfileForm({
       purposes: [],
       sources: [],
       status: 'seeking',
+      //roles or type: ['seeker'],
       ...defaultValues,
     },
   });

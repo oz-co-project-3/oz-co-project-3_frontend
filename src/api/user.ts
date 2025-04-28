@@ -1,36 +1,66 @@
 import { SeekerFormData, CompanyFormData, LoginFormData } from '@/types/user';
-import axiosInstance from '@/api/axios';
+import { apiFetch } from '@/api/fetcher'
 
-export const verifyEmailCode = (data: { email: string; verification_code: string }) => {
-  return axiosInstance.post('/api/user/verify-email', data);
+// 이메일 인증 코드 검증
+export const verifyEmailCode = async (data: { email: string; verification_code: string }) => {
+  try {
+    const res = await apiFetch('/api/user/verify-email', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    return res;
+  } catch (error) {
+    console.error('이메일 인증 오류', error);
+    throw error;
+  }
 };
 
+// 구직자 회원가입
 export const registerSeeker = async (formData: SeekerFormData) => {
   try {
-    const res = await axiosInstance.post('/api/user/register/', formData);
-    return res.data;
+    const res = await apiFetch('/api/user/register/', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+    return res;
   } catch (error) {
     console.error('구직자 회원가입 오류', error);
     throw error;
   }
 };
 
+// 기업 회원가입
 export const registerCompany = async (formData: CompanyFormData) => {
   try {
-    const res = await axiosInstance.post('/api/user/register-company/', formData);
-    return res.data;
+    const res = await apiFetch('/api/user/register-company/', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+    return res;
   } catch (error) {
     console.error('기업 회원가입 오류', error);
     throw error;
   }
 };
 
+// 로그인
 export const loginUser = async (formData: LoginFormData) => {
-  const res = await axiosInstance.post('/api/user/login/', formData);
-  return res.data;
+  try {
+    const res = await apiFetch('/api/user/login/', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    });
+    return res;
+  } catch (error) {
+    console.error('로그인 오류', error);
+    throw error;
+  }
 };
 
-export const checkEmailDuplicate = async (email: string) => {
-  const res = await axiosInstance.post('/api/user/check-email/', { email });
-  return res.data.is_available;
-};
+//이메일 중복확인
+export async function checkEmailDuplicate(email: string): Promise<boolean> {
+  return apiFetch<boolean>(`/api/user/check-email/`, {
+    method: "POST",
+    body: JSON.stringify({ email }),
+  });
+}
