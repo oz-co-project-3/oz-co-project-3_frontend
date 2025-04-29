@@ -18,6 +18,10 @@ export default function ChatbotPopup() {
   const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
   const [resetFlag, setResetFlag] = useState(false); // 리셋용
 
+  console.log('WS:', process.env.NEXT_PUBLIC_WS_URL);
+  console.log('INTERNAL:', process.env.NEXT_PUBLIC_INTERNAL_BASE_URL);
+  console.log('EXTERNAL:', process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL);
+
   useEffect(() => {
     console.log(process.env.NEXT_PUBLIC_WS_URL);
     const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL!}/api/ws/`);
