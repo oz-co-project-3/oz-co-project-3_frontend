@@ -4,18 +4,21 @@ import { Button } from '@/components/ui/button';
 
 export default function TogleButton({
   onClick,
-  isActive,
   children,
+  isActive,
+  disabled,
 }: {
   onClick: () => void;
-  isActive: boolean;
   children: React.ReactNode;
+  isActive?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <Button
       onClick={onClick}
       size='sm'
-      className={`${isActive ? 'bg-main-light hover:bg-main-dark' : 'bg-zinc-200 text-black hover:bg-zinc-300'}`}
+      className={`${isActive ? 'bg-main-light hover:bg-main-dark' : 'bg-transparent text-black shadow-none hover:bg-zinc-100'} cursor-pointer`}
+      disabled={disabled}
     >
       {children}
     </Button>

@@ -1,13 +1,13 @@
 'use client';
 
+import JobPostingEditor from '../common/text-editor/JobPostingEditor';
+
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
 // import dynamic from 'next/dynamic';
 
 // const JobPostingEditor = dynamic(() => import('@/components/common/textEditor/JobPostingEditor'), {
 //   ssr: false,
 // });
-
-import JobPostingEditor from '../common/textEditor/JobPostingEditor';
 
 export default function JobPostingForm() {
   return (

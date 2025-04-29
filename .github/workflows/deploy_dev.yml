@@ -71,15 +71,16 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
+            cd app
+
             # .env 파일 생성
-            cat > app/.env << EOL
+            cat > .env << EOL
             NEXT_PUBLIC_INTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_INTERNAL_BASE_URL }}
             NEXT_PUBLIC_EXTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_EXTERNAL_BASE_URL }}
             NEXT_PUBLIC_WS_URL=${{ secrets.NEXT_PUBLIC_WS_URL }}
             # NEXT_PUBLIC_NAVER_MAP_KEY=${{ secrets.NEXT_PUBLIC_NAVER_MAP_KEY }}
             EOL
 
-            cd app
             sudo docker pull nagi2/oz-co-front-dev:latest
             sudo docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
             sudo docker image rm nagi2/oz-co-front-dev:latest
