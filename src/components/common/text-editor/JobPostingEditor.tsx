@@ -2,7 +2,6 @@
 
 import { EditorContent, EditorContext, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-
 import Placeholder from '@tiptap/extension-placeholder';
 import { List } from 'lucide-react';
 import TogleButton from './TogleButton';
@@ -16,8 +15,15 @@ import HyperLink, { link } from './style-options/HyperLink';
 import Image from '@tiptap/extension-image';
 import ImageUploadBtn, { imageUploadNode } from './style-options/ImageUploadBtn';
 import CharacterCounter, { characterCount } from './CharacterCounter';
+import { useEffect } from 'react';
 
-export default function JobPostingEditor() {
+export default function JobPostingEditor({
+  setDetailHTML,
+  setDetailJSON,
+}: {
+  setDetailHTML: (html: string) => void;
+  setDetailJSON: (json: string) => void;
+}) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -43,7 +49,7 @@ export default function JobPostingEditor() {
       }),
       characterCount,
     ],
-    // 일단 테스트용 텍스트 (수정이나 불러오기 했을때, 초기 텍스트로 대체)
+    // 일단 테스트용 텍스트 (수정이나 불러오기 했을때, 초기 텍스트로 대체, JSON 으로 넣어주기)
     content: `
         <h1>This is a 1st level heading</h1>
         <p>This is a paragraph</p>
@@ -60,7 +66,18 @@ export default function JobPostingEditor() {
     // Tiptap Error: SSR has been detected,
     // please set `immediatelyRender` explicitly to `false` to avoid hydration mismatches.
     immediatelyRender: false,
+    onUpdate: ({ editor }) => {
+      setDetailHTML(editor.getHTML());
+      setDetailJSON(JSON.stringify(editor.getJSON()));
+    },
   });
+
+  useEffect(() => {
+    if (editor) {
+      setDetailHTML(editor.getHTML());
+      setDetailJSON(JSON.stringify(editor.getJSON()));
+    }
+  }, [editor, setDetailHTML, setDetailJSON]);
 
   if (!editor) return null;
 
@@ -75,7 +92,6 @@ export default function JobPostingEditor() {
 
           {/* 헤딩 */}
           <Headings editor={editor} />
-
           {/* 리스트 (불릿) */}
           <TogleButton
             onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -96,10 +112,8 @@ export default function JobPostingEditor() {
 
           {/* 링크 */}
           <HyperLink editor={editor} />
-
           {/* 이미지 */}
           <ImageUploadBtn editor={editor} />
-
           {/* 유튜브 */}
           <YoutubeBtn editor={editor} />
         </div>

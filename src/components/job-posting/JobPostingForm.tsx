@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import JobPostingEditor from '../common/text-editor/JobPostingEditor';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
@@ -10,9 +11,23 @@ import JobPostingEditor from '../common/text-editor/JobPostingEditor';
 // });
 
 export default function JobPostingForm() {
+  const [detailHTML, setDetailHTML] = useState<string>('');
+  const [detailJSON, setDetailJSON] = useState<string>('');
+  if (detailJSON) {
+    console.log(JSON.parse(detailJSON));
+  }
+
   return (
     <div>
-      <JobPostingEditor />
+      <JobPostingEditor setDetailHTML={setDetailHTML} setDetailJSON={setDetailJSON} />
+      <div className='mt-4'>
+        <div className='text-sm font-bold'>HTML</div>
+        <div>{detailHTML}</div>
+      </div>
+      <div className='mt-4'>
+        <div className='text-sm font-bold'>JSON</div>
+        <div>{detailJSON}</div>
+      </div>
     </div>
   );
 }
