@@ -15,6 +15,8 @@ export default async function PrivateJobsPage({
   const resolvedSearchParams = await searchParams;
   const searchKeyword = resolvedSearchParams?.search_keyword;
 
+  console.log(process.env.NEXT_PUBLIC_INTERNAL_BASE_URL);
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=일반` +
       (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
