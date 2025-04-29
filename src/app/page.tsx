@@ -8,6 +8,13 @@ import { AiOutlineFileSearch } from 'react-icons/ai';
 import { VscAccount } from 'react-icons/vsc';
 import { FaRegComments } from 'react-icons/fa';
 import KeywordRecommand from '@/components/common/searchbar/KeywordRecommand';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
 
 export default function Home() {
   return (
@@ -54,9 +61,31 @@ export default function Home() {
               </div>
             </Link>
           </nav>
-          <h1 className='text-2xl font-bold'>최근에 등록된 공고</h1>
+          <h1 className='text-2xl font-bold'>최근에 등록된 공고(임시로 형태만 넣어둠)</h1>
           {/* 로그인되면 추천 공고 뜨게 해야함 */}
-          <p>이 부분은 디벨롭 머지 후 컴포넌트를 가져와 만들겠습니다 0428</p>
+          {/* 상태관리로 가져오기  */}
+          <Carousel
+            opts={{
+              align: 'center',
+            }}
+            className='mx-auto flex w-full max-w-2xl'
+          >
+            <CarouselContent>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <CarouselItem key={index} className='md:basis-1/2 lg:basis-1/3'>
+                  <div className='p-1'>
+                    <div className='gap-4'>
+                      <div className='flex h-[200px] w-[200px] items-center justify-center rounded-2xl border text-lg'>
+                        공고
+                      </div>
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
         </main>
       </div>
     </>

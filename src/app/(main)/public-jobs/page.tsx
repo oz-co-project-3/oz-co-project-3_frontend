@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import FilterList from '@/components/filter/FilterList';
 import PublicJobList from './PublicJobList';
 import { Suspense } from 'react';
+import Image from 'next/image';
 
 export default async function PublicJobsPage({
   searchParams,
@@ -16,6 +17,10 @@ export default async function PublicJobsPage({
     `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=공공` +
       (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
   );
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`서버 에러 (${res.status}): ${errorText}`);
+  }
   const data = await res.json();
 
   return (
@@ -23,12 +28,21 @@ export default async function PublicJobsPage({
       <main className='w-full max-w-[1400px] flex-row'>
         <h1 className='text-center text-3xl font-bold'>공공일자리 정보</h1>
         <hr />
-        <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
-        <div className='mb-10 flex space-x-2'>
-          <FilterList />
+        <div className='bg-white'>
+          <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
+          <div className='mb-10 flex space-x-2'>
+            <FilterList />
+          </div>
         </div>
         <Suspense fallback={<div>로딩 중...</div>}>
-          {data.data.length > 0 ? <PublicJobList data={data} /> : <div>검색 결과가 없습니다.</div>}
+          {data.data.length > 0 ? (
+            <PublicJobList data={data} />
+          ) : (
+            <div className='flex flex-col items-center justify-center'>
+              <Image src='/SadCharacter2.png' alt='슬픈곰돌이 남' width={200} height={200} />
+              <div>검색 결과가 없습니다.</div>
+            </div>
+          )}
         </Suspense>
       </main>
     </div>
