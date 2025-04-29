@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '../../../ui/button';
+import { Button } from '../ui/button';
 
 export default function DeleteResumeButton({ id }: { id: string }) {
   const [isOpen, setIsOpen] = useState(false);

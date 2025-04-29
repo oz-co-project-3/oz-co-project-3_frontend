@@ -1,4 +1,4 @@
-name: Deploy to NCP Server with Docker (Dev)
+name: Deploy to AWS EC2 with Docker (Dev)
 
 on:
   push:
@@ -72,9 +72,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # .env 파일 생성
-            cat > .env << EOL
+            cat > app/.env << EOL
             NEXT_PUBLIC_INTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_INTERNAL_BASE_URL }}
             NEXT_PUBLIC_EXTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_EXTERNAL_BASE_URL }}
+            NEXT_PUBLIC_WS_URL=${{ secrets.NEXT_PUBLIC_WS_URL }}
             # NEXT_PUBLIC_NAVER_MAP_KEY=${{ secrets.NEXT_PUBLIC_NAVER_MAP_KEY }}
             EOL
 

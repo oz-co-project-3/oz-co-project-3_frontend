@@ -9,7 +9,7 @@ export default async function JobPostingCard({ id }: { id: string }) {
   return (
     <section className='relative flex cursor-pointer gap-4 rounded-md border px-8 py-6 max-sm:flex-col sm:justify-between'>
       <Link
-        href={`/company-dashboard/current-job-postings/${id}`}
+        href={`/company-dashboard/job-postings/current/${id}`}
         className='absolute inset-0 grow'
       >
         <span className='sr-only'>공고 상세보기</span>

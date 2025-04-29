@@ -1,4 +1,4 @@
-import ExpiredJobPostingCardTemp from '@/components/dashboard/company/job-posting/ExpiredJobPostingCardTemp';
+import ExpiredJobPostingCardTemp from '@/components/job-posting/ExpiredJobPostingCardTemp';
 import Link from 'next/link';
 
 export default async function PreviousJobPostingsPage() {

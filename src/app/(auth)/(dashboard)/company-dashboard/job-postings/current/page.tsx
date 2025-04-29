@@ -1,4 +1,4 @@
-import JobPostingCard from '@/components/dashboard/company/job-posting/JobPostingCard';
+import JobPostingCard from '@/components/job-posting/JobPostingCard';
 import Link from 'next/link';
 
 export default async function CurrentJobPostingsPage() {

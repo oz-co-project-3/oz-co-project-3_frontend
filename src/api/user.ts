@@ -1,5 +1,5 @@
 import { SeekerFormData, CompanyFormData, LoginFormData } from '@/types/user';
-import { apiFetch } from '@/api/fetcher'
+import { apiFetch } from '@/lib/fetcher';
 
 // 이메일 인증 코드 검증
 export const verifyEmailCode = async (data: { email: string; verification_code: string }) => {
@@ -60,7 +60,7 @@ export const loginUser = async (formData: LoginFormData) => {
 //이메일 중복확인
 export async function checkEmailDuplicate(email: string): Promise<boolean> {
   return apiFetch<boolean>(`/api/user/check-email/`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ email }),
   });
 }

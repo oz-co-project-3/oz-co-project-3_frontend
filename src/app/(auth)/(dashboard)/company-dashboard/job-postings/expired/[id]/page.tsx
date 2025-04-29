@@ -1,4 +1,4 @@
-import JobPosting from '@/components/dashboard/seeker/job-posting/JobPosting';
+import JobPosting from '@/components/job-posting/JobPosting';
 import { Button } from '@/components/ui/button';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {

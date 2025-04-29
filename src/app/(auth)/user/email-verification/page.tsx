@@ -14,7 +14,6 @@ import {
 import { useState, useEffect, useCallback } from 'react';
 import { verifyEmailCode } from '@/api/user';
 import { useRouter } from 'next/navigation';
-import { AxiosError } from 'axios';
 
 interface VerificationFormValues {
   verification_code: string;
@@ -65,9 +64,10 @@ export default function EmailVerificationPage() {
         // localStorage.removeItem('registerFormData');
         router.push('/');
       } catch (err) {
-        const error = err as AxiosError;
+        const error = err as Error;
 
-        if (error.response?.status === 400) {
+        // Error 객체에는 response 속성이 없으므로 커스텀 에러 메시지를 확인
+        if (error.message.includes('400') || error.message.includes('이미 가입된 이메일')) {
           setError('이미 가입된 이메일이거나 인증 실패했습니다.');
         } else {
           console.error('에러:', error);
