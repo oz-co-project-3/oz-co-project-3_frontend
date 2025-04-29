@@ -1,5 +1,5 @@
 import { SeekerFormData, CompanyFormData, LoginFormData } from '@/types/user';
-import { apiFetch } from '@/api/fetcher'
+import { apiFetch } from '@/lib/fetcher'
 
 // 이메일 인증 코드 검증
 export const verifyEmailCode = async (data: { email: string; verification_code: string }) => {

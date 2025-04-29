@@ -9,7 +9,7 @@ export const companyProfileSchema = z
     business_start_date: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD 형식으로 입력해주세요'),
-    business_number: z.string(),
+    business_number: z.string().min(10, '- 하이픈은 모두 제거 해주세요'),
     company_description: z.string().min(10, '소개를 10자 이상 입력해주세요.'),
     manager_name: z.string().optional(),
     manager_phone_number: z.string().optional(),
