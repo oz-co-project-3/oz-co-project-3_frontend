@@ -12,7 +12,7 @@ export default async function AllJobsPage({
   const searchKeyword = resolvedSearchParams?.search_keyword;
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?` +
+    `${process.env.INTERNAL_BASE_URL}/api/postings/?` +
       (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
   );
   const data = await res.json();
