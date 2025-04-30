@@ -13,7 +13,7 @@ export default function PublicJobList({
   const searchParams = useSearchParams(); //쿼리 파라미터 가져와서
   const pathname = usePathname(); //현재 경로 가져와서
 
-  const currentPage = parseInt(searchParams.get('page') || '1', 10); //현재 페이지 가져오기(쿼리파라미터 페이지로) 근데 없으면 1로 시작하기
+  const currentPage = parseInt(searchParams.get('page') || '0', 10); //현재 페이지 가져오기(쿼리파라미터 페이지로) 근데 없으면 1로 시작하기
   const totalPages = Math.ceil(total / limit); //전체 페이지 수 구하는데 올림하기
 
   const createPageURL = (page: number) => {
