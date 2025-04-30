@@ -14,7 +14,7 @@ import {
 import { useState, useEffect, useCallback } from 'react';
 import { verifyEmailCode } from '@/api/user';
 import { useRouter } from 'next/navigation';
-import { AxiosError } from 'axios';
+import { resendEmailCode } from '@/lib/resendEmailCode';
 
 interface VerificationFormValues {
   verification_code: string;
@@ -30,6 +30,7 @@ export default function EmailVerificationPage() {
   const [timeLeft, setTimeLeft] = useState(600);
   const [error, setError] = useState('');
   const router = useRouter();
+  const [resendCount, setResendCount] = useState(0);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -65,18 +66,40 @@ export default function EmailVerificationPage() {
         // localStorage.removeItem('registerFormData');
         router.push('/');
       } catch (err) {
-        const error = err as AxiosError;
+        console.error('에러:', err);
 
-        if (error.response?.status === 400) {
-          setError('이미 가입된 이메일이거나 인증 실패했습니다.');
-        } else {
-          console.error('에러:', error);
-          setError('인증 실패 또는 회원가입 실패했습니다.');
-        }
+        setError('인증 실패 또는 회원가입 실패했습니다.');
       }
     },
     [router],
   );
+
+  const handleResendCode = useCallback(async () => {
+    if (resendCount >= 5) {
+      alert('인증번호 재전송은 최대 5회까지만 가능합니다.');
+      return;
+    }
+
+    try {
+      const savedFormData = JSON.parse(localStorage.getItem('registerFormData') || '{}');
+
+      if (!savedFormData.email) {
+        setError('잘못된 접근입니다. 다시 회원가입을 진행해주세요.');
+        return;
+      }
+
+      await resendEmailCode(savedFormData.email);
+
+      alert('인증번호가 다시 발송되었습니다.');
+
+      setTimeLeft(600);
+
+      setResendCount((prev) => prev + 1);
+    } catch (err) {
+      console.error('재전송 에러:', err);
+      setError('인증번호 재전송에 실패했습니다.');
+    }
+  }, [resendCount]);
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-100 px-4'>
@@ -111,13 +134,24 @@ export default function EmailVerificationPage() {
 
             {error && <p className='text-center text-sm text-red-500'>{error}</p>}
 
-            <Button
-              type='submit'
-              className='bg-main-light hover:bg-main-dark w-full text-white'
-              disabled={timeLeft <= 0}
-            >
-              인증하기
-            </Button>
+            <div className='flex gap-2'>
+              <Button
+                type='button'
+                onClick={handleResendCode}
+                className='text-main-light w-1/2 border bg-white hover:bg-gray-100'
+                disabled={resendCount >= 5}
+              >
+                인증번호 재전송
+              </Button>
+
+              <Button
+                type='submit'
+                className='bg-main-light hover:bg-main-dark w-1/2 text-white'
+                disabled={timeLeft <= 0}
+              >
+                인증하기
+              </Button>
+            </div>
 
             <div className='text-center text-sm text-gray-500'>
               남은 시간: {formatTime(timeLeft)}

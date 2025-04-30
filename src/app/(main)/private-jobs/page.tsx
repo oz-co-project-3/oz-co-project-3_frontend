@@ -13,6 +13,7 @@ export default function PrivateJobsPage() {
   const searchKeyword = searchParams.get('search_keyword'); // .get() 사용
   const { data, loading } = useFilterJobs('일반', searchKeyword || undefined);
 
+
   return (
     <div className='flex h-full justify-center pt-30'>
       <main className='w-full max-w-[1400px] flex-row'>

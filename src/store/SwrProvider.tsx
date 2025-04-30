@@ -1,13 +1,12 @@
 'use client';
 
-import axiosInstance from '@/api/axios';
+import { apiFetch } from '@/lib/fetcher';
 import { SWRConfig } from 'swr';
 
 export default function SwrProvider({ children }: { children: React.ReactNode }) {
   const fetcher = async (url: string) => {
-    // 인스턴스 작성 완료 후 업데이트 하기
-    const response = await axiosInstance.get(url);
-    return response.data;
+    const response = await apiFetch(url);
+    return response;
   };
 
   return (

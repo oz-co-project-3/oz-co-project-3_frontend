@@ -24,6 +24,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { CompanyProfileFormSchema, companyProfileSchema } from '@/types/Schema/companySchema';
 import { CompanyFormData } from '@/types/user';
+import { verifyBusinessNumber } from '@/lib/businessVerify';
 
 interface CompanyProfileFormProps {
   type: 'register' | 'edit';
@@ -237,7 +238,34 @@ export default function CompanyProfileForm({
                   {type === 'register' && (
                     <Button
                       type='button'
-                      onClick={() => alert('사업자등록번호 확인')}
+                      onClick={async () => {
+                        const businessNumber = form.getValues('business_number');
+                        if (!businessNumber) {
+                          alert('사업자등록번호를 입력해주세요.');
+                          return;
+                        }
+
+                        try {
+                          const result = await verifyBusinessNumber(businessNumber);
+                          if (result.is_valid) {
+                            alert('사업자등록번호 확인 완료!');
+                          } else {
+                            alert('유효하지 않은 사업자등록번호입니다.');
+                          }
+                        } catch (error: unknown) {
+                          if (error instanceof Error) {
+                            if (error.message.includes('invalid_business_number')) {
+                              alert('국세청에 등록되지 않은 사업자등록번호입니다.');
+                            } else {
+                              alert('사업자등록번호 확인 중 오류가 발생했습니다.');
+                            }
+                            console.error('사업자번호 확인 실패:', error);
+                          } else {
+                            alert('알 수 없는 오류가 발생했습니다.');
+                            console.error('Unknown error:', error);
+                          }
+                        }
+                      }}
                       className='bg-main-light hover:bg-main-dark h-10 px-3 whitespace-nowrap text-white'
                     >
                       유효확인
