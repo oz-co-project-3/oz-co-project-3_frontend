@@ -1,32 +1,39 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState, useCallback } from 'react';
 import DataTable from '../table/DataTable';
-import { columns } from './columns';
+import { getColumns } from './columns';
 import { AdminUser } from '@/types/user';
 
 interface UserTableProps {
   userType: 'personal' | 'corporate';
 }
 
-// 타입 안전 매핑 함수
 const getExpectedBackendType = (frontendType: 'personal' | 'corporate') => {
   const map = {
     personal: 'seeker',
     corporate: 'business',
   } as const;
-
   return map[frontendType];
 };
 
 export function UserTable({ userType }: UserTableProps) {
+  const router = useRouter();
+
+  const handleResumeClick = useCallback(
+    (userId: number) => {
+      router.push(`/admin/resume/${userId}`);
+    },
+    [router],
+  );
+
   const [data, setData] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
-
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/admin/user`, {
           method: 'GET',
@@ -36,19 +43,11 @@ export function UserTable({ userType }: UserTableProps) {
           },
         });
 
-        const contentType = res.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          const text = await res.text();
-          throw new Error(`Invalid JSON 응답:\n${text}`);
-        }
-
         const result: AdminUser[] = await res.json();
-
-        //타입 매핑 후 비교
-        const backendType = getExpectedBackendType(userType); // 'seeker' | 'business'
+        const backendType = getExpectedBackendType(userType);
         const filtered = result.filter(
-          (user) => user.base.user_type === backendType && user.base.is_superuser === false,
-        ); //관리자는 목록에서 제외
+          (user) => user.base.user_type === backendType && !user.base.is_superuser,
+        );
 
         setData(filtered);
       } catch (error) {
@@ -71,7 +70,7 @@ export function UserTable({ userType }: UserTableProps) {
 
   return (
     <div className='mt-4'>
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={getColumns(handleResumeClick)} data={data} />
     </div>
   );
 }

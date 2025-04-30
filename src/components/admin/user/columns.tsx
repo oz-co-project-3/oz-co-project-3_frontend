@@ -1,7 +1,10 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { AdminUser } from '@/types/user';
+import { Button } from '@/components/ui/button';
 
-export const columns: ColumnDef<AdminUser>[] = [
+export type ResumeButtonHandler = (userId: number) => void;
+
+export const getColumns = (onResumeClick: ResumeButtonHandler): ColumnDef<AdminUser>[] => [
   {
     accessorKey: 'base.id',
     header: 'ID',
@@ -12,13 +15,38 @@ export const columns: ColumnDef<AdminUser>[] = [
     cell: ({ row }) => {
       const seekerName = row.original.seeker?.name;
       const corpName = row.original.corp?.company_name;
-      return seekerName || corpName || '-';
+      const name = seekerName || corpName || '-';
+
+      return (
+        <div className='flex items-center gap-2'>
+          <span>{name}</span>
+          <div className='ml-6'>
+            <Button variant='outline' size='sm' className='mr-2 px-2 py-1 text-xs'>
+              프로필
+            </Button>
+            <Button
+              variant='outline'
+              size='sm'
+              className='px-2 py-1 text-xs'
+              onClick={() => onResumeClick(row.original.base.id)} // 핸들러 외부에서 주입
+            >
+              이력서
+            </Button>
+          </div>
+        </div>
+      );
     },
   },
   {
     accessorKey: 'base.email',
     header: '이메일',
     cell: ({ row }) => row.original.base.email || '-',
+  },
+  {
+    id: 'phone_number',
+    header: '전화번호',
+    cell: ({ row }) =>
+      row.original.seeker?.phone_number || row.original.corp?.manager_phone_number || '-',
   },
   {
     accessorKey: 'base.user_type',
