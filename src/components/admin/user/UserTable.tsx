@@ -28,16 +28,13 @@ export function UserTable({ userType }: UserTableProps) {
       setIsLoading(true);
 
       try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/admin/user`,
-          {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`,
-            },
-          }
-        );
+        const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/admin/user`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.NEXT_PUBLIC_ADMIN_TOKEN}`,
+          },
+        });
 
         const contentType = res.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
@@ -49,7 +46,9 @@ export function UserTable({ userType }: UserTableProps) {
 
         //타입 매핑 후 비교
         const backendType = getExpectedBackendType(userType); // 'seeker' | 'business'
-        const filtered = result.filter((user) => user.base.user_type === backendType);
+        const filtered = result.filter(
+          (user) => user.base.user_type === backendType && user.base.is_superuser === false,
+        ); //관리자는 목록에서 제외
 
         setData(filtered);
       } catch (error) {
@@ -64,14 +63,14 @@ export function UserTable({ userType }: UserTableProps) {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center">
-        <p className="text-gray-400">로딩 중...</p>
+      <div className='flex h-64 items-center justify-center'>
+        <p className='text-gray-400'>로딩 중...</p>
       </div>
     );
   }
 
   return (
-    <div className="mt-4">
+    <div className='mt-4'>
       <DataTable columns={columns} data={data} />
     </div>
   );

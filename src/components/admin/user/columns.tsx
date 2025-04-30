@@ -9,7 +9,6 @@ export const columns: ColumnDef<AdminUser>[] = [
   {
     accessorKey: 'seeker.name',
     header: '이름',
-    // ✅ 수정: seeker.name 또는 corp.company_name 표시
     cell: ({ row }) => {
       const seekerName = row.original.seeker?.name;
       const corpName = row.original.corp?.company_name;
@@ -24,7 +23,6 @@ export const columns: ColumnDef<AdminUser>[] = [
   {
     accessorKey: 'base.user_type',
     header: '회원 구분',
-    // ✅ 수정: 'seeker'이면 '개인회원', 'business'이면 '기업회원'
     cell: ({ row }) => {
       const type = row.original.base.user_type;
       if (type === 'seeker') return '개인회원';
@@ -35,7 +33,6 @@ export const columns: ColumnDef<AdminUser>[] = [
   {
     accessorKey: 'base.created_at',
     header: '가입일',
-    // ✅ 수정: 한국 날짜 형식(yyyy. MM. dd.)으로 명시
     cell: ({ row }) => {
       const createdAt = row.original.base.created_at;
       return createdAt
