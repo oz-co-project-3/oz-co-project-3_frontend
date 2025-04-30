@@ -15,6 +15,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { Suspense } from 'react';
+import Loading from './loading';
 
 export default function Home() {
   return (
@@ -32,7 +34,9 @@ export default function Home() {
           <div className='mt-1 mb-10 flex flex-row justify-center'>
             <p className='mr-5 text-gray-500'>검색 키워드 추천</p>
             <div className='mb-1 flex justify-center'>
-              <KeywordRecommand />
+              <Suspense fallback={<Loading />}>
+                <KeywordRecommand />
+              </Suspense>
             </div>
           </div>
           <nav className='mb-10 flex flex-row justify-center space-x-4'>

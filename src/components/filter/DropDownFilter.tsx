@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { JOB_CATEGORIES } from '../../constants/jobCategories';
 import { REGIONS } from '../../constants/region';
 import { FiChevronRight } from 'react-icons/fi';
@@ -8,6 +7,7 @@ import { RiResetLeftFill } from 'react-icons/ri';
 import { EMPLOYMENT_TYPES } from '@/constants/employmentType';
 import { CAREER } from '@/constants/career';
 import { EDUCATION } from '@/constants/education';
+import { useFilterStore } from '@/store/filterStore';
 
 interface DropDownFilterProps {
   isRegionOpen: boolean;
@@ -28,11 +28,20 @@ export default function DropDownFilter({
   selectedJob,
   setSelectedJob,
 }: DropDownFilterProps) {
-  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
-  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
-  const [selectedMethod, setSelectedMethod] = useState<string[]>([]);
-  const [selectedCareer, setSelectedCareer] = useState<string[]>([]);
-  const [selectedEducation, setSelectedEducation] = useState<string[]>([]);
+  const {
+    selectedDistricts,
+    setSelectedDistricts,
+    toggleDistrict,
+    selectedSubcategories,
+    toggleSubcategory,
+    selectedMethod,
+    toggleMethod,
+    selectedCareer,
+    toggleCareer,
+    selectedEducation,
+    toggleEducation,
+    resetAll,
+  } = useFilterStore();
 
   // 전체 선택/해제 함수
   const toggleAllDistricts = () => {
@@ -44,34 +53,6 @@ export default function DropDownFilter({
     } else {
       setSelectedDistricts(allDistricts);
     }
-  };
-
-  // 토글 함수
-  const toggleDistrict = (district: string) => {
-    setSelectedDistricts((prev) =>
-      prev.includes(district) ? prev.filter((d) => d !== district) : [...prev, district],
-    );
-  };
-
-  const toggleSubcategory = (subcategory: string) => {
-    setSelectedSubcategories((prev) =>
-      prev.includes(subcategory) ? prev.filter((s) => s !== subcategory) : [...prev, subcategory],
-    );
-  };
-  const toggleMethod = (method: string) => {
-    setSelectedMethod((prev) =>
-      prev.includes(method) ? prev.filter((d) => d !== method) : [...prev, method],
-    );
-  };
-  const toggleCareer = (career: string) => {
-    setSelectedCareer((prev) =>
-      prev.includes(career) ? prev.filter((d) => d !== career) : [...prev, career],
-    );
-  };
-  const toggleEducation = (education: string) => {
-    setSelectedEducation((prev) =>
-      prev.includes(education) ? prev.filter((d) => d !== education) : [...prev, education],
-    );
   };
 
   return (
@@ -325,13 +306,7 @@ export default function DropDownFilter({
       </div>
       <div className='flex'>
         <button
-          onClick={() => {
-            setSelectedDistricts([]);
-            setSelectedSubcategories([]);
-            setSelectedMethod([]);
-            setSelectedCareer([]);
-            setSelectedEducation([]);
-          }}
+          onClick={resetAll}
           className='ml-auto flex cursor-pointer rounded-md border bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100'
         >
           <span>초기화</span>

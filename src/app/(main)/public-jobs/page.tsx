@@ -1,27 +1,18 @@
-export const dynamic = 'force-dynamic';
+'use client';
 
+import { useSearchParams } from 'next/navigation'; // 추가
 import FilterList from '@/components/filter/FilterList';
 import PublicJobList from './PublicJobList';
-import { Suspense } from 'react';
+import { useFilterJobs } from '@/hooks/useFilterJobs';
 import Image from 'next/image';
+import Loading from '@/app/loading';
 
-export default async function PublicJobsPage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ [key: string]: string }>;
-}) {
-  const resolvedSearchParams = await searchParams;
-  const searchKeyword = resolvedSearchParams?.search_keyword;
-
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_INTERNAL_BASE_URL}/api/postings/?employment_type=공공` +
-      (searchKeyword ? `&search_keyword=${encodeURIComponent(searchKeyword)}` : ''),
-  );
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`서버 에러 (${res.status}): ${errorText}`);
-  }
-  const data = await res.json();
+export default function PublicJobsPage() {
+  // props 제거
+  const searchParams = useSearchParams();
+  const searchKeyword = searchParams.get('search_keyword'); // .get() 사용
+  const { data, loading } = useFilterJobs('공공', searchKeyword || undefined);
+  console.log(data);
 
   return (
     <div className='flex h-full justify-center pt-30'>
@@ -34,16 +25,16 @@ export default async function PublicJobsPage({
             <FilterList />
           </div>
         </div>
-        <Suspense fallback={<div>로딩 중...</div>}>
-          {data.data.length > 0 ? (
-            <PublicJobList data={data} />
-          ) : (
-            <div className='flex flex-col items-center justify-center'>
-              <Image src='/SadCharacter2.png' alt='슬픈곰돌이 남' width={200} height={200} />
-              <div>검색 결과가 없습니다.</div>
-            </div>
-          )}
-        </Suspense>
+        {loading ? (
+          <Loading />
+        ) : data && data.data.length > 0 ? (
+          <PublicJobList data={data} />
+        ) : (
+          <div className='flex flex-col items-center justify-center'>
+            <Image src='/SadCharacter2.png' alt='슬픈곰돌이 남' width={200} height={200} />
+            <div>검색 결과가 없습니다.</div>
+          </div>
+        )}
       </main>
     </div>
   );
