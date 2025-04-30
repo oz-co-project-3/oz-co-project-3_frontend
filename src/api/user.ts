@@ -59,10 +59,9 @@ export const loginUser = async (formData: LoginFormData): Promise<LoginResponseD
     });
 
     // console.log('응답 전체:', res);
-    // console.log('응답 data:', res.data); //도르마무 확인용 
+    // console.log('응답 data:', res.data); //도르마무 확인용
 
     return res.data;
-    
   } catch (error) {
     console.error('로그인 오류', error);
     throw error;
@@ -78,6 +77,26 @@ export async function checkEmailDuplicate(email: string): Promise<boolean> {
 
   return res.is_available === true;
 }
+
+//로그아웃
+export const logoutUser = async (): Promise<void> => {
+  const token = localStorage.getItem('access_token');
+
+  if (!token) throw new Error('로그인 상태가 아닙니다.');
+
+  const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/logout/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) {
+    const errorBody = await res.json().catch(() => ({}));
+    throw new Error(errorBody.message || '로그아웃 실패');
+  }
+};
 
 //회원 탈퇴
 export const deleteUser = async (data: DeleteUserRequest) => {
