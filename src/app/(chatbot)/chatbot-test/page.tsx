@@ -2,7 +2,7 @@ import ChatbotButton from '@/components/chatbot/ChatbotButton';
 
 export default async function ChatbotPlayground() {
   console.log('WS:', process.env.NEXT_PUBLIC_WS_URL);
-  console.log('INTERNAL:', process.env.NEXT_PUBLIC_INTERNAL_BASE_URL);
+  console.log('INTERNAL:', process.env.INTERNAL_BASE_URL);
   console.log('EXTERNAL:', process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL);
 
   return (

@@ -59,8 +59,15 @@ export default function Header() {
 
       <div className='flex items-center gap-2'>
         {/* 유저 정보 받으면 원 안에 프사 넣은걸로 바꾸기 */}
-        <Link href='/dashboard'>
-          <Button className='bg-main-dark hover:bg-main-light cursor-pointer text-white'>MY</Button>
+        <Link href='/dashboard/profile'>
+          <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
+            개인
+          </Button>
+        </Link>
+        <Link href='/company-dashboard/profile'>
+          <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
+            기업
+          </Button>
         </Link>
         {/* <Button variant='outline' onClick={logOut}>로그아웃</Button> */}
         <Link href='/user/login'>

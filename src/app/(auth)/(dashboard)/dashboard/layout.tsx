@@ -6,9 +6,9 @@ import { usePathname } from 'next/navigation';
 const navItems = [
   { name: '프로필', href: '/dashboard/profile' },
   { name: '이력서', href: '/dashboard/resume' },
-  { name: '지원한 채용공고', href: '/dashboard/applied-job-postings' },
-  { name: '찜한 채용공고', href: '/dashboard/favorite-job-postings' },
-];
+  { name: '지원한 채용공고', href: '/dashboard/job-postings/applied' },
+  { name: '찜한 채용공고', href: '/dashboard/job-postings/favorite' },
+] as const;
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
