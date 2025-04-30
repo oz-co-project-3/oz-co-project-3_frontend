@@ -18,8 +18,13 @@ export default function ChatbotPopup() {
   const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
   const [resetFlag, setResetFlag] = useState(false); // 리셋용
 
+  console.log('WS:', process.env.NEXT_PUBLIC_WS_URL);
+  console.log('INTERNAL:', process.env.INTERNAL_BASE_URL);
+  console.log('EXTERNAL:', process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL);
+
   useEffect(() => {
-    const ws = new WebSocket('ws://localhost:8000/api/ws/');
+    console.log(process.env.NEXT_PUBLIC_WS_URL);
+    const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL!}/api/ws/`);
     socketRef.current = ws;
 
     ws.onopen = () => {
@@ -99,11 +104,11 @@ export default function ChatbotPopup() {
         {chatLog.map((chat, idx) => (
           <div key={idx} className={chat.sender === 'user' ? 'text-right' : 'text-left'}>
             <p
-              className={`inline-block rounded-lg px-4 py-2 ${
+              className={`inline-block rounded-lg px-4 py-2 whitespace-pre-line ${
                 chat.sender === 'user' ? 'bg-green-200 text-gray-700' : 'bg-gray-200 text-gray-700'
               }`}
             >
-              {chat.message}
+              {chat.message.replace(/\\n/g, '\n')}
             </p>
           </div>
         ))}

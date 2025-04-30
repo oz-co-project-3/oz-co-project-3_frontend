@@ -59,9 +59,6 @@ export default function FilterList() {
             <MdOutlineArrowDropDownCircle />
           </span>
         </div>
-        <div className='relative flex w-[450px] items-center justify-center rounded-2xl border bg-[#0F8C3B]'>
-          <button>검색하기</button>
-        </div>
       </div>
       <DropDownFilter
         isRegionOpen={isRegionOpen}

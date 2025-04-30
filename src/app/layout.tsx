@@ -31,7 +31,7 @@ export default async function RootLayout({
       >
         <SwrProvider>
           <Header />
-          <main className='h-full pt-[70px]'>{children}</main>
+          <div className='h-full pt-[70px]'>{children}</div>
         </SwrProvider>
       </body>
     </html>

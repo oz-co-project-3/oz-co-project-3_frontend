@@ -1,4 +1,4 @@
-import Resume from '@/components/dashboard/seeker/resume/Resume';
+import Resume from '@/components/resume/Resume';
 import { Button } from '@/components/ui/button';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
