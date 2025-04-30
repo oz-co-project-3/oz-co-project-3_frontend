@@ -15,6 +15,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { verifyEmailCode } from '@/api/user';
 import { useRouter } from 'next/navigation';
 import { resendEmailCode } from '@/lib/resendEmailCode';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface VerificationFormValues {
   verification_code: string;
@@ -31,6 +32,8 @@ export default function EmailVerificationPage() {
   const [error, setError] = useState('');
   const router = useRouter();
   const [resendCount, setResendCount] = useState(0);
+
+  const login = useAuthStore((state) => state.login);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -60,10 +63,22 @@ export default function EmailVerificationPage() {
           verification_code: data.verification_code.trim(),
         });
 
-        localStorage.setItem('emailVerified', 'true');
+        const token = localStorage.getItem('access_token');
+
+        const user = {
+          id: savedFormData.user_id,
+          email: savedFormData.email,
+          name: savedFormData.name,
+          user_type: [savedFormData.user_type], // 🔥 배열로 변환
+        };
+
+        if (token) {
+          login(user, token);
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('emailVerified', 'true');
+        }
 
         alert('회원가입이 완료되었습니다!');
-        // localStorage.removeItem('registerFormData');
         router.push('/');
       } catch (err) {
         console.error('에러:', err);
@@ -71,7 +86,7 @@ export default function EmailVerificationPage() {
         setError('인증 실패 또는 회원가입 실패했습니다.');
       }
     },
-    [router],
+    [router, login],
   );
 
   const handleResendCode = useCallback(async () => {
