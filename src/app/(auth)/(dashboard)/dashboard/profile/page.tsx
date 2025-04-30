@@ -1,3 +1,4 @@
+import SeekerProfile from '@/components/profile/SeekerProfile';
 import Link from 'next/link';
 
 export default async function ProfilePage() {
@@ -14,56 +15,10 @@ export default async function ProfilePage() {
           </Link>
         </div>
 
-        <div className='flex flex-col gap-4 rounded-md border p-8'>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>이름</span>
-            <span>김오즈</span>
-          </div>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>이메일</span>
-            <span>oz-8-frontend@nextrunners.com</span>
-          </div>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>전화번호</span>
-            <span>010-0000-0000</span>
-          </div>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>생년월일</span>
-            <span>1960-01-01</span>
-          </div>
-        </div>
-
-        <div className='flex flex-col gap-4 rounded-md border p-8'>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>관심 분야</span>
-            <span>프론트엔드, 백엔드, 데이터 분석가</span>
-          </div>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>지원한 공고 수</span>
-            <span>10</span>
-          </div>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>찜한 공고 수</span>
-            <span>10</span>
-          </div>
-        </div>
-
-        <div className='flex flex-col gap-4 rounded-md border p-8'>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>구직 상태</span>
-            <span>구직 중</span>
-          </div>
-          <div className='flex justify-between border-b pb-4'>
-            <span className='font-bold'>가입일</span>
-            <span>2025-01-01</span>
-          </div>
-        </div>
+        <SeekerProfile />
       </section>
     </>
   );
 }
 
 // 프사 안하는지 물어보기
-//
-
-// 회원정보 수정 버튼 넣기

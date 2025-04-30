@@ -1,9 +1,13 @@
 'use client';
 
-import { useState } from 'react';
 import { JOB_CATEGORIES } from '../../constants/jobCategories';
 import { REGIONS } from '../../constants/region';
 import { FiChevronRight } from 'react-icons/fi';
+import { RiResetLeftFill } from 'react-icons/ri';
+import { EMPLOYMENT_TYPES } from '@/constants/employmentType';
+import { CAREER } from '@/constants/career';
+import { EDUCATION } from '@/constants/education';
+import { useFilterStore } from '@/store/filterStore';
 
 interface DropDownFilterProps {
   isRegionOpen: boolean;
@@ -24,41 +28,33 @@ export default function DropDownFilter({
   selectedJob,
   setSelectedJob,
 }: DropDownFilterProps) {
-  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
-  const [selectedSubcategories, setSelectedSubcategories] = useState<string[]>([]);
-  const [selectedDetails, setSelectedDetails] = useState<string[]>([]);
+  const {
+    selectedDistricts,
+    setSelectedDistricts,
+    toggleDistrict,
+    selectedSubcategories,
+    toggleSubcategory,
+    selectedMethod,
+    toggleMethod,
+    selectedCareer,
+    toggleCareer,
+    selectedEducation,
+    toggleEducation,
+    resetAll,
+  } = useFilterStore();
 
-  // 토글 함수
-  const toggleDistrict = (district: string) => {
-    if (district.includes('전체')) {
-      // '전체'가 포함된 항목을 클릭하면 전체만 선택
-      setSelectedDistricts([district]);
+  // 전체 선택/해제 함수
+  const toggleAllDistricts = () => {
+    if (!selectedRegion) return;
+    const allDistricts = [selectedRegion, ...REGIONS[selectedRegion]];
+    // 이미 모두 선택되었으면 해제, 아니면 전체 선택
+    if (allDistricts.every((d) => selectedDistricts.includes(d))) {
+      setSelectedDistricts([]);
     } else {
-      setSelectedDistricts((prev) => {
-        // 만약 '전체'가 이미 선택되어 있으면 해제하고 해당 구만 선택
-        const hasAll = prev.some((d) => d.includes('전체'));
-        if (hasAll) {
-          return [district];
-        }
-        // 이미 선택된 구를 다시 클릭하면 해제
-        if (prev.includes(district)) {
-          return prev.filter((d) => d !== district);
-        }
-        // 그 외에는 구 추가
-        return [...prev, district];
-      });
+      setSelectedDistricts(allDistricts);
     }
   };
-  const toggleSubcategory = (subcategory: string) => {
-    setSelectedSubcategories((prev) =>
-      prev.includes(subcategory) ? prev.filter((s) => s !== subcategory) : [...prev, subcategory],
-    );
-  };
-  const toggleDetail = (detail: string) => {
-    setSelectedDetails((prev) =>
-      prev.includes(detail) ? prev.filter((d) => d !== detail) : [...prev, detail],
-    );
-  };
+
   return (
     <div>
       <div>
@@ -69,7 +65,7 @@ export default function DropDownFilter({
             onClick={(e) => e.stopPropagation()}
           >
             {/* 시/도 리스트 */}
-            <div className='w-1/3 border-r'>
+            <div className='h-[400px] w-1/3 overflow-y-scroll border-r'>
               {(Object.keys(REGIONS) as Array<keyof typeof REGIONS>).map((region) => (
                 <div
                   key={region}
@@ -88,6 +84,21 @@ export default function DropDownFilter({
               {selectedRegion ? (
                 <div>
                   <div className='grid grid-cols-4 gap-2'>
+                    {/* 전체 선택 체크박스 */}
+                    <div key={selectedRegion}>
+                      <label>
+                        <input
+                          type='checkbox'
+                          checked={[selectedRegion, ...REGIONS[selectedRegion]].every((d) =>
+                            selectedDistricts.includes(d),
+                          )}
+                          onChange={toggleAllDistricts}
+                          className='cursor-pointer rounded border px-3 py-1 font-bold'
+                        />
+                        {selectedRegion} 전체
+                      </label>
+                    </div>
+                    {/* 개별 구/군/시 체크박스 */}
                     {REGIONS[selectedRegion].map((district: string) => (
                       <div key={district}>
                         <label>
@@ -161,120 +172,59 @@ export default function DropDownFilter({
         {/* 상세조건 드롭다운 */}
         {isDetailOpen && (
           <div
-            className='w-[1400px] rounded-t-2xl border bg-white px-4 py-2'
+            className='w-[1400px] rounded-t-2xl border bg-white'
             onClick={(e) => e.stopPropagation()}
           >
-            <div>
+            <div className='px-4 py-2'>
               <div className='font-semibold'>고용형태</div>
               <div className='flex flex-wrap gap-2'>
-                <label>
-                  <input
-                    type='checkbox'
-                    checked={selectedDetails.includes('정규직')}
-                    onChange={() => toggleDetail('정규직')}
-                  />
-                  정규직
-                </label>
-                <label>
-                  <input
-                    type='checkbox'
-                    checked={selectedDetails.includes('계약직')}
-                    onChange={() => toggleDetail('계약직')}
-                  />
-                  계약직
-                </label>
-                <label>
-                  <input
-                    type='checkbox'
-                    checked={selectedDetails.includes('프리랜서')}
-                    onChange={() => toggleDetail('프리랜서')}
-                  />
-                  프리랜서
-                </label>
+                {EMPLOYMENT_TYPES.map((type) => (
+                  <label key={type}>
+                    <input
+                      type='checkbox'
+                      checked={selectedMethod.includes(type)}
+                      onChange={() => toggleMethod(type)}
+                    />
+                    {type}
+                  </label>
+                ))}
               </div>
             </div>
-            <div className='font-semibold'>경력여부</div>
-            <div className='flex flex-wrap gap-2'>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('신입')}
-                  onChange={() => toggleDetail('신입')}
-                />
-                신입
-              </label>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('경력')}
-                  onChange={() => toggleDetail('경력')}
-                />
-                경력
-              </label>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('경력무관')}
-                  onChange={() => toggleDetail('경력무관')}
-                />
-                경력무관
-              </label>
+            <div className='px-4 py-2'>
+              <div className='font-semibold'>경력여부</div>
+              <div className='flex flex-wrap gap-2'>
+                {CAREER.map((career) => (
+                  <label key={career}>
+                    <input
+                      type='checkbox'
+                      checked={selectedCareer.includes(career)}
+                      onChange={() => toggleCareer(career)}
+                    />
+                    {career}
+                  </label>
+                ))}
+              </div>
             </div>
-            <div className='font-semibold'>학력</div>
-            <div className='flex flex-wrap gap-2'>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('학력무관')}
-                  onChange={() => toggleDetail('학력무관')}
-                />
-                학력무관
-              </label>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('고등학교 졸업')}
-                  onChange={() => toggleDetail('고등학교 졸업')}
-                />
-                고등학교 졸업
-              </label>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('대학교 졸업(2,3년제)')}
-                  onChange={() => toggleDetail('대학교 졸업(2,3년제)')}
-                />
-                대학교 졸업(2,3년제)
-              </label>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('대학교 졸업(4년제)')}
-                  onChange={() => toggleDetail('대학교 졸업(4년제)')}
-                />
-                대학교 졸업(4년제)
-              </label>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('대학원 석사 졸업')}
-                  onChange={() => toggleDetail('대학원 석사 졸업')}
-                />
-                대학원 석사 졸업
-              </label>
-              <label>
-                <input
-                  type='checkbox'
-                  checked={selectedDetails.includes('대학원 박사 졸업')}
-                  onChange={() => toggleDetail('대학원 박사 졸업')}
-                />
-                대학원 박사 졸업
-              </label>
+            <div className='px-4 py-2'>
+              <div className='font-semibold'>학력</div>
+              <div className='flex flex-wrap gap-2'>
+                {EDUCATION.map((education) => (
+                  <label key={education}>
+                    <input
+                      type='checkbox'
+                      checked={selectedEducation.includes(education)}
+                      onChange={() => toggleEducation(education)}
+                    />
+                    {education}
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
         )}
       </div>
-      <div className='mt-4 flex flex-wrap gap-2 border p-4'>
+      {/* 선택 뜨는 곳 */}
+      <div className='mt-4 flex flex-wrap gap-2 p-4'>
         {/* 지역 */}
         {selectedDistricts.map((district) => (
           <span
@@ -308,21 +258,62 @@ export default function DropDownFilter({
           </span>
         ))}
         {/* 상세조건 */}
-        {selectedDetails.map((detail) => (
+        {selectedMethod.map((method) => (
           <span
-            key={detail}
+            key={method}
             className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-gray-700'
           >
-            {detail}
+            {method}
             <button
               className='ml-1 text-blue-400 hover:text-blue-700'
-              onClick={() => toggleDetail(detail)}
+              onClick={() => toggleMethod(method)}
               type='button'
             >
               X
             </button>
           </span>
         ))}
+        {selectedCareer.map((career) => (
+          <span
+            key={career}
+            className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-gray-700'
+          >
+            {career}
+            <button
+              className='ml-1 text-blue-400 hover:text-blue-700'
+              onClick={() => toggleCareer(career)}
+              type='button'
+            >
+              X
+            </button>
+          </span>
+        ))}
+        {selectedEducation.map((education) => (
+          <span
+            key={education}
+            className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-gray-700'
+          >
+            {education}
+            <button
+              className='ml-1 text-blue-400 hover:text-blue-700'
+              onClick={() => toggleEducation(education)}
+              type='button'
+            >
+              X
+            </button>
+          </span>
+        ))}
+      </div>
+      <div className='flex'>
+        <button
+          onClick={resetAll}
+          className='ml-auto flex cursor-pointer rounded-md border bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100'
+        >
+          <span>초기화</span>
+          <div className='flex items-center'>
+            <RiResetLeftFill />
+          </div>
+        </button>
       </div>
     </div>
   );
