@@ -103,13 +103,13 @@ export default function ChatbotPopup() {
       <div className='flex flex-col gap-4'>
         {chatLog.map((chat, idx) => (
           <div key={idx} className={chat.sender === 'user' ? 'text-right' : 'text-left'}>
-            <div
+            <p
               className={`inline-block rounded-lg px-4 py-2 whitespace-pre-line ${
                 chat.sender === 'user' ? 'bg-green-200 text-gray-700' : 'bg-gray-200 text-gray-700'
               }`}
             >
-              {chat.message}
-            </div>
+              {chat.message.replace(/\\n/g, '\n')}
+            </p>
           </div>
         ))}
       </div>
