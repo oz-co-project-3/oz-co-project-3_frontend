@@ -14,6 +14,7 @@ import YoutubeBtn, { youtube } from './style-options/YoutubeBtn';
 import HyperLink, { link } from './style-options/HyperLink';
 import Image from '@tiptap/extension-image';
 import ImageUploadBtn, { imageUploadNode } from './style-options/ImageUploadBtn';
+import ImageResize from 'tiptap-extension-resize-image';
 import CharacterCounter, { characterCount } from './CharacterCounter';
 import { useEffect } from 'react';
 
@@ -45,6 +46,7 @@ export default function JobPostingEditor({
       link,
       Image,
       imageUploadNode,
+      ImageResize,
       Placeholder.configure({
         placeholder: '내용을 입력해주세요...',
       }),
