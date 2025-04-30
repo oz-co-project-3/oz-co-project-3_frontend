@@ -1,7 +1,7 @@
 'use client';
 
-import ImageUploadNode from '@/components/tiptap-node/image-upload-node/image-upload-node-extension';
 import { Editor } from '@tiptap/react';
+import { ImageUploadNode } from '@/components/ui/tiptap-node/image-upload-node';
 import TogleButton from '../TogleButton';
 import { Image as ImageIcon } from 'lucide-react';
 
