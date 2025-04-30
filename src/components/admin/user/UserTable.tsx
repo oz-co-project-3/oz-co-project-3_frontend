@@ -1,7 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import DataTable from '../table/DataTable';
 import { getColumns } from './columns';
 import { AdminUser } from '@/types/user';
@@ -19,15 +18,6 @@ const getExpectedBackendType = (frontendType: 'personal' | 'corporate') => {
 };
 
 export function UserTable({ userType }: UserTableProps) {
-  const router = useRouter();
-
-  const handleResumeClick = useCallback(
-    (userId: number) => {
-      router.push(`/admin/resume/${userId}`);
-    },
-    [router],
-  );
-
   const [data, setData] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -70,7 +60,7 @@ export function UserTable({ userType }: UserTableProps) {
 
   return (
     <div className='mt-4'>
-      <DataTable columns={getColumns(handleResumeClick)} data={data} />
+      <DataTable columns={getColumns()} data={data} />
     </div>
   );
 }
