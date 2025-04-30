@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation';
 
 const navItems = [
   { name: '프로필', href: '/company-dashboard/profile' },
-  { name: '현재 채용공고', href: '/company-dashboard/current-job-postings' },
-  { name: '이전 채용공고', href: '/company-dashboard/previous-job-postings' },
-];
+  { name: '현재 채용공고', href: '/company-dashboard/job-postings/current' },
+  { name: '이전 채용공고', href: '/company-dashboard/job-postings/expired' },
+  { name: '채용공고 등록', href: '/company-dashboard/job-postings/post' },
+] as const;
 
 export default function CompanyDashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

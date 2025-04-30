@@ -1,4 +1,4 @@
-import ResumeCard from '@/components/dashboard/seeker/resume/ResumeCard';
+import ResumeCard from '@/components/resume/ResumeCard';
 import Link from 'next/link';
 
 export default async function ResumePage() {
@@ -11,7 +11,7 @@ export default async function ResumePage() {
 
         <article className='flex rounded-md border'>
           <Link
-            href='/dashboard/resume/create'
+            href='/dashboard/resume/post'
             className='text-main-light flex h-56 grow cursor-pointer items-center justify-center rounded-md p-2 font-extrabold transition-all duration-150 hover:text-xl hover:underline'
           >
             새 이력서
