@@ -1,4 +1,4 @@
-FROM node:23.3.0-alpine3.18 AS builder 
+FROM node:23.3.0-alpine3.21 AS builder 
 WORKDIR /app
 
 COPY package.json package-lock.json ./
@@ -20,7 +20,7 @@ ENV NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL
 COPY . .
 RUN npm run build
 
-FROM node:23.3.0-alpine3.18
+FROM node:23.3.0-alpine3.21
 WORKDIR /app
 
 COPY --from=builder /app/.next/standalone ./
