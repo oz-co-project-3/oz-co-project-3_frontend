@@ -1,7 +1,9 @@
-export default function AdminUsersPage() {
+import { UserTabs } from '@/components/admin/user/UserTabs';
+
+export default async function AdminUsersPage() {
   return (
-    <div>
-      <h1>회원 관리 페이지입니다.</h1>
+    <div className='space-y-4'>
+      <UserTabs />
     </div>
   );
 }

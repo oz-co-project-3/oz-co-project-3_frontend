@@ -9,14 +9,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { ChatbotPrompt } from '@/types/chatbot';
 
-interface DataTableProps {
-  columns: ColumnDef<ChatbotPrompt>[];
-  data: ChatbotPrompt[];
+// 제네릭 타입 추가
+interface DataTableProps<TData> {
+  columns: ColumnDef<TData>[]; // ChatbotPrompt 대신 TData
+  data: TData[]; // ChatbotPrompt[] 대신 TData[]
 }
 
-export default function DataTable({ columns, data }: DataTableProps) {
+// 수정: 컴포넌트에 제네릭 <TData> 추가
+export default function DataTable<TData>({ columns, data }: DataTableProps<TData>) {
   const table = useReactTable({
     data,
     columns,
@@ -30,7 +31,7 @@ export default function DataTable({ columns, data }: DataTableProps) {
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead key={header.id} className='bg-gray-200'>
                   {header.isPlaceholder
                     ? null
                     : flexRender(header.column.columnDef.header, header.getContext())}
@@ -41,7 +42,7 @@ export default function DataTable({ columns, data }: DataTableProps) {
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.length ? (
-            table.getRowModel().rows.map((row: Row<ChatbotPrompt>) => (
+            table.getRowModel().rows.map((row: Row<TData>) => (
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
