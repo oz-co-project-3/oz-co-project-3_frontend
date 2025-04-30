@@ -7,7 +7,7 @@ import Highlight from '@tiptap/extension-highlight';
 
 export const highlight = Highlight.configure({
   HTMLAttributes: {
-    class: 'bg-main-light rounded px-[4px] py-[2px] text-white',
+    class: 'bg-main-light/50 py-[1px]',
   },
 });
 
