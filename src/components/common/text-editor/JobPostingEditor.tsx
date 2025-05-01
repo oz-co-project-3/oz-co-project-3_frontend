@@ -16,6 +16,7 @@ import Image from '@tiptap/extension-image';
 import ImageUploadBtn, { imageUploadNode } from './style-options/ImageUploadBtn';
 import CharacterCounter, { characterCount } from './CharacterCounter';
 import { useEffect } from 'react';
+import ImageResize from 'tiptap-extension-resize-image';
 
 export default function JobPostingEditor({
   setDetailHTML,
@@ -45,6 +46,7 @@ export default function JobPostingEditor({
       link,
       Image,
       imageUploadNode,
+      ImageResize,
       Placeholder.configure({
         placeholder: '내용을 입력해주세요...',
       }),
