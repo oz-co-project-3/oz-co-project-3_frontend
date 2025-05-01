@@ -19,10 +19,8 @@ import { useEffect } from 'react';
 import ImageResize from 'tiptap-extension-resize-image';
 
 export default function JobPostingEditor({
-  setDetailHTML,
   setDetailJSON,
 }: {
-  setDetailHTML: (html: string) => void;
   setDetailJSON: (json: string) => void;
 }) {
   const editor = useEditor({
@@ -70,17 +68,15 @@ export default function JobPostingEditor({
     // please set `immediatelyRender` explicitly to `false` to avoid hydration mismatches.
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
-      setDetailHTML(editor.getHTML());
       setDetailJSON(JSON.stringify(editor.getJSON()));
     },
   });
 
   useEffect(() => {
     if (editor) {
-      setDetailHTML(editor.getHTML());
       setDetailJSON(JSON.stringify(editor.getJSON()));
     }
-  }, [editor, setDetailHTML, setDetailJSON]);
+  }, [editor, setDetailJSON]);
 
   if (!editor) return null;
 

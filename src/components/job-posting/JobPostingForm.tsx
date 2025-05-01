@@ -27,9 +27,7 @@ import useSWRMutation from 'swr/mutation';
 // });
 
 export default function JobPostingForm() {
-  const [detailHTML, setDetailHTML] = useState<string>('');
   const [detailJSON, setDetailJSON] = useState<string>('');
-
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
 
   // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
@@ -63,7 +61,7 @@ export default function JobPostingForm() {
       employment_type: '일반',
       status: '모집중',
       // description: '',
-      description: detailHTML, // 빌드에러 방지용 (HTML, JSON 결정 후엔 윗줄로 바꿔서 하기)
+      description: '', // 빌드에러 방지용 (HTML, JSON 결정 후엔 윗줄로 바꿔서 하기)
     },
   });
 
@@ -235,7 +233,7 @@ export default function JobPostingForm() {
                         mode='single'
                         selected={field.value ? new Date(field.value) : undefined}
                         onSelect={(date) => {
-                          field.onChange(date ? date.toISOString() : '');
+                          field.onChange(date ? format(date, 'yyyy-MM-dd') : '');
                           setIsCalendarOpen(false);
                         }}
                         disabled={(date) => date < new Date() || date > new Date('2035-12-31')}
@@ -325,7 +323,7 @@ export default function JobPostingForm() {
         {/* 상세 모집 내용 */}
         <div className='flex flex-col gap-2'>
           <span className='font-semibold'>상세 모집 내용</span>
-          <JobPostingEditor setDetailHTML={setDetailHTML} setDetailJSON={setDetailJSON} />
+          <JobPostingEditor setDetailJSON={setDetailJSON} />
           {/* 데이터 형식 미리보기 */}
           {/* <div className='mt-4'>
           <div className='text-sm font-bold'>HTML</div>

@@ -29,7 +29,7 @@ export const jobPostingSchema = z.object({
   report: z.number().int().min(0).optional(),
 });
 
-// education -> qualification 으로 바꾸기 (자격요건)
+// education -> qualification 으로 바꾸기? (자격요건)
 
 // 최대 글자수 넣어주기
 
@@ -39,6 +39,6 @@ export const jobPostingSchema = z.object({
 // 테이블 명세서에 1개 없음
 // company
 
-// 유주님이 정의한 타입에 detailPagePath 는 뭐지?
+// 유주님이 정의한 타입에 detailPagePath 는 빼고 인자 나눠서 전달하라고 얘기하기
 
 export type JobPostingSchema = z.infer<typeof jobPostingSchema>;
