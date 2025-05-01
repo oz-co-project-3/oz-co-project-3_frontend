@@ -23,6 +23,7 @@ export const getColumns = (router: AppRouterInstance): ColumnDef<AdminUser>[] =>
           <div className='flex items-center gap-2'>
             <span>{name}</span>
             <div className='ml-6'>
+              {/* 프로필 페이지 이동 */}
               <Button
                 variant='outline'
                 size='sm'
@@ -31,7 +32,14 @@ export const getColumns = (router: AppRouterInstance): ColumnDef<AdminUser>[] =>
               >
                 프로필
               </Button>
-              <Button variant='outline' size='sm' className='px-2 py-1 text-xs'>
+
+              {/* 이력서 페이지 이동 */}
+              <Button
+                variant='outline'
+                size='sm'
+                className='px-2 py-1 text-xs'
+                onClick={() => router.push(`/admin/resume/${row.original.base.id}`)}
+              >
                 이력서
               </Button>
             </div>
