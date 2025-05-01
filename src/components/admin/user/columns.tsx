@@ -3,8 +3,9 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { AdminUser } from '@/types/user';
 import { Button } from '@/components/ui/button';
+import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
-export const getColumns = (): ColumnDef<AdminUser>[] => {
+export const getColumns = (router: AppRouterInstance): ColumnDef<AdminUser>[] => {
   return [
     {
       accessorKey: 'base.id',
@@ -22,7 +23,12 @@ export const getColumns = (): ColumnDef<AdminUser>[] => {
           <div className='flex items-center gap-2'>
             <span>{name}</span>
             <div className='ml-6'>
-              <Button variant='outline' size='sm' className='mr-2 px-2 py-1 text-xs'>
+              <Button
+                variant='outline'
+                size='sm'
+                className='mr-2 px-2 py-1 text-xs'
+                onClick={() => router.push(`/admin/user/${row.original.base.id}`)}
+              >
                 프로필
               </Button>
               <Button variant='outline' size='sm' className='px-2 py-1 text-xs'>

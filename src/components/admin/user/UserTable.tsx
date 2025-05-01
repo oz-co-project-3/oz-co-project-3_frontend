@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import DataTable from '../table/DataTable';
 import { getColumns } from './columns';
 import { AdminUser } from '@/types/user';
@@ -20,6 +21,7 @@ const getExpectedBackendType = (frontendType: 'personal' | 'corporate') => {
 export function UserTable({ userType }: UserTableProps) {
   const [data, setData] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter(); // router 훅은 여기서만 호출
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -60,7 +62,7 @@ export function UserTable({ userType }: UserTableProps) {
 
   return (
     <div className='mt-4'>
-      <DataTable columns={getColumns()} data={data} />
+      <DataTable columns={getColumns(router)} data={data} /> {/* router 전달 */}
     </div>
   );
 }

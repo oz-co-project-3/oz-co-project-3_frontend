@@ -14,7 +14,7 @@ const userNavItems = [
 
 //관리자용
 const adminNavItems = [
-  { name: '회원 관리', href: '/admin/users' },
+  { name: '회원 관리', href: '/admin/user' },
   { name: '공고 관리', href: '/admin/jobs' },
   { name: '챗봇 관리', href: '/admin/chatbot' },
   { name: '커뮤니티 관리', href: '/admin/community' },
