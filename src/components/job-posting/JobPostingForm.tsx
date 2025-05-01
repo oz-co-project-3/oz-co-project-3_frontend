@@ -205,7 +205,10 @@ export default function JobPostingForm() {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className='w-auto p-0' align='start'>
+                    <PopoverContent
+                      className='w-[var(--radix-popover-trigger-width)] p-0' // 너무 안예쁘면 다시 w-auto
+                      align='start'
+                    >
                       <Calendar
                         mode='single'
                         selected={field.value ? new Date(field.value) : undefined}
@@ -215,7 +218,6 @@ export default function JobPostingForm() {
                         }}
                         disabled={(date) => date < new Date() || date > new Date('2035-12-31')}
                         locale={ko}
-                        initialFocus
                       />
                     </PopoverContent>
                   </Popover>
@@ -323,5 +325,3 @@ export default function JobPostingForm() {
     </Form>
   );
 }
-
-// 폼으로 바꾸고, 에디터 위에도 텍스트 더 받아야함.
