@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface LoginFormData {
   email: string;
@@ -15,6 +16,7 @@ interface LoginFormData {
 
 export default function LoginPage() {
   const router = useRouter();
+  const login = useAuthStore((state) => state.login);
   const {
     register,
     handleSubmit,
@@ -23,12 +25,29 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      await loginUser(data);
+      const res = await loginUser(data);
 
-      alert('로그인 성공!');
+      const { access_token, email, user_id, user_type, name } = res;
+
+      const user = {
+        id: user_id,
+        email,
+        user_type: [user_type], // 문자열이라 배열로
+        name,
+      };
+
+      if (access_token && user) {
+        login(user, access_token); // Zustand 전역 저장
+        localStorage.setItem('access_token', access_token); // localStorage 저장
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        console.error('토큰 또는 유저 정보 누락:', { access_token, user });
+      }
+
+      console.log('로그인 완료:', user);
       router.push('/');
     } catch (err) {
-      console.error('❌ 로그인 실패 ❌:', err);
+      console.error(' 로그인 실패 :', err);
       alert('이메일 또는 비밀번호가 잘못되었습니다.');
     }
   };

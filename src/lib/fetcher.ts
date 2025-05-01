@@ -17,5 +17,5 @@ export async function apiFetch<T>(url: string, options: RequestInit = {}): Promi
     throw new Error(errorBody.message || 'API 요청 실패');
   }
 
-  return res.json();
+  return await res.json();
 }

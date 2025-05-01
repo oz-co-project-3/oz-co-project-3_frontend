@@ -4,6 +4,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { logoutUser } from '@/api/user';
+import { useRouter } from 'next/navigation';
 
 const userNavItems = [
   { name: '공공 공고', href: '/public-jobs' },
@@ -22,6 +25,19 @@ const adminNavItems = [
 
 export default function Header() {
   const pathname = usePathname();
+  const { accessToken, logout } = useAuthStore();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser();
+      logout();
+      router.push('/');
+    } catch (err) {
+      console.error('❌ 로그아웃 실패:', err);
+      alert('로그아웃에 실패했습니다.');
+    }
+  };
 
   //경로가 /admin 시작일때 관리자메뉴
   const isAdminPage = pathname.startsWith('/admin');
@@ -58,25 +74,40 @@ export default function Header() {
 
       <div className='flex items-center gap-2'>
         {/* 유저 정보 받으면 원 안에 프사 넣은걸로 바꾸기 */}
-        <Link href='/dashboard/profile'>
-          <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-            개인
-          </Button>
-        </Link>
-        <Link href='/company-dashboard/profile'>
-          <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-            기업
-          </Button>
-        </Link>
-        {/* <Button variant='outline' onClick={logOut}>로그아웃</Button> */}
-        <Link href='/user/login'>
-          <Button className='bg-main hover:bg-main-light cursor-pointer text-white'>로그인</Button>
-        </Link>
-        <Link href='/user/register'>
-          <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-            회원가입
-          </Button>
-        </Link>
+        {accessToken ? (
+          <>
+            <Link href='/dashboard/profile'>
+              <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
+                개인
+              </Button>
+            </Link>
+            <Link href='/company-dashboard/profile'>
+              <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
+                기업
+              </Button>
+            </Link>
+            <Button
+              variant='outline'
+              onClick={handleLogout}
+              className='cursor-pointer bg-amber-600 text-white hover:bg-amber-800'
+            >
+              로그아웃
+            </Button>
+          </>
+        ) : (
+          <>
+            <Link href='/user/login'>
+              <Button className='bg-main hover:bg-main-light cursor-pointer text-white'>
+                로그인
+              </Button>
+            </Link>
+            <Link href='/user/register'>
+              <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
+                회원가입
+              </Button>
+            </Link>
+          </>
+        )}
       </div>
     </header>
   );

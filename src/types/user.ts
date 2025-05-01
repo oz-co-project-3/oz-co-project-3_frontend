@@ -1,3 +1,20 @@
+// export type UserRole = 'NORMAL' | 'COMPANY' | 'SUPER' | 'UNVERIFIED';
+// export type SignInMethod = 'EMAIL' | 'KAKAO' | 'NAVER';
+
+// export interface User {
+//   id: number;
+//   email: string;
+//   name: string;
+//   userRole: UserRole[];
+//   signInMethod: SignInMethod[];
+// } 
+// export interface LoginResponseData {
+//   access_token: string;
+//   refresh_token?: string;
+//   user: User;
+// } 
+
+
 export interface SeekerFormData {
   name: string;
   email: string;
@@ -32,11 +49,29 @@ export interface LoginFormData {
 
 export interface LoginResponseData {
   access_token: string;
-  user: {
-    id: number;
-    email: string;
-    user_type: ('seeker' | 'business' | 'admin')[];
-  };
+  refresh_token?: string;
+  email: string;
+  name: string;
+  user_id: number;
+  user_type: 'seeker' | 'business' | 'admin';
+}
+
+export interface DeleteUserRequest {
+  password: string;
+  is_active: boolean;
+  reason: string;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  name: string;
+  user_type: ('seeker' | 'business' | 'admin')[];
+}
+
+export interface EmailCheckResponse {
+  is_available: boolean;
+  message: string;
 }
 
 // 관리자용 조회 타입 (BaseUser) 

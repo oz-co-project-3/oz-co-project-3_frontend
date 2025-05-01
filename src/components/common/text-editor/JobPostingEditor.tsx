@@ -28,6 +28,7 @@ export default function JobPostingEditor({
     extensions: [
       StarterKit.configure({
         heading: false,
+        listItem: false,
         bulletList: {
           keepMarks: true,
           // TODO: Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
