@@ -16,6 +16,8 @@ import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { apiFetch } from '@/lib/fetcher';
+import useSWRMutation from 'swr/mutation';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
 // import dynamic from 'next/dynamic';
@@ -30,6 +32,17 @@ export default function JobPostingForm() {
 
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
 
+  // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
+  const { trigger } = useSWRMutation(
+    '/api/job_posting/',
+    async (url: string, { arg }: { arg: JobPostingSchema }) => {
+      return apiFetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg),
+      });
+    },
+  );
+
   const form = useForm<JobPostingSchema>({
     resolver: zodResolver(jobPostingSchema),
     shouldFocusError: false,
@@ -37,8 +50,8 @@ export default function JobPostingForm() {
       title: '',
       salary: '협의 후 결정',
       location: '',
-      employ_method: '정규직', //
-      work_time: '', //
+      employ_method: '정규직',
+      work_time: '',
       position: '',
       recruitment_count: 1,
       education: '',
@@ -56,6 +69,15 @@ export default function JobPostingForm() {
 
   const onSubmit = (data: JobPostingSchema) => {
     console.table(data);
+    trigger(data)
+      .then((response) => {
+        console.log('성공:', response);
+        // 성공 처리 로직 (예: 알림, 리디렉션 등)
+      })
+      .catch((error) => {
+        console.error('에러:', error);
+        // 에러 처리 로직
+      });
   };
 
   useEffect(() => {
