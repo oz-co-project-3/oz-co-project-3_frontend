@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import JobPostingEditor from '../common/text-editor/JobPostingEditor';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { jobPostingSchema, JobPostingSchema } from '@/types/Schema/jobPostingSchema';
+import { JobPostingRequest, jobPostingSchemaRequest } from '@/types/Schema/jobPostingSchema';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -33,7 +33,7 @@ export default function JobPostingForm() {
   // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
   const { trigger } = useSWRMutation(
     '/api/job_posting/',
-    async (url: string, { arg }: { arg: JobPostingSchema }) => {
+    async (url: string, { arg }: { arg: JobPostingRequest }) => {
       return apiFetch(url, {
         method: 'POST',
         body: JSON.stringify(arg),
@@ -41,9 +41,10 @@ export default function JobPostingForm() {
     },
   );
 
-  const form = useForm<JobPostingSchema>({
-    resolver: zodResolver(jobPostingSchema),
-    shouldFocusError: false,
+  const form = useForm<JobPostingRequest>({
+    resolver: zodResolver(jobPostingSchemaRequest),
+    mode: 'onTouched', // 한 번 터치된 필드에 대해
+    reValidateMode: 'onChange', // 이후에는 값이 변경될 때마다 검증
     defaultValues: {
       title: '',
       salary: '협의 후 결정',
@@ -65,7 +66,7 @@ export default function JobPostingForm() {
     },
   });
 
-  const onSubmit = (data: JobPostingSchema) => {
+  const onSubmit = (data: JobPostingRequest) => {
     console.table(data);
     trigger(data)
       .then((response) => {
@@ -149,11 +150,13 @@ export default function JobPostingForm() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {Object.values(jobPostingSchema.shape.employ_method.enum).map((item) => (
-                        <SelectItem key={item} value={item}>
-                          {item}
-                        </SelectItem>
-                      ))}
+                      {Object.values(jobPostingSchemaRequest.shape.employ_method.enum).map(
+                        (item) => (
+                          <SelectItem key={item} value={item}>
+                            {item}
+                          </SelectItem>
+                        ),
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage className='absolute top-0 right-0 text-sm' />
