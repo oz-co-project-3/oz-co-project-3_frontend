@@ -23,6 +23,8 @@ const handleImageUpload = async (file: File) => {
   //   },
   // });
 
+  // 샤드씨엔 프로그레스바 추가 (업로드 진행 정도) onProgress인가 옵션이 있음, 공식문서 참고
+
   const formData = new FormData();
   formData.append('file', file);
   console.log(formData);

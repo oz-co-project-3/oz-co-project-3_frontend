@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const jobPostingSchema = z.object({
+export const jobPostingSchemaRequest = z.object({
   id: z.number().optional(),
   user: z
     .object({
@@ -29,6 +29,15 @@ export const jobPostingSchema = z.object({
   report: z.number().int().min(0).optional(),
 });
 
+export const jobPostingSchemaUpdate = jobPostingSchemaRequest.partial();
+
+// 타입 파일에서 스키마 없이 타입만 다시 정의하기 (항목은 다시 확인)
+export const jobPostingSchemaResponse = jobPostingSchemaRequest.extend({
+  user: z.object({
+    id: z.number(),
+  }),
+});
+
 // education -> qualification 으로 바꾸기? (자격요건)
 
 // 최대 글자수 넣어주기
@@ -41,4 +50,7 @@ export const jobPostingSchema = z.object({
 
 // 유주님이 정의한 타입에 detailPagePath 는 빼고 인자 나눠서 전달하라고 얘기하기
 
-export type JobPostingSchema = z.infer<typeof jobPostingSchema>;
+export type JobPostingRequest = z.infer<typeof jobPostingSchemaRequest>;
+export type JobPostingUpdate = z.infer<typeof jobPostingSchemaUpdate>;
+
+// 리퀘스트 다시 확인 (안보내도 되는 값 찾아서 삭제, 그리고 받을때만 필요한걸 응답 타입에 넣어주기)
