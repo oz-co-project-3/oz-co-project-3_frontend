@@ -32,12 +32,18 @@ export default function LoginPage() {
       const user = {
         id: user_id,
         email,
-        user_type: [user_type], // 문자열이라 배열로
+        user_type: user_type,
         name,
       };
 
       if (access_token && user) {
-        login(user, access_token); // Zustand 전역 저장
+        login(
+          {
+            ...user,
+            signinMethod: ['email'],
+          },
+          access_token,
+        ); // Zustand 전역 저장
         localStorage.setItem('access_token', access_token); // localStorage 저장
         localStorage.setItem('user', JSON.stringify(user));
       } else {
