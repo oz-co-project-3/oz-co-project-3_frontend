@@ -9,6 +9,7 @@ import { CHATBOT_API } from '@/constants/chatbot';
 import type { ChatbotPrompt } from '@/types/chatbot';
 import type { KeyedMutator } from 'swr';
 import { Textarea } from '@/components/ui/textarea';
+import { useAuthStore } from '@/store/useAuthStore'; // 전역 상태에서 토큰 가져오기
 
 interface Props {
   open: boolean;
@@ -25,8 +26,9 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
   const [isTerminate, setIsTerminate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState('');
+  const accessToken = useAuthStore((state) => state.accessToken);
 
-  // 모달 열릴 때 초기값
+  // 모달 열릴 때 초기값 설정
   useEffect(() => {
     if (open) {
       if (editTarget) {
@@ -42,6 +44,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
     }
   }, [open, editTarget]);
 
+  // 폼 초기화
   const resetForm = () => {
     setStep(1);
     setSelectionPath('');
@@ -51,10 +54,10 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
     setRedirectUrl('');
   };
 
+  // 저장 또는 수정 요청
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const token = process.env.NEXT_PUBLIC_ADMIN_TOKEN!;
       const url = editTarget ? CHATBOT_API.DETAIL(editTarget.id) : CHATBOT_API.BASE;
       const method = editTarget ? 'PATCH' : 'POST';
 
@@ -62,7 +65,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           step,
@@ -77,8 +80,8 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
       if (!res.ok) throw new Error(editTarget ? '수정 실패' : '추가 실패');
 
       await onSuccess(); // SWR 새로고침 (목록을 최신화시킴)
-      resetForm(); //폼도 초기화
-      onClose(); //닫기
+      resetForm(); // 폼 초기화
+      onClose(); // 모달 닫기
     } catch (err) {
       console.error(err);
     } finally {
@@ -103,10 +106,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
           <Input
             placeholder='선택 경로 (예: 기업/회원가입)'
             value={selectionPath}
-            onChange={(e) => {
-              console.log('[Admin] 입력한 selection_path:', e.target.value);
-              setSelectionPath(e.target.value);
-            }}
+            onChange={(e) => setSelectionPath(e.target.value)}
           />
           <Textarea placeholder='응답' value={answer} onChange={(e) => setAnswer(e.target.value)} />
           <Input
