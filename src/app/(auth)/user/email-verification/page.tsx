@@ -73,7 +73,16 @@ export default function EmailVerificationPage() {
         };
 
         if (token) {
-          login(user, token);
+          login(
+            {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              user_type: user.user_type,
+              signinMethod: ['email'],
+            },
+            token,
+          );
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('emailVerified', 'true');
         }

@@ -28,7 +28,11 @@ import { useRef, useState } from 'react';
 
 interface SeekerProfileFormProps {
   type: 'register' | 'edit';
-  defaultValues?: Partial<SeekerProfileFormValues>;
+  defaultValues?: Partial<Omit<SeekerProfileFormValues, 'interests' | 'purposes' | 'sources'>> & {
+    interests?: string[];
+    purposes?: string[];
+    sources?: string[];
+  };
   onSubmit: (data: SeekerProfileFormValues, isEmailVerified: boolean) => void;
 }
 
@@ -51,7 +55,6 @@ export default function SeekerProfileForm({
       purposes: [],
       sources: [],
       status: 'seeking',
-      //roles or type: ['seeker'],
       ...defaultValues,
     },
   });
