@@ -9,52 +9,36 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { ResumeModal } from '../resume/ResumeModal';
 
 interface UserTableProps {
-  userType: 'personal' | 'corporate';
+  userType: 'seeker' | 'business'; // 사용자 유형 (개인 또는 기업)
 }
 
-const getExpectedBackendType = (frontendType: 'personal' | 'corporate') => {
-  const map = {
-    personal: 'seeker',
-    corporate: 'business',
-  } as const;
-  return map[frontendType];
-};
-
+// 응답 객체에서 AdminUser 배열 추출
 function extractAdminUsers(response: unknown): AdminUser[] {
-  if (Array.isArray(response)) return response as AdminUser[];
-
-  if (
-    typeof response === 'object' &&
-    response !== null &&
-    'users' in response &&
-    Array.isArray((response as { users: unknown }).users)
-  ) {
-    return (response as { users: AdminUser[] }).users;
+  if (Array.isArray(response)) {
+    return response as AdminUser[];
   }
-
-  if (
-    typeof response === 'object' &&
-    response !== null &&
-    'data' in response &&
-    Array.isArray((response as { data: unknown }).data)
-  ) {
-    return (response as { data: AdminUser[] }).data;
-  }
-
-  throw new Error(`배열 형태의 응답을 찾을 수 없음: ${JSON.stringify(response)}`);
+  return [];
 }
 
 export function UserTable({ userType }: UserTableProps) {
+  // 전체 사용자 목록 상태
   const [data, setData] = useState<AdminUser[]>([]);
+
+  // 로딩 상태
   const [isLoading, setIsLoading] = useState(true);
+
+  // 모달 오픈 시 선택된 유저 ID
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+
   const router = useRouter();
   const accessToken = useAuthStore((state) => state.accessToken);
   const logout = useAuthStore((state) => state.logout);
 
+  // 사용자 목록 조회 API
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
+
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/admin/user`, {
           method: 'GET',
@@ -64,6 +48,7 @@ export function UserTable({ userType }: UserTableProps) {
           },
         });
 
+        // 인증 만료 시 로그아웃 처리
         if (res.status === 401) {
           logout();
           router.push('/user/login');
@@ -73,22 +58,16 @@ export function UserTable({ userType }: UserTableProps) {
         const result = await res.json();
         const users = extractAdminUsers(result);
 
-        const backendType = getExpectedBackendType(userType);
+        // 사용자 유형에 따라 필터링 + 관리자(admin) 제외
         const filtered = users.filter((user) => {
-          const isTargetType =
-            backendType === 'seeker'
-              ? user.seeker !== null
-              : backendType === 'business'
-                ? user.corp !== null
-                : false;
+          const isTarget =
+            userType === 'seeker' ? !!user.seeker : userType === 'business' ? !!user.corp : false;
 
-          return isTargetType && !user.base.is_superuser;
+          // user_type이 문자열로 와서 admin 포함되는지 체크
+          const isAdmin = user.base.user_type.includes('admin');
+
+          return isTarget && !isAdmin;
         });
-
-        console.log('[백엔드 타입]', backendType);
-        console.log('[응답 받은 user들]', users);
-        console.log('[필터링 후]', filtered);
-
         setData(filtered);
       } catch (error) {
         console.error('회원 목록 실패:', error);
@@ -97,9 +76,11 @@ export function UserTable({ userType }: UserTableProps) {
       }
     };
 
+    // 액세스 토큰이 있을 때만 요청
     if (accessToken) fetchUsers();
   }, [userType, accessToken, router, logout]);
 
+  // 로딩 중 화면
   if (isLoading) {
     return (
       <div className='flex h-64 items-center justify-center'>
@@ -108,9 +89,11 @@ export function UserTable({ userType }: UserTableProps) {
     );
   }
 
+  // 사용자 테이블, 이력서 모달 렌더링
   return (
     <div className='mt-4'>
       <DataTable columns={getColumns(router, (id) => setSelectedUserId(id))} data={data} />
+
       {selectedUserId !== null && (
         <ResumeModal userId={selectedUserId} open={true} onClose={() => setSelectedUserId(null)} />
       )}
