@@ -1,10 +1,13 @@
+'use client';
+
+import { useParams } from 'next/navigation';
 import AdminLayout from '@/components/layout/AdminLayout';
 import DeleteResumeButton from '@/components/resume/DeleteResumeButton';
 import Resume from '@/components/resume/Resume';
 
-// 수정: Props 인터페이스 제거하고 params에 직접 타입 지정
-export default async function AdminResumeDetailPage({ params }: { params: { id: string } }) {
-  const resumeId = params.id;
+export default function AdminResumeDetailPage() {
+  const params = useParams();
+  const resumeId = params.id as string;
 
   return (
     <AdminLayout>
@@ -21,3 +24,4 @@ export default async function AdminResumeDetailPage({ params }: { params: { id: 
     </AdminLayout>
   );
 }
+//나중에 API 연동, 그때 async function으로 다시 서버 컴포넌트화 가능

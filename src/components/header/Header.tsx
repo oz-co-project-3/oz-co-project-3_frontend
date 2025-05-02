@@ -2,11 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { logoutUser } from '@/api/user';
-import { useRouter } from 'next/navigation';
 
 const userNavItems = [
   { name: '공공 공고', href: '/public-jobs' },
@@ -15,7 +15,7 @@ const userNavItems = [
   { name: 'ADMIN', href: '/admin' }, // 임시
 ];
 
-//관리자용
+// 관리자용
 const adminNavItems = [
   { name: '회원 관리', href: '/admin/user' },
   { name: '공고 관리', href: '/admin/jobs' },
@@ -28,6 +28,13 @@ export default function Header() {
   const { accessToken, logout } = useAuthStore();
   const router = useRouter();
 
+  // hydration mismatch 방지를 위한 mounted 상태
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -39,7 +46,6 @@ export default function Header() {
     }
   };
 
-  //경로가 /admin 시작일때 관리자메뉴
   const isAdminPage = pathname.startsWith('/admin');
   const navItems = isAdminPage ? adminNavItems : userNavItems;
 
@@ -57,6 +63,7 @@ export default function Header() {
           />
         </Link>
       </h1>
+
       <nav className='grow px-12'>
         <ul className='flex items-center gap-4'>
           {navItems.map((item) => (
@@ -73,8 +80,8 @@ export default function Header() {
       </nav>
 
       <div className='flex items-center gap-2'>
-        {/* 유저 정보 받으면 원 안에 프사 넣은걸로 바꾸기 */}
-        {accessToken ? (
+        {/* 수정: 클라이언트 마운트 후에만 accessToken으로 분기 */}
+        {!mounted ? null : accessToken ? (
           <>
             <Link href='/dashboard/profile'>
               <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
@@ -112,6 +119,3 @@ export default function Header() {
     </header>
   );
 }
-
-// 유저가 관리자일 경우 nav 조건부 렌더링
-// 로그인 상태에 따라 버튼 조건부 렌더링

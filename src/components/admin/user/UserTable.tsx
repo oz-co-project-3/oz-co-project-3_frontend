@@ -20,6 +20,30 @@ const getExpectedBackendType = (frontendType: 'personal' | 'corporate') => {
   return map[frontendType];
 };
 
+function extractAdminUsers(response: unknown): AdminUser[] {
+  if (Array.isArray(response)) return response as AdminUser[];
+
+  if (
+    typeof response === 'object' &&
+    response !== null &&
+    'users' in response &&
+    Array.isArray((response as { users: unknown }).users)
+  ) {
+    return (response as { users: AdminUser[] }).users;
+  }
+
+  if (
+    typeof response === 'object' &&
+    response !== null &&
+    'data' in response &&
+    Array.isArray((response as { data: unknown }).data)
+  ) {
+    return (response as { data: AdminUser[] }).data;
+  }
+
+  throw new Error(`배열 형태의 응답을 찾을 수 없음: ${JSON.stringify(response)}`);
+}
+
 export function UserTable({ userType }: UserTableProps) {
   const [data, setData] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -47,13 +71,23 @@ export function UserTable({ userType }: UserTableProps) {
         }
 
         const result = await res.json();
-        if (!Array.isArray(result))
-          throw new Error(`응답이 배열이 아님: ${JSON.stringify(result)}`);
+        const users = extractAdminUsers(result);
 
         const backendType = getExpectedBackendType(userType);
-        const filtered = result.filter(
-          (user) => user.base.user_type === backendType && !user.base.is_superuser,
-        );
+        const filtered = users.filter((user) => {
+          const isTargetType =
+            backendType === 'seeker'
+              ? user.seeker !== null
+              : backendType === 'business'
+                ? user.corp !== null
+                : false;
+
+          return isTargetType && !user.base.is_superuser;
+        });
+
+        console.log('[백엔드 타입]', backendType);
+        console.log('[응답 받은 user들]', users);
+        console.log('[필터링 후]', filtered);
 
         setData(filtered);
       } catch (error) {
@@ -77,7 +111,6 @@ export function UserTable({ userType }: UserTableProps) {
   return (
     <div className='mt-4'>
       <DataTable columns={getColumns(router, (id) => setSelectedUserId(id))} data={data} />
-
       {selectedUserId !== null && (
         <ResumeModal userId={selectedUserId} open={true} onClose={() => setSelectedUserId(null)} />
       )}
