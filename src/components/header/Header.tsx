@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useEffect, useState } from 'react';
 import { logoutUser } from '@/api/user';
 
 const userNavItems = [
