@@ -16,6 +16,7 @@ export default function TogleButton({
   return (
     <Button
       onClick={onClick}
+      type='button'
       size='sm'
       className={`${isActive ? 'bg-main-light hover:bg-main-dark' : 'bg-transparent text-black shadow-none hover:bg-zinc-100'} cursor-pointer`}
       disabled={disabled}

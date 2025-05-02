@@ -16,18 +16,18 @@ import Image from '@tiptap/extension-image';
 import ImageUploadBtn, { imageUploadNode } from './style-options/ImageUploadBtn';
 import CharacterCounter, { characterCount } from './CharacterCounter';
 import { useEffect } from 'react';
+import ImageResize from 'tiptap-extension-resize-image';
 
 export default function JobPostingEditor({
-  setDetailHTML,
   setDetailJSON,
 }: {
-  setDetailHTML: (html: string) => void;
   setDetailJSON: (json: string) => void;
 }) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
         heading: false,
+        listItem: false,
         bulletList: {
           keepMarks: true,
           // TODO: Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
@@ -44,6 +44,7 @@ export default function JobPostingEditor({
       link,
       Image,
       imageUploadNode,
+      ImageResize,
       Placeholder.configure({
         placeholder: '내용을 입력해주세요...',
       }),
@@ -67,17 +68,15 @@ export default function JobPostingEditor({
     // please set `immediatelyRender` explicitly to `false` to avoid hydration mismatches.
     immediatelyRender: false,
     onUpdate: ({ editor }) => {
-      setDetailHTML(editor.getHTML());
       setDetailJSON(JSON.stringify(editor.getJSON()));
     },
   });
 
   useEffect(() => {
     if (editor) {
-      setDetailHTML(editor.getHTML());
       setDetailJSON(JSON.stringify(editor.getJSON()));
     }
-  }, [editor, setDetailHTML, setDetailJSON]);
+  }, [editor, setDetailJSON]);
 
   if (!editor) return null;
 
