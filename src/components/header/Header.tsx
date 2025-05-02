@@ -3,10 +3,11 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '../ui/button';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useEffect, useState } from 'react';
 import { logoutUser } from '@/api/user';
-import { useRouter } from 'next/navigation';
+
 
 const userNavItems = [
   { name: '공공 공고', href: '/public-jobs' },
@@ -26,23 +27,46 @@ const adminNavItems = [
 
 export default function Header() {
   const pathname = usePathname();
-  const { accessToken, logout } = useAuthStore();
   const router = useRouter();
+  const { accessToken, login, logout } = useAuthStore();
+
+  // 클라이언트에서 localStorage → Zustand에 반영 (hydration mismatch 방지용)
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('access_token');
+      const rawUser = localStorage.getItem('user');
+      if (token && rawUser && rawUser !== 'undefined') {
+        try {
+          const user = JSON.parse(rawUser);
+          login(user, token);
+        } catch (err) {
+          console.error('user JSON 파싱 실패:', err);
+        }
+      }
+      setHasMounted(true);
+    }
+  }, [login]);
 
   const handleLogout = async () => {
     try {
-      await logoutUser();
-      logout();
-      router.push('/');
+      await logoutUser(); // access_token이 만료되면 여기서 에러
     } catch (err) {
-      console.error('❌ 로그아웃 실패:', err);
-      alert('로그아웃에 실패했습니다.');
+      console.warn('로그아웃 API 실패 :', err);
     }
+
+    logout(); // 상태 초기화
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('user');
+    router.push('/');
   };
 
   //경로가 /admin 시작일때 관리자메뉴
   const isAdminPage = pathname.startsWith('/admin');
   const navItems = isAdminPage ? adminNavItems : userNavItems;
+
+   //클라이언트에서 렌더링 완료 후 보여주기 (SSR 조건부 렌더링 차이 해결)
+   if (!hasMounted) return null;
 
   return (
     <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between border-b bg-white px-2'>

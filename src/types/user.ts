@@ -7,13 +7,12 @@
 //   name: string;
 //   userRole: UserRole[];
 //   signInMethod: SignInMethod[];
-// } 
+// }
 // export interface LoginResponseData {
 //   access_token: string;
 //   refresh_token?: string;
 //   user: User;
-// } 
-
+// }
 
 export interface SeekerFormData {
   name: string;
@@ -23,10 +22,11 @@ export interface SeekerFormData {
   password_check: string;
   phone_number: string;
   gender?: 'male' | 'female' | 'none';
-  interests?: string[];
-  purposes?: string[];
-  sources?: string[];
+  interests?: string | string[];
+  purposes?: string | string[];
+  sources?: string | string[];
   status: 'seeking' | 'not_seeking' | 'employed';
+  signinMethod?: 'email' | 'naver' | 'kakao';
 }
 export interface CompanyFormData {
   email: string;
@@ -53,7 +53,8 @@ export interface LoginResponseData {
   email: string;
   name: string;
   user_id: number;
-  user_type: 'seeker' | 'business' | 'admin';
+  user_type: ('seeker' | 'business' | 'admin')[];
+  signinMethod: ('email' | 'naver' | 'kakao')[];
 }
 
 export interface DeleteUserRequest {
@@ -67,6 +68,7 @@ export interface User {
   email: string;
   name: string;
   user_type: ('seeker' | 'business' | 'admin')[];
+  signinMethod: ('email' | 'naver' | 'kakao')[];
 }
 
 export interface EmailCheckResponse {

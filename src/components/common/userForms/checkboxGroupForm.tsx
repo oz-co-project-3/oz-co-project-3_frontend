@@ -10,16 +10,12 @@ interface CheckboxGroupProps<T extends FieldValues> {
   options: string[];
 }
 
-export function CheckboxGroup<T extends FieldValues>({
-  form,
-  name,
-  options,
-}: CheckboxGroupProps<T>) {
+export function CheckboxGroup<T extends FieldValues>({ form, name, options }: CheckboxGroupProps<T>) {
   return (
-    <div className='grid grid-cols-2 gap-2'>
+    <div className="grid grid-cols-2 gap-2">
       {options.map((item) => (
-        <Label key={item} className='cursor-pointer'>
-          <div className='flex items-center gap-2'>
+        <Label key={item} className="cursor-pointer">
+          <div className="flex items-center gap-2">
             <Checkbox
               id={`${String(name)}-${item}`}
               checked={form.watch(name)?.includes(item)}
@@ -31,10 +27,10 @@ export function CheckboxGroup<T extends FieldValues>({
                   name,
                   (checked
                     ? [...values, item]
-                    : values.filter((i) => i !== item)) as FieldPathValue<T, typeof name>,
+                    : values.filter((i) => i !== item)) as FieldPathValue<T, typeof name>
                 );
               }}
-              className='data-[state=checked]:border-[#2F4858] data-[state=checked]:bg-[#2F4858]'
+              className="data-[state=checked]:border-[#2F4858] data-[state=checked]:bg-[#2F4858]"
             />
             {item}
           </div>

@@ -19,7 +19,7 @@ const storedUser =
 export interface AuthUser {
   id: number;
   email: string;
-  user_type: ('seeker' | 'business' | 'admin')[];
+  user_type: 'seeker' | 'business' | 'admin';
   name: string;
 }
 
