@@ -1,7 +1,7 @@
 'use client';
 
-import { JOB_CATEGORIES } from '../../constants/jobCategories';
-import { REGIONS } from '../../constants/region';
+import { JOB_CATEGORIES } from '../../../constants/jobCategories';
+import { REGIONS } from '../../../constants/region';
 import { FiChevronRight } from 'react-icons/fi';
 import { RiResetLeftFill } from 'react-icons/ri';
 import { EMPLOYMENT_TYPES } from '@/constants/employmentType';

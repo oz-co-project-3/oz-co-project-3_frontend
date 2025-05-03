@@ -1,12 +1,7 @@
 //공공 상세페이지
-'use client';
-
-import { useParams } from 'next/navigation';
-
-export default function JobDetailPage() {
-  const params = useParams();
+export default async function JobDetailPage({ params }: { params: Promise<{ id: number }> }) {
   // 폴더명이 [id]라면 params.id로 접근
-  const { id } = params;
+  const { id } = await params;
 
   return (
     <div>

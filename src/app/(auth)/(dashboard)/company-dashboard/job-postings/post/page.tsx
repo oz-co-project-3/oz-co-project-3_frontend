@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 export default function Page() {
-  // const [defaultJobPosting, setDefaultJobPosting] = useState<JobPostingSchema | null>(null);
+  // const [defaultJobPosting, setDefaultJobPosting] = useState<JobPostingRequest | null>(null);
   const [isLoadJobPostingModalOpen, setIsLoadJobPostingModalOpen] = useState<boolean>(false);
   console.log(isLoadJobPostingModalOpen); // 삭제 (에러제거용)
 
