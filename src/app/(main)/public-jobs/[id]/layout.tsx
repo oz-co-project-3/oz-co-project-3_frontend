@@ -1,6 +1,6 @@
 'use client';
 
-import LikeButton from '@/components/likebutton/LikeButton';
+import LikeButton from '@/components/common/likebutton/LikeButton';
 import { JobPosting } from '@/types/jobPosting';
 
 export default function Layout({ id, children }: JobPosting & { children: React.ReactNode }) {

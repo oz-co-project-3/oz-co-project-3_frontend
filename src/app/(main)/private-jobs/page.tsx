@@ -1,6 +1,6 @@
 'use client';
 
-import FilterList from '@/components/filter/FilterList';
+import FilterList from '@/components/common/filter/FilterList';
 import PrivateJobList from './PrivateJobList';
 import Image from 'next/image';
 import Loading from '@/app/loading';
@@ -12,7 +12,6 @@ export default function PrivateJobsPage() {
   const searchParams = useSearchParams();
   const searchKeyword = searchParams.get('search_keyword'); // .get() 사용
   const { data, loading } = useFilterJobs('일반', searchKeyword || undefined);
-
 
   return (
     <div className='flex h-full justify-center pt-30'>

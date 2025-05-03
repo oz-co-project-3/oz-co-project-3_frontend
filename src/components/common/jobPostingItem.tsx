@@ -1,5 +1,5 @@
 import { JobPosting } from '@/types/jobPosting';
-import LikeButton from '../likebutton/LikeButton';
+import LikeButton from '@/components/common/likebutton/LikeButton';
 import Link from 'next/link';
 
 export default function JobPostingItem({

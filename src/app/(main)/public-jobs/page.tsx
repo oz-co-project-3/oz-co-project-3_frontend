@@ -1,7 +1,7 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation'; // 추가
-import FilterList from '@/components/filter/FilterList';
+import FilterList from '@/components/common/filter/FilterList';
 import PublicJobList from './PublicJobList';
 import { useFilterJobs } from '@/hooks/useFilterJobs';
 import Image from 'next/image';
