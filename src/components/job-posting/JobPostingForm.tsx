@@ -88,7 +88,7 @@ export default function JobPostingForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-8'>
         {/* 채용 공고 제목 */}
         <FormField
           control={form.control}
@@ -134,8 +134,8 @@ export default function JobPostingForm() {
           )}
         />
 
-        <div className='flex justify-between gap-4 max-md:flex-col'>
-          <div className='flex grow flex-col gap-4'>
+        <div className='flex justify-between gap-8 max-md:flex-col'>
+          <div className='flex grow flex-col gap-8'>
             {/* 급여 */}
             <FormField
               control={form.control}
@@ -195,7 +195,7 @@ export default function JobPostingForm() {
             />
           </div>
 
-          <div className='flex grow flex-col gap-4'>
+          <div className='flex grow flex-col gap-8'>
             {/* 근무 시간 */}
             <FormField
               control={form.control}
