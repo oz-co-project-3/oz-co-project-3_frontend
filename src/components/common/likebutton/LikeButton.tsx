@@ -5,7 +5,7 @@ import useSWR from 'swr';
 import { apiFetch } from '@/lib/fetcher';
 
 interface LikeButtonProps {
-  id: number;
+  id?: string;
 }
 
 const LikeButton = ({ id }: LikeButtonProps) => {

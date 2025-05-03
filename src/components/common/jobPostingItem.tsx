@@ -1,5 +1,5 @@
 import { JobPosting } from '@/types/jobPosting';
-import LikeButton from '../likebutton/LikeButton';
+import LikeButton from '@/components/common/likebutton/LikeButton';
 import Link from 'next/link';
 
 export default function JobPostingItem({
@@ -22,7 +22,7 @@ export default function JobPostingItem({
           </div>
           {/* 모집제목/기업명 */}
           <div className='flex h-[80px] w-[400px] flex-col justify-center'>
-            <span className='text-xl font-black'>{title}</span>
+            <span className='tegitxt-xl font-black'>{title}</span>
             <span>{company}</span>
           </div>
           {/* 근무요약 */}

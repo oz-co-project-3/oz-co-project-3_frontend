@@ -3,7 +3,7 @@
 import JobPostingItem from '@/components/common/jobPostingItem';
 import { useSearchParams, usePathname } from 'next/navigation';
 import { JobPostingListResponse } from '@/types/jobPosting';
-import CustomPagination from '@/components/pagination/CustomPagination';
+import CustomPagination from '@/components/common/pagination/CustomPagination';
 
 export default function AllJobList({
   data: { data: posts, total, limit },
