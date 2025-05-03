@@ -1,21 +1,19 @@
 import { create } from 'zustand';
 import { User } from '@/types/user';
 
-const storedToken =
-  typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
+const storedToken = typeof window !== 'undefined' ? localStorage.getItem('access_token') : null;
 
-const rawUser =
-  typeof window !== 'undefined' ? localStorage.getItem('user') : null;
+const rawUser = typeof window !== 'undefined' ? localStorage.getItem('user') : null;
 
-const storedUser =
-  rawUser && rawUser !== 'undefined' ? JSON.parse(rawUser) : null;
+const storedUser = rawUser && rawUser !== 'undefined' ? JSON.parse(rawUser) : null;
 
-  interface AuthState {
-    user: User | null;
-    accessToken: string | null;
-    login: (user: User, token: string) => void;
-    logout: () => void;
-  }
+interface AuthState {
+  user: User | null;
+  accessToken: string | null;
+  login: (user: User, token: string) => void;
+  logout: () => void;
+}
+
 export interface AuthUser {
   id: number;
   email: string;

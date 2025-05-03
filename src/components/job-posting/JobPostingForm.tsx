@@ -66,6 +66,7 @@ export default function JobPostingForm() {
     },
   });
 
+  // TODO: API 요청 성공 후 로직 필요함
   const onSubmit = (data: JobPostingRequest) => {
     console.table(data);
     trigger(data)
@@ -80,7 +81,6 @@ export default function JobPostingForm() {
   };
 
   useEffect(() => {
-    // JSON이나 HTML 중에 선택하기
     form.setValue('description', detailJSON, {
       shouldValidate: false,
     });
@@ -329,18 +329,25 @@ export default function JobPostingForm() {
           <JobPostingEditor setDetailJSON={setDetailJSON} />
           {/* 데이터 형식 미리보기 */}
           {/* <div className='mt-4'>
-          <div className='text-sm font-bold'>HTML</div>
-          <div>{detailHTML}</div>
-          </div> */}
-          {/* <div className='mt-4'>
             <div className='text-sm font-bold'>JSON</div>
             <div>{detailJSON}</div>
           </div> */}
+          <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div>
         </div>
 
         <div className='flex justify-between gap-2'>
-          <Button className='bg-danger grow cursor-pointer hover:bg-amber-700'>취소하기</Button>
-          <Button type='submit' className='bg-main-light hover:bg-main-dark grow cursor-pointer'>
+          <Button
+            className='bg-danger grow cursor-pointer hover:bg-amber-700'
+            onClick={() => console.log('클릭')}
+          >
+            취소하기
+          </Button>
+          <Button
+            type='submit'
+            className='bg-main-light hover:bg-main-dark grow cursor-pointer'
+            // disabled={!form.formState.isValid}
+            onClick={() => form.trigger()}
+          >
             저장하기
           </Button>
         </div>
