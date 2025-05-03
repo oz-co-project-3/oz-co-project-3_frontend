@@ -25,9 +25,9 @@ export default function NaverCallbackPage() {
 
         const data = await res.json();
 
-        const { access_token, email, name, user_type, user_id, signinMethod } = data;
-        login({ id: user_id, email, name, user_type, signinMethod }, access_token);
-        localStorage.setItem('access_token', access_token);
+        const { email, name, user_type, user_id, signinMethod } = data;
+        login({ id: user_id, email, name, user_type, signinMethod });
+        //localStorage.setItem('access_token', access_token);
         router.push('/');
       } catch (err) {
         console.error('네이버 로그인 실패:', err);

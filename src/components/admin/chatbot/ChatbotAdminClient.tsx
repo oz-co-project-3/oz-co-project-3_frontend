@@ -12,7 +12,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { useRouter } from 'next/navigation';
 
 const fetcher = async (url: string): Promise<ChatbotPrompt[]> => {
-  const token = useAuthStore.getState().accessToken;
+  const token = useAuthStore.getState()//.accessToken;
   const res = await fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -37,7 +37,7 @@ export default function ChatbotAdminClient() {
   const [openModal, setOpenModal] = useState(false);
   const [editTarget, setEditTarget] = useState<ChatbotPrompt | null>(null);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
-  const accessToken = useAuthStore((state) => state.accessToken);
+  //const accessToken = useAuthStore((state) => state.accessToken);
   const logout = useAuthStore((state) => state.logout);
   const router = useRouter();
 
@@ -70,7 +70,7 @@ export default function ChatbotAdminClient() {
       const res = await fetch(CHATBOT_API.DETAIL(id), {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer ${accessToken}`,
+          //Authorization: `Bearer ${accessToken}`,
         },
       });
 
