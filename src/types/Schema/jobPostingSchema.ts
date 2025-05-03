@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
 export const jobPostingSchemaRequest = z.object({
-  company: z.string(),
-  // .min(1, '회사명은 필수입니다.'),
+  company: z.string().min(1, '회사명은 필수입니다.'),
   title: z.string().min(1, '제목은 필수입니다.'),
   location: z.string().min(1, '위치는 필수입니다.'),
   employment_type: z.enum(['공공', '일반']),
@@ -20,24 +19,11 @@ export const jobPostingSchemaRequest = z.object({
   summary: z.string().optional(),
   description: z.string(), // 필수 항목으로 처리하는 방법 고민하기
   status: z.enum(['모집중', '마감 임박', '모집 종료', '블라인드', '대기중', '반려됨']),
-  // 테이블에 이미 있는거 추가하기
-  // career: z.string().default('경력 무관'),
-  // image_url: z.string().url(),
+  career: z.string().transform((val) => (val === '' ? '경력 무관' : val)),
+  image_url: z.string().optional(),
 });
 
 export const jobPostingSchemaUpdate = jobPostingSchemaRequest.partial();
-
-// education -> qualification 으로 바꾸기? (자격요건)
-
-// 최대 글자수 넣어주기
-
-// 스웨거에 3개 빠짐
-// image_url, updated_at, created_at, agreed_terms (이건 없앤듯)
-
-// 테이블 명세서에 1개 없음
-// company
-
-// 유주님이 정의한 타입에 detailPagePath 는 빼고 인자 나눠서 전달하라고 얘기하기
 
 export type JobPostingRequest = z.infer<typeof jobPostingSchemaRequest>;
 export type JobPostingUpdate = z.infer<typeof jobPostingSchemaUpdate>;
@@ -51,3 +37,7 @@ export type JobPostingResponse = JobPostingRequest & {
   created_at: string;
   updated_at: string;
 };
+
+// 최대 글자수 넣어주기
+
+// 유주님이 정의한 타입에 detailPagePath 는 빼고 인자 나눠서 전달하라고 얘기하기

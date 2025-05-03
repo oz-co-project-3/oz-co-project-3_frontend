@@ -46,23 +46,23 @@ export default function JobPostingForm() {
     mode: 'onTouched', // 한 번 터치된 필드에 대해
     reValidateMode: 'onChange', // 이후에는 값이 변경될 때마다 검증
     defaultValues: {
+      company: '',
       title: '',
-      salary: '협의 후 결정',
       location: '',
+      employment_type: '일반',
       employ_method: '정규직',
       work_time: '',
       position: '',
-      recruitment_count: 1,
-      education: '',
-      deadline: '', // 날짜 형식?
-      summary: '',
       history: undefined,
-      // 필수 항목중에 필드에 입력 받지 않을 값을 디폴트로 넣어줘도 괜찮은듯
-      company: '', // 프로필의 회사명 받아서 넣어주거나, 공고 조회시에만 회사명 개업일자 회사소개 넣어주기
-      employment_type: '일반',
+      recruitment_count: 0,
+      education: '',
+      deadline: '', // YYYY-MM-DD
+      salary: '협의 후 결정',
+      summary: undefined,
+      description: '',
       status: '모집중',
-      // description: '',
-      description: '', // 빌드에러 방지용 (HTML, JSON 결정 후엔 윗줄로 바꿔서 하기)
+      career: '경력 무관',
+      image_url: undefined,
     },
   });
 
@@ -98,6 +98,36 @@ export default function JobPostingForm() {
               <FormLabel className='text-base font-semibold'>채용 공고 제목</FormLabel>
               <FormControl>
                 <Input placeholder='채용 공고 제목을 입력하세요.' {...field} />
+              </FormControl>
+              <FormMessage className='absolute top-0 right-0 text-sm' />
+            </FormItem>
+          )}
+        />
+
+        {/* 회사명 */}
+        <FormField
+          control={form.control}
+          name='company'
+          render={({ field }) => (
+            <FormItem className='relative'>
+              <FormLabel className='text-base font-semibold'>회사명</FormLabel>
+              <FormControl>
+                <Input placeholder='주소를 입력하세요.' {...field} />
+              </FormControl>
+              <FormMessage className='absolute top-0 right-0 text-sm' />
+            </FormItem>
+          )}
+        />
+
+        {/* 썸네일 이미지 */}
+        <FormField
+          control={form.control}
+          name='image_url'
+          render={({ field }) => (
+            <FormItem className='relative'>
+              <FormLabel className='text-base font-semibold'>썸네일 이미지</FormLabel>
+              <FormControl>
+                <Input placeholder='주소를 입력하세요.' {...field} />
               </FormControl>
               <FormMessage className='absolute top-0 right-0 text-sm' />
             </FormItem>
@@ -254,16 +284,31 @@ export default function JobPostingForm() {
         {/* 자격 요건 */}
         <FormField
           control={form.control}
-          name='education'
+          name='career'
           render={({ field }) => (
             <FormItem className='relative'>
               <FormLabel className='text-base font-semibold'>자격 요건</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
-                  placeholder='학력, 자격, 경력 등 자격 요건을 입력하세요.'
+                  placeholder='경력, 지원 자격 등 자격 요건을 입력하세요.'
                   className='h-auto min-h-36 resize-none'
                 />
+              </FormControl>
+              <FormMessage className='absolute top-0 right-0 text-sm' />
+            </FormItem>
+          )}
+        />
+
+        {/* 학력 */}
+        <FormField
+          control={form.control}
+          name='education'
+          render={({ field }) => (
+            <FormItem className='relative'>
+              <FormLabel className='text-base font-semibold'>학력</FormLabel>
+              <FormControl>
+                <Input placeholder='주소를 입력하세요.' {...field} />
               </FormControl>
               <FormMessage className='absolute top-0 right-0 text-sm' />
             </FormItem>
@@ -304,13 +349,13 @@ export default function JobPostingForm() {
           )}
         />
 
-        {/* 업무 내용 */}
+        {/* 주요 업무 */}
         <FormField
           control={form.control}
           name='summary'
           render={({ field }) => (
             <FormItem className='relative'>
-              <FormLabel className='text-base font-semibold'>업무 내용</FormLabel>
+              <FormLabel className='text-base font-semibold'>주요 업무</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}

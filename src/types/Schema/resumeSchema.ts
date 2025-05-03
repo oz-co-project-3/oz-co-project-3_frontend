@@ -32,26 +32,20 @@ export const resumeSchemaRequest = z.object({
     .optional(),
 });
 
-// 업데이트용
 export const resumeSchemaUpdate = resumeSchemaRequest.partial();
-
-// 타입 파일에서 스키마 없이 타입만 다시 정의하기
-export const resumeSchemaResponse = resumeSchemaRequest.extend({
-  id: z.number(),
-  user: z.object({
-    id: z.number(),
-  }),
-  work_experience: z.array(
-    z.object({
-      id: z.number(),
-      resume_id: z.number(),
-      company: z.string(),
-      period: z.string(),
-      position: z.string(),
-      // 직급, 업무 경험 및 성과
-    }),
-  ),
-});
 
 export type ResumeRequest = z.infer<typeof resumeSchemaRequest>;
 export type ResumeUpdate = z.infer<typeof resumeSchemaUpdate>;
+export type ResumeResponse = ResumeRequest & {
+  id: number;
+  user: {
+    id: number;
+  };
+  work_experience: {
+    id: number;
+    resume_id: number;
+    company: string;
+    period: string;
+    position: string;
+  }[];
+};
