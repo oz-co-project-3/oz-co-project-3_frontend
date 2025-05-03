@@ -6,7 +6,6 @@ import { useEffect, useState } from 'react';
 import { Button } from '../ui/button';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
-import { useEffect, useState } from 'react';
 import { logoutUser } from '@/api/user';
 
 const userNavItems = [
@@ -27,51 +26,28 @@ const adminNavItems = [
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const { accessToken, login, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
 
-  // 클라이언트에서 localStorage → Zustand에 반영 (hydration mismatch 방지용)
-  const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('access_token');
-      const rawUser = localStorage.getItem('user');
-      if (token && rawUser && rawUser !== 'undefined') {
-        try {
-          const user = JSON.parse(rawUser);
-          login(user, token);
-        } catch (err) {
-          console.error('user JSON 파싱 실패:', err);
-        }
-      }
-      setHasMounted(true);
-    }
-  }, [login]);
-
-  // hydration mismatch 방지를 위한 mounted 상태
   const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  
   const handleLogout = async () => {
     try {
-      await logoutUser(); // access_token이 만료되면 여기서 에러
+      await logoutUser();
+      logout(); // Zustand 상태 초기화
+      router.push('/');
     } catch (err) {
-      console.warn('로그아웃 API 실패 :', err);
+      console.error('로그아웃 실패:', err);
+      alert('로그아웃에 실패했습니다.');
     }
-
-    logout(); // 상태 초기화
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
-    router.push('/');
   };
 
   const isAdminPage = pathname.startsWith('/admin');
   const navItems = isAdminPage ? adminNavItems : userNavItems;
 
-   //클라이언트에서 렌더링 완료 후 보여주기 (SSR 조건부 렌더링 차이 해결)
-   if (!hasMounted) return null;
+  //클라이언트에서 렌더링 완료 후 보여주기 (SSR 조건부 렌더링 차이 해결)
+  if (!mounted) return null;
 
   return (
     <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between border-b bg-white px-2'>
@@ -104,8 +80,7 @@ export default function Header() {
       </nav>
 
       <div className='flex items-center gap-2'>
-        {/* 수정: 클라이언트 마운트 후에만 accessToken으로 분기 */}
-        {!mounted ? null : accessToken ? (
+        {user ? (
           <>
             <Link href='/dashboard/profile'>
               <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>

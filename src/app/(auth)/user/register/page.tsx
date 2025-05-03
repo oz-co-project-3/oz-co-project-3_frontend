@@ -18,7 +18,6 @@ export default function SeekerRegisterPage() {
       };
   
       await registerSeeker(formattedData as SeekerFormData); 
-      localStorage.setItem('registerFormData', JSON.stringify(formData)); 
       router.push('/user/email-verification');
     } catch (err) {
       console.error('이메일 인증 요청 실패:', err);
