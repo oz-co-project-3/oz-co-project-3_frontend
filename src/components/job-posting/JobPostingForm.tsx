@@ -36,15 +36,15 @@ export default function JobPostingForm() {
     async (url: string, { arg }: { arg: JobPostingRequest }) => {
       return apiFetch(url, {
         method: 'POST',
-        body: JSON.stringify(arg),
+        body: JSON.stringify(arg), // 왜 그냥이 아니고 stringify?
       });
     },
   );
 
   const form = useForm<JobPostingRequest>({
     resolver: zodResolver(jobPostingSchemaRequest),
-    mode: 'onTouched', // 한 번 터치된 필드에 대해
-    reValidateMode: 'onChange', // 이후에는 값이 변경될 때마다 검증
+    mode: 'onSubmit', // 한 번 제출한 뒤에
+    reValidateMode: 'onBlur', // 이후에는 포커스를 잃을 때마다 검증
     defaultValues: {
       company: '',
       title: '',
@@ -69,6 +69,8 @@ export default function JobPostingForm() {
   // TODO: API 요청 성공 후 로직 필요함
   const onSubmit = (data: JobPostingRequest) => {
     console.table(data);
+
+    // try, catch 로 바꾸기
     trigger(data)
       .then((response) => {
         console.log('성공:', response);

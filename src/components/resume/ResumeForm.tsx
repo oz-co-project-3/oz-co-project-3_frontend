@@ -3,6 +3,8 @@
 // import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormMessage, FormControl, FormItem, FormLabel, FormField } from '../ui/form';
+import useSWRMutation from 'swr/mutation';
+import { apiFetch } from '@/lib/fetcher';
 import { Input } from '../ui/input';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { resumeSchemaRequest, ResumeRequest } from '@/types/Schema/resumeSchema';
@@ -11,7 +13,16 @@ import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 
 export default function ResumeForm() {
-  // const [career, setCareer] = useState<string[]>();
+  // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
+  const { trigger } = useSWRMutation(
+    '/api/resume/',
+    async (url: string, { arg }: { arg: ResumeRequest }) => {
+      return apiFetch(url, {
+        method: 'POST',
+        body: JSON.stringify(arg), // 왜 그냥이 아니고 stringify?
+      });
+    },
+  );
 
   const form = useForm<ResumeRequest>({
     resolver: zodResolver(resumeSchemaRequest),
@@ -44,11 +55,22 @@ export default function ResumeForm() {
     name: 'work_experience',
   });
 
+  // TODO: API 요청 성공 후 로직 필요함
   const onSubmit = (data: ResumeRequest) => {
     data.visibility = true;
     data.status = '구직중';
     console.table(data);
-    // visibility, status 는 여기서 변경 후 api 요청
+
+    // try, catch 로 바꾸기
+    trigger(data)
+      .then((response) => {
+        console.log('성공:', response);
+        // 성공 처리 로직 (예: 알림, 리디렉션 등)
+      })
+      .catch((error) => {
+        console.error('에러:', error);
+        // 에러 처리 로직
+      });
   };
 
   return (
