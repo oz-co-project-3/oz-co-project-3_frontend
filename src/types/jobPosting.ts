@@ -1,9 +1,9 @@
 export interface User {
-  id: number;
+  id: string;
 }
 
 export interface JobPosting {
-  id: number;
+  id: string;
   user: User;
   company: string;
   title: string;
