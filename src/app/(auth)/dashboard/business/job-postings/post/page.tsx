@@ -1,8 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import JobPostingForm from '@/components/job-posting/JobPostingForm';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 
 export default function Page() {
   // const [defaultJobPosting, setDefaultJobPosting] = useState<JobPostingRequest | null>(null);

@@ -419,3 +419,6 @@ export default function ResumeForm() {
     </Form>
   );
 }
+
+// 폼필드 컴포넌트화
+// 유틸함수 분리

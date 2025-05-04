@@ -31,7 +31,6 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -82,14 +81,9 @@ export default function Header() {
       <div className='flex items-center gap-2'>
         {user ? (
           <>
-            <Link href='/dashboard/profile'>
+            <Link href='/dashboard/job-seeker/profile'>
               <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-                개인
-              </Button>
-            </Link>
-            <Link href='/company-dashboard/profile'>
-              <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-                기업
+                대시보드
               </Button>
             </Link>
             <Button

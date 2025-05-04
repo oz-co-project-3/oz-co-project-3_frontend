@@ -20,8 +20,8 @@ import { fetchOnClient } from '@/api/clientFetcher';
 import useSWRMutation from 'swr/mutation';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
+// 클라이언트 전용으로 렌더링하고 싶을때
 // import dynamic from 'next/dynamic';
-
 // const JobPostingEditor = dynamic(() => import('@/components/common/textEditor/JobPostingEditor'), {
 //   ssr: false,
 // });
@@ -414,3 +414,5 @@ export default function JobPostingForm() {
 }
 
 // 썸네일 이미지 추가
+
+// 폼필드 컴포넌트화
