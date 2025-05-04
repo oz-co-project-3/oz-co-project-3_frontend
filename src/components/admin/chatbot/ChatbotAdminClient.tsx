@@ -3,45 +3,24 @@
 import useSWR from 'swr';
 import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { CHATBOT_API } from '@/constants/chatbot';
 import type { ChatbotPrompt } from '@/types/chatbot';
 import ChatbotModal from './ChatbotModal';
 import DataTable from '@/components/admin/table/DataTable';
 import { getColumns } from './columns';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useRouter } from 'next/navigation';
-
-const fetcher = async (url: string): Promise<ChatbotPrompt[]> => {
-  const token = useAuthStore.getState()//.accessToken;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  // 401 에러처리: SWR 내에서는 여기서 throw 해야 onError로 감지됨
-  if (res.status === 401) {
-    useAuthStore.getState().logout(); // 로그아웃 처리
-    if (typeof window !== 'undefined') {
-      window.location.href = '/user/login';
-    }
-    throw new Error('인증이 만료되었습니다.');
-  }
-
-  if (!res.ok) throw new Error('데이터 불러오기 실패');
-  const data = await res.json();
-  return data;
-};
+import { apiFetch } from '@/lib/fetcher';
 
 export default function ChatbotAdminClient() {
   const [openModal, setOpenModal] = useState(false);
   const [editTarget, setEditTarget] = useState<ChatbotPrompt | null>(null);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
-  //const accessToken = useAuthStore((state) => state.accessToken);
-  const logout = useAuthStore((state) => state.logout);
-  const router = useRouter();
 
-  const { data: prompts = [], error, isLoading, mutate } = useSWR(CHATBOT_API.BASE, fetcher);
+  // SWR 응답 목록 불러오기
+  const {
+    data: prompts = [],
+    error,
+    isLoading,
+    mutate,
+  } = useSWR('/api/admin/chatbot', () => apiFetch<ChatbotPrompt[]>('/api/admin/chatbot'));
 
   // STEP 오름차순 정렬 및 필터링
   const filteredPrompts = useMemo(() => {
@@ -67,20 +46,9 @@ export default function ChatbotAdminClient() {
     if (!confirmed) return;
 
     try {
-      const res = await fetch(CHATBOT_API.DETAIL(id), {
+      await apiFetch(`/api/admin/chatbot/${id}`, {
         method: 'DELETE',
-        headers: {
-          //Authorization: `Bearer ${accessToken}`,
-        },
       });
-
-      if (res.status === 401) {
-        logout();
-        router.push('/user/login');
-        return;
-      }
-
-      if (!res.ok) throw new Error('삭제 실패');
       mutate(); // 목록 갱신
     } catch (err) {
       console.error('삭제 오류:', err);
