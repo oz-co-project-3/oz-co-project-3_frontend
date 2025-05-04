@@ -3,16 +3,20 @@ import { User } from '@/types/user';
 
 interface AuthState {
   user: User | null;
-  login: (user: User) => void;
+  // 액세스 토큰 추가 (기태)
+  accessToken: string | null;
+  login: (user: User, accessToken: string) => void;
   logout: () => void;
   setUser: (user: User | null) => void;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
+  accessToken: null,
 
-  login: (user) => {
-    set({ user });
+  // 액세스 토큰 추가 (기태)
+  login: (user, accessToken) => {
+    set({ user, accessToken });
   },
 
   logout: () => {

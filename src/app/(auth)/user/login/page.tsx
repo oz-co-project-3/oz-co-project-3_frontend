@@ -30,7 +30,7 @@ export default function LoginPage() {
         throw new Error('로그인 응답이 없습니다.');
       }
 
-      const { email, user_id, user_type, name } = res;
+      const { email, user_id, user_type, name, access_token } = res;
 
       const user = {
         id: user_id,
@@ -40,7 +40,7 @@ export default function LoginPage() {
         signinMethod: 'email' as const,
       };
 
-      login(user);
+      login(user, access_token);
       localStorage.setItem('user', JSON.stringify(user));
 
       console.log('로그인 완료:', user);

@@ -63,7 +63,7 @@ export default function JobPostingForm() {
       summary: undefined,
       description: '',
       status: '모집중',
-      career: '경력 무관',
+      career: '경력무관',
       image_url: undefined,
     },
   });
@@ -197,6 +197,32 @@ export default function JobPostingForm() {
                 </FormItem>
               )}
             />
+
+            {/* 자격 요건 */}
+            <FormField
+              control={form.control}
+              name='career'
+              render={({ field }) => (
+                <FormItem className='relative'>
+                  <FormLabel className='text-base font-semibold'>자격 요건</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger className='w-full'>
+                        <SelectValue placeholder='자격 요건을 선택하세요.' />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {Object.values(jobPostingSchemaRequest.shape.career.enum).map((item) => (
+                        <SelectItem key={item} value={item}>
+                          {item}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage className='absolute top-0 right-0 text-sm' />
+                </FormItem>
+              )}
+            />
           </div>
 
           <div className='flex grow flex-col gap-8'>
@@ -282,42 +308,23 @@ export default function JobPostingForm() {
                 </FormItem>
               )}
             />
+
+            {/* 학력 */}
+            <FormField
+              control={form.control}
+              name='education'
+              render={({ field }) => (
+                <FormItem className='relative'>
+                  <FormLabel className='text-base font-semibold'>학력</FormLabel>
+                  <FormControl>
+                    <Input placeholder='학력 조건을 입력하세요.' {...field} />
+                  </FormControl>
+                  <FormMessage className='absolute top-0 right-0 text-sm' />
+                </FormItem>
+              )}
+            />
           </div>
         </div>
-
-        {/* 자격 요건 */}
-        <FormField
-          control={form.control}
-          name='career'
-          render={({ field }) => (
-            <FormItem className='relative'>
-              <FormLabel className='text-base font-semibold'>자격 요건</FormLabel>
-              <FormControl>
-                <Textarea
-                  {...field}
-                  placeholder='경력, 지원 자격 등 자격 요건을 입력하세요.'
-                  className='h-auto min-h-36 resize-none'
-                />
-              </FormControl>
-              <FormMessage className='absolute top-0 right-0 text-sm' />
-            </FormItem>
-          )}
-        />
-
-        {/* 학력 */}
-        <FormField
-          control={form.control}
-          name='education'
-          render={({ field }) => (
-            <FormItem className='relative'>
-              <FormLabel className='text-base font-semibold'>학력</FormLabel>
-              <FormControl>
-                <Input placeholder='주소를 입력하세요.' {...field} />
-              </FormControl>
-              <FormMessage className='absolute top-0 right-0 text-sm' />
-            </FormItem>
-          )}
-        />
 
         {/* 근무지 정보 */}
         <FormField

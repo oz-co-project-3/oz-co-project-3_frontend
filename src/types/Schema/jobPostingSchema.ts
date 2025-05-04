@@ -19,7 +19,7 @@ export const jobPostingSchemaRequest = z.object({
   summary: z.string().optional(),
   description: z.string(), // 필수 항목으로 처리하는 방법 고민하기
   status: z.enum(['모집중', '마감 임박', '모집 종료', '블라인드', '대기중', '반려됨']),
-  career: z.string().transform((val) => (val === '' ? '경력 무관' : val)),
+  career: z.enum(['경력무관', '신입', '경력직']),
   image_url: z.string().optional(),
 });
 
