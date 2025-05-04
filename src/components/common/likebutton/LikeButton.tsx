@@ -2,7 +2,7 @@
 
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import useSWR from 'swr';
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 
 interface LikeButtonProps {
   id?: string;
@@ -19,11 +19,11 @@ const LikeButton = ({ id }: LikeButtonProps) => {
 
     try {
       if (liked) {
-        await apiFetch(`/api/user/profile/liked/${id}`, {
+        await fetchOnClient(`/api/user/profile/liked/${id}`, {
           method: 'POST',
         });
       } else {
-        await apiFetch(`/api/user/profile/liked/${id}`, {
+        await fetchOnClient(`/api/user/profile/liked/${id}`, {
           method: 'DELETE',
         });
       }

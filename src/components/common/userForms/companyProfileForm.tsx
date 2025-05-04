@@ -24,7 +24,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { CompanyProfileFormSchema, companyProfileSchema } from '@/types/Schema/companySchema';
 import { CompanyFormData } from '@/types/user';
-import { verifyBusinessNumber } from '@/lib/businessVerify';
+import { verifyBusinessNumber } from '@/api/businessVerify';
 
 interface CompanyProfileFormProps {
   type: 'register' | 'edit';
