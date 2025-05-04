@@ -9,7 +9,7 @@ import { CHATBOT_API } from '@/constants/chatbot';
 import type { ChatbotPrompt } from '@/types/chatbot';
 import type { KeyedMutator } from 'swr';
 import { Textarea } from '@/components/ui/textarea';
-import { useAuthStore } from '@/store/useAuthStore'; // 전역 상태에서 토큰 가져오기
+//import { useAuthStore } from '@/store/useAuthStore'; // 전역 상태에서 토큰 가져오기
 
 interface Props {
   open: boolean;
@@ -26,7 +26,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
   const [isTerminate, setIsTerminate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState('');
-  const accessToken = useAuthStore((state) => state.accessToken);
+  //const accessToken = useAuthStore((state) => state.accessToken);
 
   // 모달 열릴 때 초기값 설정
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
         method,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+          //Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({
           step,

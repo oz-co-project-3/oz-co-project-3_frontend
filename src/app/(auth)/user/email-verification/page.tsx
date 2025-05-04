@@ -63,29 +63,13 @@ export default function EmailVerificationPage() {
           verification_code: data.verification_code.trim(),
         });
 
-        const token = localStorage.getItem('access_token');
-
-        const user = {
+        login({
           id: savedFormData.user_id,
           email: savedFormData.email,
           name: savedFormData.name,
-          user_type: [savedFormData.user_type], // 🔥 배열로 변환
-        };
-
-        if (token) {
-          login(
-            {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-              user_type: user.user_type,
-              signinMethod: ['email'],
-            },
-            token,
-          );
-          localStorage.setItem('user', JSON.stringify(user));
-          localStorage.setItem('emailVerified', 'true');
-        }
+          user_type: savedFormData.user_type,
+          signinMethod: 'email',
+        });
 
         alert('회원가입이 완료되었습니다!');
         router.push('/');
