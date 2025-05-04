@@ -43,31 +43,36 @@ export default function JobPostingForm() {
 
   const form = useForm<JobPostingRequest>({
     resolver: zodResolver(jobPostingSchemaRequest),
+    // mode: 'onSubmit', // 한 번 제출한 뒤에
+    // reValidateMode: 'onBlur', // 이후에는 포커스를 잃을 때마다 검증
     mode: 'onTouched', // 한 번 터치된 필드에 대해
     reValidateMode: 'onChange', // 이후에는 값이 변경될 때마다 검증
     defaultValues: {
+      company: '',
       title: '',
-      salary: '협의 후 결정',
       location: '',
+      employment_type: '일반',
       employ_method: '정규직',
       work_time: '',
       position: '',
-      recruitment_count: 1,
-      education: '',
-      deadline: '', // 날짜 형식?
-      summary: '',
       history: undefined,
-      // 필수 항목중에 필드에 입력 받지 않을 값을 디폴트로 넣어줘도 괜찮은듯
-      company: '', // 프로필의 회사명 받아서 넣어주거나, 공고 조회시에만 회사명 개업일자 회사소개 넣어주기
-      employment_type: '일반',
+      recruitment_count: 0,
+      education: '',
+      deadline: '', // YYYY-MM-DD
+      salary: '협의 후 결정',
+      summary: undefined,
+      description: '',
       status: '모집중',
-      // description: '',
-      description: '', // 빌드에러 방지용 (HTML, JSON 결정 후엔 윗줄로 바꿔서 하기)
+      career: '경력 무관',
+      image_url: undefined,
     },
   });
 
+  // TODO: API 요청 성공 후 로직 필요함
   const onSubmit = (data: JobPostingRequest) => {
     console.table(data);
+
+    // try, catch 로 바꾸기
     trigger(data)
       .then((response) => {
         console.log('성공:', response);
@@ -80,7 +85,6 @@ export default function JobPostingForm() {
   };
 
   useEffect(() => {
-    // JSON이나 HTML 중에 선택하기
     form.setValue('description', detailJSON, {
       shouldValidate: false,
     });
@@ -88,7 +92,7 @@ export default function JobPostingForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-8'>
         {/* 채용 공고 제목 */}
         <FormField
           control={form.control}
@@ -104,8 +108,38 @@ export default function JobPostingForm() {
           )}
         />
 
-        <div className='flex justify-between gap-4 max-md:flex-col'>
-          <div className='flex grow flex-col gap-4'>
+        {/* 회사명 */}
+        <FormField
+          control={form.control}
+          name='company'
+          render={({ field }) => (
+            <FormItem className='relative'>
+              <FormLabel className='text-base font-semibold'>회사명</FormLabel>
+              <FormControl>
+                <Input placeholder='주소를 입력하세요.' {...field} />
+              </FormControl>
+              <FormMessage className='absolute top-0 right-0 text-sm' />
+            </FormItem>
+          )}
+        />
+
+        {/* 썸네일 이미지 */}
+        <FormField
+          control={form.control}
+          name='image_url'
+          render={({ field }) => (
+            <FormItem className='relative'>
+              <FormLabel className='text-base font-semibold'>썸네일 이미지</FormLabel>
+              <FormControl>
+                <Input placeholder='주소를 입력하세요.' {...field} />
+              </FormControl>
+              <FormMessage className='absolute top-0 right-0 text-sm' />
+            </FormItem>
+          )}
+        />
+
+        <div className='flex justify-between gap-8 max-md:flex-col'>
+          <div className='flex grow flex-col gap-8'>
             {/* 급여 */}
             <FormField
               control={form.control}
@@ -165,7 +199,7 @@ export default function JobPostingForm() {
             />
           </div>
 
-          <div className='flex grow flex-col gap-4'>
+          <div className='flex grow flex-col gap-8'>
             {/* 근무 시간 */}
             <FormField
               control={form.control}
@@ -254,16 +288,31 @@ export default function JobPostingForm() {
         {/* 자격 요건 */}
         <FormField
           control={form.control}
-          name='education'
+          name='career'
           render={({ field }) => (
             <FormItem className='relative'>
               <FormLabel className='text-base font-semibold'>자격 요건</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
-                  placeholder='학력, 자격, 경력 등 자격 요건을 입력하세요.'
+                  placeholder='경력, 지원 자격 등 자격 요건을 입력하세요.'
                   className='h-auto min-h-36 resize-none'
                 />
+              </FormControl>
+              <FormMessage className='absolute top-0 right-0 text-sm' />
+            </FormItem>
+          )}
+        />
+
+        {/* 학력 */}
+        <FormField
+          control={form.control}
+          name='education'
+          render={({ field }) => (
+            <FormItem className='relative'>
+              <FormLabel className='text-base font-semibold'>학력</FormLabel>
+              <FormControl>
+                <Input placeholder='주소를 입력하세요.' {...field} />
               </FormControl>
               <FormMessage className='absolute top-0 right-0 text-sm' />
             </FormItem>
@@ -304,13 +353,13 @@ export default function JobPostingForm() {
           )}
         />
 
-        {/* 업무 내용 */}
+        {/* 주요 업무 */}
         <FormField
           control={form.control}
           name='summary'
           render={({ field }) => (
             <FormItem className='relative'>
-              <FormLabel className='text-base font-semibold'>업무 내용</FormLabel>
+              <FormLabel className='text-base font-semibold'>주요 업무</FormLabel>
               <FormControl>
                 <Textarea
                   {...field}
@@ -329,18 +378,25 @@ export default function JobPostingForm() {
           <JobPostingEditor setDetailJSON={setDetailJSON} />
           {/* 데이터 형식 미리보기 */}
           {/* <div className='mt-4'>
-          <div className='text-sm font-bold'>HTML</div>
-          <div>{detailHTML}</div>
-          </div> */}
-          {/* <div className='mt-4'>
             <div className='text-sm font-bold'>JSON</div>
             <div>{detailJSON}</div>
           </div> */}
+          <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div>
         </div>
 
         <div className='flex justify-between gap-2'>
-          <Button className='bg-danger grow cursor-pointer hover:bg-amber-700'>취소하기</Button>
-          <Button type='submit' className='bg-main-light hover:bg-main-dark grow cursor-pointer'>
+          <Button
+            className='bg-danger grow cursor-pointer hover:bg-amber-700'
+            onClick={() => console.log('클릭')}
+          >
+            취소하기
+          </Button>
+          <Button
+            type='submit'
+            className='bg-main-light hover:bg-main-dark grow cursor-pointer'
+            // disabled={!form.formState.isValid}
+            onClick={() => form.trigger()}
+          >
             저장하기
           </Button>
         </div>

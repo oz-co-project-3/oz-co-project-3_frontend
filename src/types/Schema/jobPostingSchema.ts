@@ -1,13 +1,7 @@
 import { z } from 'zod';
 
 export const jobPostingSchemaRequest = z.object({
-  id: z.number().optional(),
-  user: z
-    .object({
-      id: z.number(),
-    })
-    .optional(),
-  company: z.string(), // 프로필의 회사명 받아서 넣어주거나, 공고 조회시에만 회사명 개업일자 회사소개 넣어주기
+  company: z.string().min(1, '회사명은 필수입니다.'),
   title: z.string().min(1, '제목은 필수입니다.'),
   location: z.string().min(1, '위치는 필수입니다.'),
   employment_type: z.enum(['공공', '일반']),
@@ -25,32 +19,25 @@ export const jobPostingSchemaRequest = z.object({
   summary: z.string().optional(),
   description: z.string(), // 필수 항목으로 처리하는 방법 고민하기
   status: z.enum(['모집중', '마감 임박', '모집 종료', '블라인드', '대기중', '반려됨']),
-  view_count: z.number().int().min(0).optional(),
-  report: z.number().int().min(0).optional(),
+  career: z.string().transform((val) => (val === '' ? '경력 무관' : val)),
+  image_url: z.string().optional(),
 });
 
 export const jobPostingSchemaUpdate = jobPostingSchemaRequest.partial();
 
-// 타입 파일에서 스키마 없이 타입만 다시 정의하기 (항목은 다시 확인)
-export const jobPostingSchemaResponse = jobPostingSchemaRequest.extend({
-  user: z.object({
-    id: z.number(),
-  }),
-});
-
-// education -> qualification 으로 바꾸기? (자격요건)
+export type JobPostingRequest = z.infer<typeof jobPostingSchemaRequest>;
+export type JobPostingUpdate = z.infer<typeof jobPostingSchemaUpdate>;
+export type JobPostingResponse = JobPostingRequest & {
+  id: number;
+  user: {
+    id: number;
+  };
+  view_count: number;
+  report: number;
+  created_at: string;
+  updated_at: string;
+};
 
 // 최대 글자수 넣어주기
 
-// 스웨거에 3개 빠짐
-// image_url, updated_at, created_at, agreed_terms
-
-// 테이블 명세서에 1개 없음
-// company
-
 // 유주님이 정의한 타입에 detailPagePath 는 빼고 인자 나눠서 전달하라고 얘기하기
-
-export type JobPostingRequest = z.infer<typeof jobPostingSchemaRequest>;
-export type JobPostingUpdate = z.infer<typeof jobPostingSchemaUpdate>;
-
-// 리퀘스트 다시 확인 (안보내도 되는 값 찾아서 삭제, 그리고 받을때만 필요한걸 응답 타입에 넣어주기)

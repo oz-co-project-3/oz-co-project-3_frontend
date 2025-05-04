@@ -1,3 +1,5 @@
+import { apiFetch } from '@/lib/fetcher';
+import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import {
   BookCheck,
   Briefcase,
@@ -9,8 +11,9 @@ import {
   UsersRound,
 } from 'lucide-react';
 
-export default async function JobPosting() {
-  // id나 공고 객체를 인자로 받아오기
+export default async function JobPosting({ id }: { id: string }) {
+  const jobPosting = await apiFetch<JobPostingResponse>(`/api/job_posting/${id}/`);
+  console.log(jobPosting);
 
   return (
     <article className='flex flex-col gap-8'>
