@@ -41,7 +41,7 @@ export default function JobPostingViewer({ content }: { content: string }) {
     content: '컨텐츠를 불러오는 중입니다...',
     editorProps: {
       attributes: {
-        class: 'min-h-[500px] w-full bg-white p-4 focus:outline-none border',
+        class: 'min-h-[500px] w-full bg-white focus:outline-none',
       },
     },
     immediatelyRender: false,
