@@ -17,6 +17,7 @@ interface LoginFormData {
 export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
+
   const {
     register,
     handleSubmit,
@@ -40,7 +41,8 @@ export default function LoginPage() {
         signinMethod: 'email' as const,
       };
 
-      login(user, access_token);
+      login(user);
+      useAuthStore.setState({ accessToken: access_token });
       localStorage.setItem('user', JSON.stringify(user));
 
       console.log('로그인 완료:', user);
