@@ -1,11 +1,11 @@
 'use client';
 
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 import { SWRConfig } from 'swr';
 
 export default function SwrProvider({ children }: { children: React.ReactNode }) {
   const fetcher = async (url: string) => {
-    const response = await apiFetch(url);
+    const response = await fetchOnClient(url);
     return response;
   };
 

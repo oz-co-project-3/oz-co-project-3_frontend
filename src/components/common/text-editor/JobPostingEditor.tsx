@@ -12,7 +12,6 @@ import TextAligns, { textAlign } from './style-options/TextAligns';
 import HighlightText, { highlight } from './style-options/HighlightText';
 import YoutubeBtn, { youtube } from './style-options/YoutubeBtn';
 import HyperLink, { link } from './style-options/HyperLink';
-import Image from '@tiptap/extension-image';
 import ImageUploadBtn, { imageUploadNode } from './style-options/ImageUploadBtn';
 import CharacterCounter, { characterCount } from './CharacterCounter';
 import { useEffect } from 'react';
@@ -30,7 +29,7 @@ export default function JobPostingEditor({
         listItem: false,
         bulletList: {
           keepMarks: true,
-          // TODO: Making this as `false` becase marks are not preserved when I try to preserve attrs, awaiting a bit of help
+          // TODO: 이거 없으면 여러줄 동시 선택시 맨윗줄만 불릿
           keepAttributes: false,
         },
       }),
@@ -42,7 +41,6 @@ export default function JobPostingEditor({
       highlight,
       youtube,
       link,
-      Image,
       imageUploadNode,
       ImageResize,
       Placeholder.configure({
@@ -51,14 +49,7 @@ export default function JobPostingEditor({
       characterCount,
     ],
     // 일단 테스트용 텍스트 (수정이나 불러오기 했을때, 초기 텍스트로 대체, JSON 으로 넣어주기)
-    content: `
-        <h1>This is a 1st level heading</h1>
-        <p>This is a paragraph</p>
-        <h2>This is a 2nd level heading</h2>
-        <h3>This is a 3rd level heading</h3>
-        <h4>This 4th level heading will be converted to a paragraph, because levels are configured to be only 1, 2 or 3.</h4>
-        asdf
-      `,
+    content: ``,
     editorProps: {
       attributes: {
         class: 'min-h-[500px] w-full bg-white p-4 focus:outline-none',
@@ -75,6 +66,7 @@ export default function JobPostingEditor({
   useEffect(() => {
     if (editor) {
       setDetailJSON(JSON.stringify(editor.getJSON()));
+      // console.log(editor.getJSON());
     }
   }, [editor, setDetailJSON]);
 

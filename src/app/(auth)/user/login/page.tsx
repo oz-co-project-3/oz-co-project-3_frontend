@@ -1,6 +1,6 @@
 'use client';
 
-import { loginUser } from '@/api/user';
+import { loginUser, getNaverLoginUrl } from '@/api/user';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -17,6 +17,7 @@ interface LoginFormData {
 export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
+
   const {
     register,
     handleSubmit,
@@ -26,35 +27,39 @@ export default function LoginPage() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const res = await loginUser(data);
+      if (!res) {
+        throw new Error('로그인 응답이 없습니다.');
+      }
 
-      const { access_token, email, user_id, user_type, name } = res;
+      const { email, user_id, user_type, name, access_token } = res;
 
       const user = {
         id: user_id,
         email,
-        user_type: user_type,
-        name,
+        user_type,
+        name: name,
+        signinMethod: 'email' as const,
       };
 
-      if (access_token && user) {
-        login(
-          {
-            ...user,
-            signinMethod: ['email'],
-          },
-          access_token,
-        ); // Zustand 전역 저장
-        localStorage.setItem('access_token', access_token); // localStorage 저장
-        localStorage.setItem('user', JSON.stringify(user));
-      } else {
-        console.error('토큰 또는 유저 정보 누락:', { access_token, user });
-      }
+      login(user);
+      useAuthStore.setState({ accessToken: access_token });
+      localStorage.setItem('user', JSON.stringify(user));
 
       console.log('로그인 완료:', user);
       router.push('/');
     } catch (err) {
-      console.error(' 로그인 실패 :', err);
+      console.error('로그인 실패:', err);
       alert('이메일 또는 비밀번호가 잘못되었습니다.');
+    }
+  };
+
+  const handleNaverLogin = async () => {
+    try {
+      const redirect_url = await getNaverLoginUrl();
+      window.location.href = redirect_url;
+    } catch (err) {
+      console.error('네이버 로그인 요청 실패:', err);
+      alert('네이버 로그인 요청에 실패했습니다.');
     }
   };
 
@@ -98,7 +103,9 @@ export default function LoginPage() {
           <hr className='my-5' />
           <div className='flex flex-col items-center gap-3'>
             <Image src='/kakao.png' alt='카카오 로그인' width={300} height={45} />
-            <Image src='/naver.png' alt='네이버 로그인' width={300} height={45} />
+            <button onClick={handleNaverLogin}>
+              <Image src='/naver.png' alt='네이버 로그인' width={300} height={45} />
+            </button>
           </div>
         </div>
       </div>

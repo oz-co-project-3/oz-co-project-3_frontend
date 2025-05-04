@@ -5,14 +5,14 @@ import { ImageUploadNode } from '@/components/ui/tiptap-node/image-upload-node';
 import TogleButton from '../TogleButton';
 import { Image as ImageIcon } from 'lucide-react';
 // import useSWRMutation from 'swr/mutation';
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 
 // TODO: 임시 이미지 업로드 함수 (이미지 업로드 함수 따로 분리)
 const handleImageUpload = async (file: File) => {
   // swr 훅은 사용 불가 (여기선 swr이 관여할 방법이 없나?)
   // const { data, trigger } = useSWRMutation('/api/upload-image/',
   //   async (url: string, { arg }: { arg: FormData }) => {
-  //     return apiFetch(url, {
+  //     return fetchOnClient(url, {
   //       method: 'POST',
   //       body: arg,
   //     });
@@ -30,14 +30,11 @@ const handleImageUpload = async (file: File) => {
   console.log(formData);
 
   // TODO: 리팩토링 필요
-  const response = await apiFetch<{ image_url: string }>(
-    '/api/upload-image/',
-    {
-      method: 'POST',
-      body: formData,
-    },
-    true, // isFormData
-  );
+  const response = await fetchOnClient<{ image_url: string }>('/api/upload-image/', {
+    method: 'POST',
+    body: formData,
+    skipContentType: true,
+  });
   console.log(response);
   return response.image_url;
 };

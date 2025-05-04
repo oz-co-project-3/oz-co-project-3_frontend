@@ -3,8 +3,10 @@
 //post 요청만 보내서 fetch 사용
 
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+
 import { apiFetch } from '@/lib/fetcher';
 import { useState } from 'react';
+
 
 interface LikeButtonProps {
   id?: string;
@@ -23,6 +25,7 @@ const LikeButton = ({ id }: LikeButtonProps) => {
         method: 'POST',
       });
       setLiked((prev) => !prev);
+
     } catch (error) {
       console.error('찜하기 실패:', error);
     }

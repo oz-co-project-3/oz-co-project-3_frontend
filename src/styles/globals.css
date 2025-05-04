@@ -148,3 +148,12 @@ main {
   height: 0;
   pointer-events: none;
 }
+
+/* 자동 완성 스타일 초기화 - 라이트/다크 모드 대응 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--background) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
