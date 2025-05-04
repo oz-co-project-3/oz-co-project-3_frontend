@@ -11,7 +11,7 @@ import {
   DialogTitle,
   DialogFooter,
 } from '@/components/ui/dialog';
-import { findEmail, findPassword } from '@/lib/findAccount';
+import { findEmail, findPassword } from '@/api/findAccount';
 
 export default function FindAccountTab() {
   const [emailForm, setEmailForm] = useState({ name: '', phone_number: '' });

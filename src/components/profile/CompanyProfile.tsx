@@ -1,8 +1,7 @@
-export default async function CompanyProfile({ id }: { id?: Promise<string> }) {
-  const userId = await id;
-  console.log('기업유저 id: ', userId);
+export default async function CompanyProfile({ id }: { id?: string }) {
+  console.log('기업유저 id: ', id, ' (회사 프로필 페이지)');
 
-  // id가 있으면 어드민의 조회, undefined면 유저의 조회
+  // id가 있으면 어드민의 조회, undefined면 유저의 조회?
 
   return (
     <>

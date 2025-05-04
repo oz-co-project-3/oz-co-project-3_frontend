@@ -5,13 +5,13 @@ import {
   DeleteUserRequest,
   LoginResponseData,
 } from '@/types/user';
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 import { EmailCheckResponse } from '@/types/user';
 
 // 이메일 인증 코드 검증
 export const verifyEmailCode = async (data: { email: string; verification_code: string }) => {
   try {
-    const res = await apiFetch('/api/user/verify-email', {
+    const res = await fetchOnClient('/api/user/verify-email', {
       method: 'POST',
       body: JSON.stringify(data),
     });
@@ -25,7 +25,7 @@ export const verifyEmailCode = async (data: { email: string; verification_code: 
 // 구직자 회원가입
 export const registerSeeker = async (formData: SeekerFormData) => {
   try {
-    const res = await apiFetch('/api/user/register/', {
+    const res = await fetchOnClient('/api/user/register/', {
       method: 'POST',
       body: JSON.stringify(formData),
     });
@@ -39,7 +39,7 @@ export const registerSeeker = async (formData: SeekerFormData) => {
 // 기업 회원가입
 export const registerCompany = async (formData: CompanyFormData) => {
   try {
-    const res = await apiFetch('/api/user/register-company/', {
+    const res = await fetchOnClient('/api/user/register-company/', {
       method: 'POST',
       body: JSON.stringify(formData),
     });
@@ -53,7 +53,7 @@ export const registerCompany = async (formData: CompanyFormData) => {
 // 로그인
 export const loginUser = async (formData: LoginFormData): Promise<LoginResponseData> => {
   try {
-    const res = await apiFetch<LoginResponseData>('/api/user/login/', {
+    const res = await fetchOnClient<LoginResponseData>('/api/user/login/', {
       method: 'POST',
       body: JSON.stringify(formData),
     });
@@ -70,7 +70,7 @@ export const loginUser = async (formData: LoginFormData): Promise<LoginResponseD
 
 //이메일 중복확인
 export async function checkEmailDuplicate(email: string): Promise<boolean> {
-  const res = await apiFetch<EmailCheckResponse>(`/api/user/check-email/`, {
+  const res = await fetchOnClient<EmailCheckResponse>(`/api/user/check-email/`, {
     method: 'POST',
     body: JSON.stringify({ email }),
   });
@@ -103,7 +103,7 @@ export const logoutUser = async (): Promise<void> => {
 
 //회원 탈퇴
 export const deleteUser = async (data: DeleteUserRequest) => {
-  return await apiFetch('/api/user/profile/', {
+  return await fetchOnClient('/api/user/profile/', {
     method: 'DELETE',
     body: JSON.stringify(data),
   });

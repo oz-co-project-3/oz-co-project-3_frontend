@@ -25,8 +25,10 @@ export default function NaverCallbackPage() {
 
         const data = await res.json();
 
-        const { email, name, user_type, user_id, signinMethod } = data;
+        // 여기 signinMethod 스웨거에 응답 오는 항목중에 없어요!! (기태)
+        const { email, name, user_type, user_id, signinMethod, access_token } = data;
         login({ id: user_id, email, name, user_type, signinMethod });
+        useAuthStore.setState({ accessToken: access_token });
         //localStorage.setItem('access_token', access_token);
         router.push('/');
       } catch (err) {

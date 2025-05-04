@@ -1,4 +1,4 @@
-import { apiFetch } from '@/lib/fetcher';
+import fetchOnServer from '@/api/serverFetcher';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import {
   BookCheck,
@@ -12,7 +12,8 @@ import {
 } from 'lucide-react';
 
 export default async function JobPosting({ id }: { id: string }) {
-  const jobPosting = await apiFetch<JobPostingResponse>(`/api/job_posting/${id}/`);
+  console.log(id);
+  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
   console.log(jobPosting);
 
   return (

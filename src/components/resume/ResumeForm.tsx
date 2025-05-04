@@ -4,7 +4,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormMessage, FormControl, FormItem, FormLabel, FormField } from '../ui/form';
 import useSWRMutation from 'swr/mutation';
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 import { Input } from '../ui/input';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { resumeSchemaRequest, ResumeRequest } from '@/types/Schema/resumeSchema';
@@ -17,7 +17,7 @@ export default function ResumeForm() {
   const { trigger } = useSWRMutation(
     '/api/resume/',
     async (url: string, { arg }: { arg: ResumeRequest }) => {
-      return apiFetch(url, {
+      return fetchOnClient(url, {
         method: 'POST',
         body: JSON.stringify(arg),
       });
@@ -143,7 +143,7 @@ export default function ResumeForm() {
                       {...field}
                       placeholder='전화번호를 입력하세요.'
                       value={(() => {
-                        const val = field.value;
+                        const val = field.value || '';
 
                         // 숫자만 추출
                         const nums = val.replace(/[^\d]/g, '').slice(0, 11);
@@ -255,7 +255,7 @@ export default function ResumeForm() {
                           {...field}
                           placeholder='근무 기간을 입력하세요.'
                           value={(() => {
-                            const val = field.value;
+                            const val = field.value || '';
                             if (!val) return '';
 
                             // 숫자만 추출
