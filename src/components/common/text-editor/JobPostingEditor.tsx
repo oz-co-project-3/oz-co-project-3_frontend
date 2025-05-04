@@ -73,7 +73,7 @@ export default function JobPostingEditor({
   useEffect(() => {
     if (editor) {
       setDetailJSON(JSON.stringify(editor.getJSON()));
-      console.log(editor.getJSON());
+      // console.log(editor.getJSON());
     }
   }, [editor, setDetailJSON]);
 

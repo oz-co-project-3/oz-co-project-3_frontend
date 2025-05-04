@@ -14,7 +14,7 @@ import {
 import { useState, useEffect, useCallback } from 'react';
 import { verifyEmailCode } from '@/api/user';
 import { useRouter } from 'next/navigation';
-import { resendEmailCode } from '@/lib/resendEmailCode';
+import { resendEmailCode } from '@/api/resendEmailCode';
 import { useAuthStore } from '@/store/useAuthStore';
 
 interface VerificationFormValues {

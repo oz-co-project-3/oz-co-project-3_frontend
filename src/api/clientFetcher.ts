@@ -1,23 +1,23 @@
 import { useAuthStore } from '@/store/useAuthStore';
 
-export async function apiFetch<T>(
+export async function fetchOnClient<T>(
   url: string,
-  options: RequestInit = {},
-  isFormData = false, // TODO: 헤더에 Content-Type이 없어야 하는 경우가 있어서, 일단 임시로 추가함. (기태)
+  options: RequestInit & { skipContentType?: boolean } = {},
 ): Promise<T> {
   const baseUrl = process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL;
-  // 액세스 토큰 가져오기 (기태)
   const accessToken = useAuthStore.getState().accessToken;
 
+  const { skipContentType, headers: customHeaders, ...restOptions } = options;
+  const headers = {
+    ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+    ...(!skipContentType && { 'Content-Type': 'application/json' }),
+    ...(customHeaders || {}),
+  };
+
   const res = await fetch(`${baseUrl}${url}`, {
-    ...options,
-    headers: {
-      ...(!isFormData && { 'Content-Type': 'application/json' }), // 트루면 (formData를 전송할 경우에) 헤더에 Content-Type이 없어짐.
-      ...(options.headers || {}),
-      // 액세스 토큰 있다면 넣어주기 (기태)
-      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-      credentials: 'include',
-    },
+    ...restOptions,
+    headers,
+    credentials: 'include',
   });
 
   if (!res.ok) {
@@ -31,7 +31,7 @@ export async function apiFetch<T>(
     //   throw new Error(errorBody.message || '세션이 만료되었습니다. 다시 로그인해주세요.');
     // }
 
-    throw new Error(errorBody.message || 'API 요청 실패');
+    console.error('Fetch Error', errorBody);
   }
 
   return res.json();

@@ -16,7 +16,7 @@ import { CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 import useSWRMutation from 'swr/mutation';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
@@ -34,7 +34,7 @@ export default function JobPostingForm() {
   const { trigger } = useSWRMutation(
     '/api/job_posting/',
     async (url: string, { arg }: { arg: JobPostingRequest }) => {
-      return apiFetch(url, {
+      return fetchOnClient(url, {
         method: 'POST',
         body: JSON.stringify(arg),
       });
