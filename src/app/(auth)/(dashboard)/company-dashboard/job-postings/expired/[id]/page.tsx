@@ -8,7 +8,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   return (
     <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
       {/* <h2 className='border-b pb-4 text-2xl font-bold'>공고 상세 조회</h2> */}
-      <JobPosting />
+      <JobPosting id={id} />
       {/* 컴포넌트 분리 (클라이언트 컴포넌트) */}
       <div className='flex justify-center gap-2'>
         {/* 확인 모달 추가 */}
