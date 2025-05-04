@@ -388,7 +388,8 @@ export default function JobPostingForm() {
             <div className='text-sm font-bold'>JSON</div>
             <div>{detailJSON}</div>
           </div> */}
-          <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div>
+          {/* 유효성 검사 오류 표시 */}
+          {/* <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div> */}
         </div>
 
         <div className='flex justify-between gap-2'>
@@ -411,3 +412,5 @@ export default function JobPostingForm() {
     </Form>
   );
 }
+
+// 썸네일 이미지 추가
