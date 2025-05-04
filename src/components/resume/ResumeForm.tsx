@@ -19,15 +19,17 @@ export default function ResumeForm() {
     async (url: string, { arg }: { arg: ResumeRequest }) => {
       return apiFetch(url, {
         method: 'POST',
-        body: JSON.stringify(arg), // 왜 그냥이 아니고 stringify?
+        body: JSON.stringify(arg),
       });
     },
   );
 
   const form = useForm<ResumeRequest>({
     resolver: zodResolver(resumeSchemaRequest),
-    mode: 'onSubmit', // 한 번 제출한 뒤에
-    reValidateMode: 'onBlur', // 이후에는 포커스를 잃을 때마다 검증
+    // mode: 'onSubmit', // 한 번 제출한 뒤에
+    // reValidateMode: 'onBlur', // 이후에는 포커스를 잃을 때마다 검증
+    mode: 'onTouched', // 한 번 터치된 필드에 대해
+    reValidateMode: 'onChange', // 이후에는 값이 변경될 때마다 검증
     defaultValues: {
       title: '',
       visibility: false, // 제출 시 공개로 변경
@@ -59,6 +61,9 @@ export default function ResumeForm() {
   const onSubmit = (data: ResumeRequest) => {
     data.visibility = true;
     data.status = '구직중';
+
+    // TODO: 이미지 업로드 후 URL로 대체해주기
+
     console.table(data);
 
     // try, catch 로 바꾸기
@@ -134,7 +139,6 @@ export default function ResumeForm() {
                 <FormItem className='relative'>
                   <FormLabel className='text-base font-semibold'>전화번호</FormLabel>
                   <FormControl>
-                    {/* 그냥 숫자를 - 끼워넣어서 보여줄 수 있나 (형식만) */}
                     <Input
                       {...field}
                       placeholder='전화번호를 입력하세요.'
