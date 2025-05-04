@@ -1,19 +1,3 @@
-// export type UserRole = 'NORMAL' | 'COMPANY' | 'SUPER' | 'UNVERIFIED';
-// export type SignInMethod = 'EMAIL' | 'KAKAO' | 'NAVER';
-
-// export interface User {
-//   id: number;
-//   email: string;
-//   name: string;
-//   userRole: UserRole[];
-//   signInMethod: SignInMethod[];
-// }
-// export interface LoginResponseData {
-//   access_token: string;
-//   refresh_token?: string;
-//   user: User;
-// }
-
 export interface SeekerFormData {
   name: string;
   email: string;
@@ -53,8 +37,8 @@ export interface LoginResponseData {
   email: string;
   name: string;
   user_id: number;
-  user_type: ('seeker' | 'business' | 'admin')[];
-  signinMethod: ('email' | 'naver' | 'kakao')[];
+  user_type: 'seeker' | 'business' | 'admin';
+  signinMethod: 'email' | 'naver' | 'kakao'
 }
 
 export interface DeleteUserRequest {
@@ -67,8 +51,8 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  user_type: ('seeker' | 'business' | 'admin')[];
-  signinMethod: ('email' | 'naver' | 'kakao')[];
+  user_type: 'seeker' | 'business' | 'admin';
+  signinMethod: 'email' | 'naver' | 'kakao';
 }
 
 export interface EmailCheckResponse {
