@@ -25,15 +25,13 @@ import {
 import { interestOptions, purposeOptions, sourceOptions } from '@/constants/userOptions';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
+import { SeekerFormData } from '@/types/user';
+
 
 interface SeekerProfileFormProps {
   type: 'register' | 'edit';
-  defaultValues?: Partial<Omit<SeekerProfileFormValues, 'interests' | 'purposes' | 'sources'>> & {
-    interests?: string[];
-    purposes?: string[];
-    sources?: string[];
-  };
-  onSubmit: (data: SeekerProfileFormValues, isEmailVerified: boolean) => void;
+  defaultValues?: Partial<SeekerFormData>;
+  onSubmit: (data: { [key: string]: unknown }, isEmailVerified?: boolean) => void;
 }
 
 export default function SeekerProfileForm({
@@ -51,7 +49,7 @@ export default function SeekerProfileForm({
       password_check: '',
       phone_number: '',
       gender: 'none',
-      interests: [],
+      interests: [] ,
       purposes: [],
       sources: [],
       status: 'seeking',

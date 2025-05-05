@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/store/useAuthStore';
+import { User } from '@/types/user';
 
 interface LoginFormData {
   email: string;
@@ -31,19 +32,17 @@ export default function LoginPage() {
         throw new Error('로그인 응답이 없습니다.');
       }
 
-      const { email, user_id, user_type, name, access_token } = res;
+      const { email, user_id, user_type, name } = res;
 
       const user = {
         id: user_id,
         email,
-        user_type,
+        user_type: user_type as User['user_type'],
         name: name,
-        signinMethod: 'email' as const,
+        signinMethod: ['email' as const],
       };
 
       login(user);
-      useAuthStore.setState({ accessToken: access_token });
-      localStorage.setItem('user', JSON.stringify(user));
 
       console.log('로그인 완료:', user);
       router.push('/');

@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { stringToArray } from '@/lib/stringArrayConverter';
 
 const navItems = [
   { name: '프로필', href: '/dashboard/profile' },
@@ -12,6 +14,9 @@ const navItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { user } = useAuthStore();
+  const userTypeList = stringToArray(user?.user_type);
+  const showCompanyAuthButton = userTypeList.length === 1 && userTypeList.includes('normal');
 
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto'>
@@ -30,6 +35,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </li>
               ))}
             </ul>
+            {/* 기업회원 인증 버튼 추가 - 위치 거슬리지만 나중에 수정하겠슴당(수정)*/}
+            {showCompanyAuthButton && (
+              <div className='pt-12'>
+                <Link href='/user/register-company'>
+                  <button className='bg-main-light hover:bg-main-dark w-full rounded-md py-3 text-white'>
+                    기업회원 인증
+                  </button>
+                </Link>
+              </div>
+            )}
           </nav>
           <div className='flex flex-1 flex-col gap-4'>{children}</div>
         </div>

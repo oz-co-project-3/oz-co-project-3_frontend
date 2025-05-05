@@ -68,7 +68,7 @@ export default function EmailVerificationPage() {
           email: savedFormData.email,
           name: savedFormData.name,
           user_type: savedFormData.user_type,
-          signinMethod: 'email',
+          signinMethod: ['email' as const],
         });
 
         alert('회원가입이 완료되었습니다!');

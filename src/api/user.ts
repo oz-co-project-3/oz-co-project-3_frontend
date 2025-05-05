@@ -4,6 +4,7 @@ import {
   LoginFormData,
   DeleteUserRequest,
   LoginResponseData,
+  UserProfileResponse,
 } from '@/types/user';
 import { fetchOnClient } from '@/api/clientFetcher';
 import { EmailCheckResponse } from '@/types/user';
@@ -36,19 +37,13 @@ export const registerSeeker = async (formData: SeekerFormData) => {
   }
 };
 
-// 기업 회원가입
-export const registerCompany = async (formData: CompanyFormData) => {
-  try {
-    const res = await fetchOnClient('/api/user/register-company/', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-    });
-    return res;
-  } catch (error) {
-    console.error('기업 회원가입 오류', error);
-    throw error;
-  }
-};
+// 기업 회원 업그레이드
+export async function upgradeToBusiness(data: CompanyFormData): Promise<LoginResponseData> {
+  return await fetchOnClient<LoginResponseData>('/api/user/upgrade-to-business/', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
 
 // 로그인
 export const loginUser = async (formData: LoginFormData): Promise<LoginResponseData> => {
@@ -101,6 +96,13 @@ export const logoutUser = async (): Promise<void> => {
   }
 };
 
+//회원 프로필 조회
+export async function fetchUserProfile(): Promise<UserProfileResponse> {
+  return await fetchOnClient<UserProfileResponse>('/api/user/profile/', {
+    method: 'GET',
+  });
+}
+
 //회원 탈퇴
 export const deleteUser = async (data: DeleteUserRequest) => {
   return await fetchOnClient('/api/user/profile/', {
@@ -110,20 +112,16 @@ export const deleteUser = async (data: DeleteUserRequest) => {
 };
 
 //네이버 로그인 URL 요청
-export const getNaverLoginUrl = async (): Promise<string> => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/social-login/naver/`,
-  );
+export async function getNaverLoginUrl(): Promise<string> {
+  const res = await fetch('http://localhost:8000/api/user/social-login/naver/', {
+    method: 'GET',
+    credentials: 'include',
+  });
 
   if (!res.ok) {
     throw new Error('네이버 로그인 URL 요청 실패');
   }
 
-  const { redirect_url } = await res.json();
-  console.log('🔍 redirect_url 확인:', redirect_url);
-  console.log(
-    '🌍 요청 URL:',
-    `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/social-login/naver/`,
-  );
-  return redirect_url;
-};
+  const data = await res.json();
+  return data.auth_url;
+}

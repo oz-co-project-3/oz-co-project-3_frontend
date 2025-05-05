@@ -4,20 +4,24 @@ import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import { SeekerFormData } from '@/types/user';
 import { registerSeeker } from '@/api/user';
 import { useRouter } from 'next/navigation';
-import { convertArrayFieldsToString } from '@/lib/stringArrayConverter';
+import { convertArrayFieldsToString} from '@/lib/stringArrayConverter';
 
 export default function SeekerRegisterPage() {
   const router = useRouter();
 
-  const handleSubmit = async (formData: SeekerFormData) => {
+  const handleSubmit = async (
+    data: { [key: string]: unknown },
+  ): Promise<void> => {
     try {
-      const cleaned = convertArrayFieldsToString(formData);
-      const formattedData = {
+      const cleaned = convertArrayFieldsToString(data as unknown as SeekerFormData);
+  
+      const formattedData: SeekerFormData = {
         ...cleaned,
-        signinMethod: 'email', 
+        user_type: ['normal'],
+        signinMethod: ['email'],
       };
   
-      await registerSeeker(formattedData as SeekerFormData); 
+      await registerSeeker(formattedData);
       router.push('/user/email-verification');
     } catch (err) {
       console.error('이메일 인증 요청 실패:', err);
