@@ -4,7 +4,7 @@ import { CharacterCount } from '@tiptap/extension-character-count';
 import { Editor } from '@tiptap/react';
 
 //  constants로 옮겨주기?
-const CHARACTER_LIMIT = 1000;
+const CHARACTER_LIMIT = 2000;
 
 export const characterCount = CharacterCount.configure({
   limit: CHARACTER_LIMIT,

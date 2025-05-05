@@ -5,63 +5,88 @@ import {
   Briefcase,
   Calendar,
   CircleDollarSign,
+  Clock,
+  FileStack,
+  FolderOpen,
+  GraduationCap,
   Info,
   MapPin,
   PencilLine,
   UsersRound,
 } from 'lucide-react';
+import JobPostingViewer from '../common/text-editor/JobPostingViewer';
+import { format } from 'date-fns';
 
 export default async function JobPosting({ id }: { id: string }) {
   console.log(id);
   const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
   console.log(jobPosting);
 
+  // work_time, education, status, view_count, report
+
   return (
-    <article className='flex flex-col gap-8'>
-      <h2 className='border-b pb-4 text-2xl font-bold'>공고 제목</h2>
+    <article className='flex flex-col gap-4'>
+      <div className='flex items-center justify-between border-b pb-4'>
+        <h2 className='text-2xl font-bold'>{jobPosting.title}</h2>
+        <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
+          {jobPosting.employment_type}
+        </span>
+      </div>
+
+      <div className='flex items-center justify-between rounded-md border px-8 py-6'>
+        <div className='flex flex-col gap-4'>
+          <span className='text-xl font-bold text-zinc-800'>{jobPosting.company}</span>
+          <div className='flex gap-2'>
+            <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
+              {jobPosting.status}
+            </span>
+            <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
+              조회: {jobPosting.view_count}
+            </span>
+            <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
+              신고: {jobPosting.report}
+            </span>
+          </div>
+        </div>
+
+        <div className='flex flex-col gap-5'>
+          <span className='text-zinc-800'>
+            작성일: {format(jobPosting.created_at, 'yyyy-MM-dd')}
+          </span>
+          <span className='text-zinc-800'>
+            수정일: {format(jobPosting.updated_at, 'yyyy-MM-dd')}
+          </span>
+        </div>
+      </div>
 
       {/* 모집 조건 */}
       <div className='flex min-w-[300px] grow flex-col gap-6 rounded-md border p-4 sm:p-8 md:p-12'>
         <h3 className='text-main-light text-lg font-extrabold'>모집 조건</h3>
 
-        <div className='flex flex-col gap-4 lg:flex-row lg:gap-48'>
-          <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-4 lg:flex-row'>
+          <div className='flex flex-col gap-4 lg:w-1/2'>
             <div className='flex flex-col justify-between gap-4'>
               <h3 className='flex items-center gap-4 text-lg font-bold'>
                 <Briefcase className='size-4' />
                 <span>모집 직무</span>
               </h3>
-              <span className='pl-8 text-zinc-800'>프론트엔드</span>
+              <span className='pl-8 text-zinc-800'>{jobPosting.position}</span>
             </div>
 
             <div className='flex flex-col justify-between gap-4'>
               <h3 className='flex items-center gap-4 text-lg font-bold'>
-                <Calendar className='size-4' />
+                <FolderOpen className='size-4' />
                 <span>근무 형태</span>
               </h3>
-              <span className='pl-8 text-zinc-800'>정규직</span>
+              <span className='pl-8 text-zinc-800'>{jobPosting.employ_method}</span>
             </div>
 
-            <div className='flex flex-col justify-between gap-4'>
-              <h3 className='flex items-center gap-4 text-lg font-bold'>
-                <BookCheck className='size-4' />
-                <span>자격 요건</span>
-              </h3>
-              <span className='pl-8 text-zinc-800'>
-                프론트엔드 개발자 경력 2년 이상
-                <br />
-                React, TypeScript, Next.js 경험
-              </span>
-            </div>
-          </div>
-
-          <div className='flex flex-col gap-4'>
             <div className='flex flex-col justify-between gap-4'>
               <h3 className='flex items-center gap-4 text-lg font-bold'>
                 <Calendar className='size-4' />
                 <span>마감일</span>
               </h3>
-              <span className='pl-8 text-zinc-800'>2025-05-01</span>
+              <span className='pl-8 text-zinc-800'>{jobPosting.deadline}</span>
             </div>
 
             <div className='flex flex-col justify-between gap-4'>
@@ -69,7 +94,25 @@ export default async function JobPosting({ id }: { id: string }) {
                 <UsersRound className='size-4' />
                 <span>모집 인원</span>
               </h3>
-              <span className='pl-8 text-zinc-800'>0명</span>
+              <span className='pl-8 text-zinc-800'>{jobPosting.recruitment_count}명</span>
+            </div>
+          </div>
+
+          <div className='flex flex-col gap-4 lg:w-1/2'>
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <BookCheck className='size-4' />
+                <span>자격 요건</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>{jobPosting.career}</span>
+            </div>
+
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <GraduationCap className='size-4' />
+                <span>학력 요건</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>{jobPosting.education}</span>
             </div>
 
             <div className='flex flex-col justify-between gap-4'>
@@ -77,33 +120,36 @@ export default async function JobPosting({ id }: { id: string }) {
                 <CircleDollarSign className='size-4' />
                 <span>급여</span>
               </h3>
-              <span className='pl-8 text-zinc-800'>면접 후 결정</span>
+              <span className='pl-8 text-zinc-800'>{jobPosting.salary}</span>
+            </div>
+
+            <div className='flex flex-col justify-between gap-4'>
+              <h3 className='flex items-center gap-4 text-lg font-bold'>
+                <Clock className='size-4' />
+                <span>근무 시간</span>
+              </h3>
+              <span className='pl-8 text-zinc-800'>{jobPosting.work_time}</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 근무 조건 */}
+      {/* 회사 약력 */}
+      <div className='flex flex-col gap-3 rounded-md border p-4 sm:p-8 md:p-12'>
+        <h3 className='flex items-center gap-4 text-lg font-extrabold'>
+          <FileStack className='size-4' />
+          <span className='text-main-light'>회사 약력</span>
+        </h3>
+        <pre className='text-zinc-800'>{jobPosting.history}</pre>
+      </div>
+
+      {/* 주요 업무 */}
       <div className='flex flex-col gap-3 rounded-md border p-4 sm:p-8 md:p-12'>
         <h3 className='flex items-center gap-4 text-lg font-extrabold'>
           <Info className='size-4' />
-          <span className='text-main-light'>근무 조건</span>
+          <span className='text-main-light'>주요 업무</span>
         </h3>
-        <p className='text-zinc-800'>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi natus culpa numquam quo
-          sed nisi commodi vel labore harum tempore, fugiat velit minima officia possimus deleniti
-          eaque! Excepturi, illum iste! Impedit fugiat incidunt officia aliquid, suscipit odio
-          natus. Animi sapiente incidunt eveniet aliquam minus expedita? Consectetur labore ducimus
-          animi, reiciendis fuga sed debitis doloribus dolorum voluptate explicabo sapiente dolores
-          dicta? Architecto molestias ea, minus dolore facilis quos a vero eveniet fugiat quidem,
-          quam error inventore illo laboriosam aut, reiciendis iste quis rerum ipsam. Ratione
-          corrupti cumque incidunt neque cum veniam. Maiores, voluptatibus explicabo molestias
-          sapiente numquam odio! Sapiente dignissimos sequi error nisi unde! Ut rem aperiam error
-          saepe at sapiente nobis a, veniam non, ab tenetur voluptatum enim, deleniti numquam.
-          Possimus doloremque ex assumenda harum repudiandae dignissimos doloribus eligendi aut
-          obcaecati placeat distinctio, delectus commodi quia voluptatem voluptates exercitationem
-          corrupti nesciunt.
-        </p>
+        <pre className='text-zinc-800'>{jobPosting.summary}</pre>
       </div>
 
       {/* 근무지 정보 */}
@@ -113,7 +159,7 @@ export default async function JobPosting({ id }: { id: string }) {
           <span className='text-main-light'>근무지 정보</span>
         </h3>
         <div className='flex h-60 items-center justify-center rounded-md border'>지도</div>
-        <p className='text-zinc-800'>서울시 강남구 ㅁㄴㄹㅇ로 123-456</p>
+        <p className='text-zinc-800'>{jobPosting.location}</p>
       </div>
 
       {/* 상세 모집 내용 */}
@@ -122,15 +168,7 @@ export default async function JobPosting({ id }: { id: string }) {
           <PencilLine className='size-4' />
           <span className='text-main-light'>상세 모집 내용</span>
         </h3>
-        <div className='flex h-80 items-center justify-center rounded-md border'>
-          텍스트 에디터로 들어가는 글 또는 이미지
-        </div>
-        <div className='flex h-80 items-center justify-center rounded-md border'>
-          텍스트 에디터로 들어가는 글 또는 이미지
-        </div>
-        <div className='flex h-80 items-center justify-center rounded-md border'>
-          텍스트 에디터로 들어가는 글 또는 이미지
-        </div>
+        <JobPostingViewer content={jobPosting.description} />
       </div>
     </article>
   );

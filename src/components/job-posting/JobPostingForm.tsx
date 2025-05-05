@@ -20,8 +20,8 @@ import { fetchOnClient } from '@/api/clientFetcher';
 import useSWRMutation from 'swr/mutation';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
+// 클라이언트 전용으로 렌더링하고 싶을때
 // import dynamic from 'next/dynamic';
-
 // const JobPostingEditor = dynamic(() => import('@/components/common/textEditor/JobPostingEditor'), {
 //   ssr: false,
 // });
@@ -388,7 +388,8 @@ export default function JobPostingForm() {
             <div className='text-sm font-bold'>JSON</div>
             <div>{detailJSON}</div>
           </div> */}
-          <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div>
+          {/* 유효성 검사 오류 표시 */}
+          {/* <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div> */}
         </div>
 
         <div className='flex justify-between gap-2'>
@@ -411,3 +412,7 @@ export default function JobPostingForm() {
     </Form>
   );
 }
+
+// 썸네일 이미지 추가
+
+// 폼필드 컴포넌트화

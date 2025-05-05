@@ -4,7 +4,7 @@ import DeleteResumeButton from './DeleteResumeButton';
 export default async function ResumeCard({ id }: { id: string }) {
   return (
     <article className='relative flex flex-col gap-2 rounded-md border lg:flex-row'>
-      <Link href={`/dashboard/resume/${id}`} className='absolute inset-0 grow p-4'>
+      <Link href={`/dashboard/job-seeker/resume/${id}`} className='absolute inset-0 grow p-4'>
         <span className='sr-only'>이력서 상세보기</span>
       </Link>
 
