@@ -7,29 +7,34 @@ import type { ChatbotPrompt } from '@/types/chatbot';
 import ChatbotModal from './ChatbotModal';
 import DataTable from '@/components/admin/table/DataTable';
 import { getColumns } from './columns';
-import { apiFetch } from '@/lib/fetcher';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useRouter } from 'next/navigation';
+import { fetchOnClient } from '@/api/clientFetcher';
 
 export default function ChatbotAdminClient() {
   const [openModal, setOpenModal] = useState(false);
   const [editTarget, setEditTarget] = useState<ChatbotPrompt | null>(null);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
+  const logout = useAuthStore((state) => state.logout);
+  const router = useRouter();
 
-  // SWR 응답 목록 불러오기
   const {
-    data: prompts = [],
+    data: prompts,
     error,
     isLoading,
     mutate,
-  } = useSWR('/api/admin/chatbot', () => apiFetch<ChatbotPrompt[]>('/api/admin/chatbot'));
+  } = useSWR('/api/admin/chatbot', () => fetchOnClient<ChatbotPrompt[]>('/api/admin/chatbot'));
 
   // STEP 오름차순 정렬 및 필터링
   const filteredPrompts = useMemo(() => {
+    if (!Array.isArray(prompts)) return [];
     const sorted = [...prompts].sort((a, b) => a.step - b.step);
     return selectedStep !== null ? sorted.filter((p) => p.step === selectedStep) : sorted;
   }, [prompts, selectedStep]);
 
   // 중복 제거한 STEP 목록 추출
   const stepOptions = useMemo(() => {
+    if (!Array.isArray(prompts)) return [];
     const unique = Array.from(new Set(prompts.map((p) => p.step)));
     return unique.sort((a, b) => a - b);
   }, [prompts]);
@@ -46,12 +51,16 @@ export default function ChatbotAdminClient() {
     if (!confirmed) return;
 
     try {
-      await apiFetch(`/api/admin/chatbot/${id}`, {
+      await fetchOnClient(`/api/admin/chatbot/${id}`, {
         method: 'DELETE',
       });
       mutate(); // 목록 갱신
     } catch (err) {
       console.error('삭제 오류:', err);
+      if (err instanceof Error && err.message.includes('세션')) {
+        logout();
+        router.push('/user/login');
+      }
     }
   };
 

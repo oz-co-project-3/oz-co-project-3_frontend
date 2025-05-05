@@ -6,18 +6,10 @@ import DataTable from '../table/DataTable';
 import { getColumns } from './columns';
 import { AdminUser } from '@/types/user';
 import { ResumeModal } from '../resume/ResumeModal';
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 
 interface UserTableProps {
   userType: 'seeker' | 'business'; // 사용자 유형 (개인 또는 기업)
-}
-
-// 응답 객체에서 AdminUser 배열 추출
-function extractAdminUsers(response: unknown): AdminUser[] {
-  if (Array.isArray(response)) {
-    return response as AdminUser[];
-  }
-  return [];
 }
 
 export function UserTable({ userType }: UserTableProps) {
@@ -32,8 +24,7 @@ export function UserTable({ userType }: UserTableProps) {
     const fetchUsers = async () => {
       setIsLoading(true);
       try {
-        const result = await apiFetch<unknown>(`/api/admin/user`);
-        const users = extractAdminUsers(result);
+        const users = await fetchOnClient<AdminUser[]>(`/api/admin/user`);
 
         const filtered = users.filter((user) => {
           const isTarget =

@@ -8,7 +8,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import type { ChatbotPrompt } from '@/types/chatbot';
 import type { KeyedMutator } from 'swr';
 import { Textarea } from '@/components/ui/textarea';
-import { apiFetch } from '@/lib/fetcher';
+import { fetchOnClient } from '@/api/clientFetcher';
 
 interface Props {
   open: boolean;
@@ -60,7 +60,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
       const url = editTarget ? `/api/admin/chatbot/${editTarget.id}` : '/api/admin/chatbot';
       const method = editTarget ? 'PATCH' : 'POST';
 
-      await apiFetch(url, {
+      await fetchOnClient(url, {
         method,
         body: JSON.stringify({
           step,
