@@ -1,7 +1,11 @@
+// import fetchOnServer from '@/api/serverFetcher';
 import SeekerProfile from '@/components/profile/SeekerProfile';
 import Link from 'next/link';
 
 export default async function ProfilePage() {
+  // const { data: user } = await fetchOnServer<UserResponse>('/api/user/');
+  // console.log(user);
+
   return (
     <>
       <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>

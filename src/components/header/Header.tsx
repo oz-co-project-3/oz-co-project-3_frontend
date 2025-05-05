@@ -50,15 +50,16 @@ export default function Header() {
 
   return (
     <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between border-b bg-white px-2'>
-      <h1>
-        <Link href='/'>
+      <h1 className='h-[70px] w-[150px]'>
+        <Link href='/' className='relative block h-full w-full'>
           <Image
             src='/logo/logo.gif'
             alt='시니어내일'
-            width={150}
-            height={50}
+            fill
+            sizes='150px'
             priority={true}
             draggable={false}
+            className='object-cover'
           />
         </Link>
       </h1>

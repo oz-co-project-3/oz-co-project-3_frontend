@@ -9,7 +9,7 @@ export const resumeSchemaRequest = z.object({
     .max(13, '너무 긴 전화번호입니다.')
     .regex(/^01[0-9]-[0-9]{4}-[0-9]{4}$/, '01로 시작하는 11자리 숫자여야 합니다.'),
   email: z.string().email('이메일 형식이 올바르지 않습니다.'),
-  img_url: z
+  image_url: z
     .union([z.literal(''), z.string().url('이미지 링크는 올바른 URL이어야 합니다.')])
     .optional(),
   interests: z.string().optional(),
@@ -57,4 +57,11 @@ export type ResumeResponse = Omit<ResumeRequest, 'work_experiences'> & {
   }[];
   created_at: string;
   updated_at: string;
+};
+
+export type ResumeListResponse = {
+  total: number;
+  offset: number;
+  limit: number;
+  data: ResumeResponse[];
 };

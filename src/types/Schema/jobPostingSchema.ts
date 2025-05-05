@@ -47,7 +47,3 @@ export type JobPostingWithRejects = JobPostingResponse & {
 };
 
 // 최대 글자수 넣어주기
-
-// 유주님이 정의한 타입에 detailPagePath 는 빼고 인자 나눠서 전달하라고 얘기하기
-
-// history, summary 엔터 포함 어떻게 하는지?

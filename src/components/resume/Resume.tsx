@@ -44,9 +44,15 @@ export default async function Resume({ id }: { id: string }) {
 
       {/* 사진, 기본정보 */}
       <div className='flex justify-between gap-8 max-sm:flex-col'>
-        <div className='relative aspect-[7/9] w-full max-w-[300px] border'>
-          {/* 디폴트 이미지 */}
-          <Image src='/defaultProfile.png' alt='profile' fill className='object-cover p-12' />
+        <div className='relative aspect-[7/9] w-full max-w-[300px]'>
+          {/* 프로필 이미지 */}
+          <Image
+            src={resume.image_url ? resume.image_url : '/defaultProfile.png'}
+            alt='profile'
+            fill
+            unoptimized
+            className={`rounded-md object-cover ${resume.image_url ? '' : 'border'}`}
+          />
         </div>
         <div className='flex min-w-[300px] grow flex-col gap-6 rounded-md border p-4 sm:p-8 md:p-12'>
           <div className='flex items-center justify-between'>
@@ -224,7 +230,7 @@ export default async function Resume({ id }: { id: string }) {
           <PencilLine className='size-4' />
           <span>자기소개</span>
         </h3>
-        <p className='text-zinc-800'>{resume.introduce}</p>
+        <pre className='w-full whitespace-pre-wrap text-zinc-800'>{resume.introduce}</pre>
       </div>
     </article>
   );
