@@ -26,7 +26,7 @@ export default async function ResumePage() {
         <article className='flex rounded-md border'>
           <Link
             href='/dashboard/job-seeker/resume/post'
-            className='text-main-light flex h-56 grow cursor-pointer items-center justify-center rounded-md p-2 font-extrabold transition-all duration-150 hover:text-xl hover:underline'
+            className='text-main-light flex h-32 grow cursor-pointer items-center justify-center rounded-md p-2 font-extrabold transition-all duration-150 hover:text-xl hover:underline'
           >
             새 이력서
           </Link>

@@ -11,8 +11,14 @@ import { resumeSchemaRequest, ResumeRequest } from '@/types/Schema/resumeSchema'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
+import { useEffect, useState } from 'react';
+import uploadImage from '@/api/imageUploader';
+import Image from 'next/image';
 
 export default function ResumeForm() {
+  const [temporaryImage, setTemporaryImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
   // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
   const { trigger } = useSWRMutation(
     '/api/resume/',
@@ -23,6 +29,9 @@ export default function ResumeForm() {
       });
     },
   );
+
+  // data, isMutating, error 가져와서 마저 처리하기
+  const { trigger: uploadImageTrigger } = useSWRMutation('/api/upload-image/', uploadImage);
 
   const form = useForm<ResumeRequest>({
     resolver: zodResolver(resumeSchemaRequest),
@@ -36,8 +45,8 @@ export default function ResumeForm() {
       name: '',
       phone_number: '',
       email: '',
-      img_url: undefined,
-      interests: undefined,
+      image_url: undefined,
+      interests: '',
       desired_area: '',
       education: undefined,
       school_name: undefined,
@@ -57,26 +66,51 @@ export default function ResumeForm() {
     name: 'work_experiences',
   });
 
-  // TODO: API 요청 성공 후 로직 필요함
-  const onSubmit = (data: ResumeRequest) => {
+  // TODO: API 요청 성공 후 로직 (에러도) 필요함
+  const onSubmit = async (data: ResumeRequest) => {
     data.visibility = true;
     data.status = '구직중';
 
-    // TODO: 이미지 업로드 후 URL로 대체해주기
+    const filteredData = Object.fromEntries(
+      Object.entries(data).filter(([, v]) => v !== ''),
+    ) as ResumeRequest;
 
-    console.table(data);
-
-    // try, catch 로 바꾸기
-    trigger(data)
-      .then((response) => {
-        console.log('성공:', response);
-        // 성공 처리 로직 (예: 알림, 리디렉션 등)
-      })
-      .catch((error) => {
-        console.error('에러:', error);
+    // 이미지 업로드
+    if (temporaryImage) {
+      try {
+        const uploadedImageUrl = await uploadImageTrigger({ file: temporaryImage });
+        data.image_url = uploadedImageUrl;
+        console.table(filteredData);
+      } catch (error) {
+        console.error('이미지 업로드 실패:', error);
         // 에러 처리 로직
-      });
+      }
+    }
+
+    // 이력서 제출
+    try {
+      const response = await trigger(data);
+      console.log('이력서 제출 성공:', response);
+      // 성공 처리 로직 (예: 알림, 리디렉션 등)
+    } catch (error) {
+      console.error('이력서 제출 실패:', error);
+      // 에러 처리 로직
+    }
   };
+
+  // 이미지 미리보기 업데이트
+  useEffect(() => {
+    if (!temporaryImage) {
+      setPreviewUrl(null);
+      return;
+    }
+    const generatedUrl = URL.createObjectURL(temporaryImage);
+    setPreviewUrl(generatedUrl);
+
+    return () => {
+      URL.revokeObjectURL(generatedUrl);
+    };
+  }, [temporaryImage]);
 
   return (
     <Form {...form}>
@@ -97,23 +131,47 @@ export default function ResumeForm() {
         />
 
         <div className='flex justify-between gap-8 max-md:flex-col'>
-          {/* 이 div는 필요 없을지도? */}
-          <div className='flex flex-col gap-8'>
-            {/* 이력서 이미지 */}
-            <FormField
-              control={form.control}
-              name='img_url'
-              render={({ field }) => (
-                <FormItem className='relative'>
-                  <FormLabel className='text-base font-semibold'>이력서 이미지</FormLabel>
-                  <FormControl>
-                    <Input type='file' placeholder='이력서 이미지를 입력하세요.' {...field} />
-                  </FormControl>
-                  <FormMessage className='absolute top-0 right-0 text-sm' />
-                </FormItem>
-              )}
-            />
-          </div>
+          {/* 이력서 이미지 */}
+          <FormField
+            control={form.control}
+            name='image_url'
+            render={({ field }) => (
+              <FormItem className='relative'>
+                <FormLabel className='text-base font-semibold'>이력서 이미지</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type='file'
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setTemporaryImage(file);
+                      }
+                    }}
+                    className='cursor-pointer'
+                  />
+                </FormControl>
+                <div className='relative h-87 w-full'>
+                  <Image
+                    src={previewUrl ? previewUrl : '/defaultProfile.png'}
+                    alt='이력서 이미지'
+                    fill
+                    unoptimized
+                    className='rounded-md object-cover max-md:object-contain'
+                  />
+                </div>
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='cursor-pointer'
+                  onClick={() => setTemporaryImage(null)}
+                >
+                  이미지 삭제
+                </Button>
+                <FormMessage className='absolute top-0 right-0 text-sm' />
+              </FormItem>
+            )}
+          />
 
           <div className='flex grow flex-col gap-8'>
             {/* 이름 */}
