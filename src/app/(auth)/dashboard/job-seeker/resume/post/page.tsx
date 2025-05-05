@@ -1,8 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import ResumeForm from '@/components/resume/ResumeForm';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
 
 export default function Page() {
   const [isLoadResumeModalOpen, setIsLoadResumeModalOpen] = useState<boolean>(false);

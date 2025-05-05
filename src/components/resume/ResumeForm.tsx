@@ -45,7 +45,7 @@ export default function ResumeForm() {
       introduce: '',
       status: '작성중', // 제출 시 구직중으로 변경
       document_url: undefined,
-      work_experience: [
+      work_experiences: [
         { company: '', period: '', position: '' },
         { company: '', period: '', position: '' },
       ],
@@ -54,7 +54,7 @@ export default function ResumeForm() {
 
   const workExperience = useFieldArray({
     control: form.control,
-    name: 'work_experience',
+    name: 'work_experiences',
   });
 
   // TODO: API 요청 성공 후 로직 필요함
@@ -231,7 +231,7 @@ export default function ResumeForm() {
                 {/* 회사명 */}
                 <FormField
                   control={form.control}
-                  name={`work_experience.${index}.company`}
+                  name={`work_experiences.${index}.company`}
                   render={({ field }) => (
                     <FormItem className='relative grow'>
                       <FormLabel className='text-base'>회사명</FormLabel>
@@ -246,7 +246,7 @@ export default function ResumeForm() {
                 {/* 근무 기간 */}
                 <FormField
                   control={form.control}
-                  name={`work_experience.${index}.period`}
+                  name={`work_experiences.${index}.period`}
                   render={({ field }) => (
                     <FormItem className='relative grow'>
                       <FormLabel className='text-base'>근무 기간</FormLabel>
@@ -278,7 +278,7 @@ export default function ResumeForm() {
                 {/* 직무 */}
                 <FormField
                   control={form.control}
-                  name={`work_experience.${index}.position`}
+                  name={`work_experiences.${index}.position`}
                   render={({ field }) => (
                     <FormItem className='relative grow'>
                       <FormLabel className='text-base'>직무</FormLabel>
@@ -419,3 +419,6 @@ export default function ResumeForm() {
     </Form>
   );
 }
+
+// 폼필드 컴포넌트화
+// 유틸함수 분리

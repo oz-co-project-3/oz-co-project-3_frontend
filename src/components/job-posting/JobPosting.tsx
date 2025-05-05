@@ -5,6 +5,10 @@ import {
   Briefcase,
   Calendar,
   CircleDollarSign,
+  Clock,
+  FileStack,
+  FolderOpen,
+  GraduationCap,
   Info,
   MapPin,
   PencilLine,
@@ -24,7 +28,7 @@ export default async function JobPosting({ id }: { id: string }) {
     <article className='flex flex-col gap-4'>
       <div className='flex items-center justify-between border-b pb-4'>
         <h2 className='text-2xl font-bold'>{jobPosting.title}</h2>
-        <span className='rounded-lg border bg-zinc-100 px-3 py-1 text-zinc-800'>
+        <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
           {jobPosting.employment_type}
         </span>
       </div>
@@ -33,19 +37,19 @@ export default async function JobPosting({ id }: { id: string }) {
         <div className='flex flex-col gap-4'>
           <span className='text-xl font-bold text-zinc-800'>{jobPosting.company}</span>
           <div className='flex gap-2'>
-            <span className='rounded-lg border bg-zinc-100 px-3 py-1 text-zinc-800'>
+            <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
               {jobPosting.status}
             </span>
-            <span className='rounded-lg border bg-zinc-100 px-3 py-1 text-zinc-800'>
+            <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
               조회: {jobPosting.view_count}
             </span>
-            <span className='rounded-lg border bg-zinc-100 px-3 py-1 text-zinc-800'>
+            <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
               신고: {jobPosting.report}
             </span>
           </div>
         </div>
 
-        <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-5'>
           <span className='text-zinc-800'>
             작성일: {format(jobPosting.created_at, 'yyyy-MM-dd')}
           </span>
@@ -71,7 +75,7 @@ export default async function JobPosting({ id }: { id: string }) {
 
             <div className='flex flex-col justify-between gap-4'>
               <h3 className='flex items-center gap-4 text-lg font-bold'>
-                <Calendar className='size-4' />
+                <FolderOpen className='size-4' />
                 <span>근무 형태</span>
               </h3>
               <span className='pl-8 text-zinc-800'>{jobPosting.employ_method}</span>
@@ -105,7 +109,7 @@ export default async function JobPosting({ id }: { id: string }) {
 
             <div className='flex flex-col justify-between gap-4'>
               <h3 className='flex items-center gap-4 text-lg font-bold'>
-                <BookCheck className='size-4' />
+                <GraduationCap className='size-4' />
                 <span>학력 요건</span>
               </h3>
               <span className='pl-8 text-zinc-800'>{jobPosting.education}</span>
@@ -121,7 +125,7 @@ export default async function JobPosting({ id }: { id: string }) {
 
             <div className='flex flex-col justify-between gap-4'>
               <h3 className='flex items-center gap-4 text-lg font-bold'>
-                <BookCheck className='size-4' />
+                <Clock className='size-4' />
                 <span>근무 시간</span>
               </h3>
               <span className='pl-8 text-zinc-800'>{jobPosting.work_time}</span>
@@ -133,7 +137,7 @@ export default async function JobPosting({ id }: { id: string }) {
       {/* 회사 약력 */}
       <div className='flex flex-col gap-3 rounded-md border p-4 sm:p-8 md:p-12'>
         <h3 className='flex items-center gap-4 text-lg font-extrabold'>
-          <Info className='size-4' />
+          <FileStack className='size-4' />
           <span className='text-main-light'>회사 약력</span>
         </h3>
         <pre className='text-zinc-800'>{jobPosting.history}</pre>
