@@ -19,7 +19,7 @@ export default function AdminResumeDetailPage() {
           </div>
         </div>
 
-        <Resume />
+        <Resume id={resumeId} />
       </section>
     </AdminLayout>
   );
