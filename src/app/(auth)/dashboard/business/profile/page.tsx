@@ -24,13 +24,13 @@ export default async function CompanyProfilePage() {
 
         <div className='flex w-full gap-2'>
           <Link
-            href='/company-dashboard/previous-job-postings'
+            href='/dashboard/business/job-postings/expired'
             className='grow cursor-pointer rounded border py-2 text-center transition-all duration-150 hover:bg-zinc-100'
           >
             지난 채용공고
           </Link>
           <Link
-            href='/company-dashboard/current-job-postings'
+            href='/dashboard/business/job-postings/current'
             className='grow cursor-pointer rounded border py-2 text-center transition-all duration-150 hover:bg-zinc-100'
           >
             현재 채용공고
@@ -39,7 +39,7 @@ export default async function CompanyProfilePage() {
 
         {/* URL 확인 */}
         <Link
-          href='/company-dashboard/job-postings/new'
+          href='/dashboard/business/job-postings/post'
           className='bg-main-light hover:bg-main-dark cursor-pointer rounded py-2 text-center text-white transition-all duration-150'
         >
           채용 공고 등록
