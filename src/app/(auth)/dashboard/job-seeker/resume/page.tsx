@@ -1,13 +1,27 @@
+import fetchOnServer from '@/api/serverFetcher';
 import ResumeCard from '@/components/resume/ResumeCard';
+import { ResumeListResponse } from '@/types/Schema/resumeSchema';
 import Link from 'next/link';
 
 export default async function ResumePage() {
+  const { data: resumes } = await fetchOnServer<ResumeListResponse>('/api/resume/');
+  console.log(resumes);
+
   return (
     <>
       <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
-        <h2 className='border-b pb-4 text-2xl font-bold'>내 이력서</h2>
-        <ResumeCard id='1' />
-        <ResumeCard id='2' />
+        <div className='flex justify-between border-b pb-4'>
+          <h2 className='text-2xl font-bold'>내 이력서</h2>
+          <Link
+            href='/dashboard/job-seeker/resume/post'
+            className='bg-main-light hover:bg-main-dark cursor-pointer rounded-md px-5 py-1.5 text-white'
+          >
+            이력서 등록
+          </Link>
+        </div>
+        {resumes.map((resume) => (
+          <ResumeCard key={resume.id} resume={resume} />
+        ))}
 
         <article className='flex rounded-md border'>
           <Link

@@ -58,3 +58,10 @@ export type ResumeResponse = Omit<ResumeRequest, 'work_experiences'> & {
   created_at: string;
   updated_at: string;
 };
+
+export type ResumeListResponse = {
+  total: number;
+  offset: number;
+  limit: number;
+  data: ResumeResponse[];
+};
