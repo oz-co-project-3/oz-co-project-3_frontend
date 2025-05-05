@@ -5,11 +5,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { CHATBOT_API } from '@/constants/chatbot';
 import type { ChatbotPrompt } from '@/types/chatbot';
 import type { KeyedMutator } from 'swr';
 import { Textarea } from '@/components/ui/textarea';
-//import { useAuthStore } from '@/store/useAuthStore'; // 전역 상태에서 토큰 가져오기
+import { fetchOnClient } from '@/api/clientFetcher';
 
 interface Props {
   open: boolean;
@@ -26,7 +25,6 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
   const [isTerminate, setIsTerminate] = useState(false);
   const [loading, setLoading] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState('');
-  //const accessToken = useAuthStore((state) => state.accessToken);
 
   // 모달 열릴 때 초기값 설정
   useEffect(() => {
@@ -57,16 +55,13 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
   // 저장 또는 수정 요청
   const handleSubmit = async () => {
     setLoading(true);
+
     try {
-      const url = editTarget ? CHATBOT_API.DETAIL(editTarget.id) : CHATBOT_API.BASE;
+      const url = editTarget ? `/api/admin/chatbot/${editTarget.id}` : '/api/admin/chatbot';
       const method = editTarget ? 'PATCH' : 'POST';
 
-      const res = await fetch(url, {
+      await fetchOnClient(url, {
         method,
-        headers: {
-          'Content-Type': 'application/json',
-          //Authorization: `Bearer ${accessToken}`,
-        },
         body: JSON.stringify({
           step,
           selection_path: selectionPath.trim(),
@@ -76,8 +71,6 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
           url: redirectUrl.trim(),
         }),
       });
-
-      if (!res.ok) throw new Error(editTarget ? '수정 실패' : '추가 실패');
 
       await onSuccess(); // SWR 새로고침 (목록을 최신화시킴)
       resetForm(); // 폼 초기화
