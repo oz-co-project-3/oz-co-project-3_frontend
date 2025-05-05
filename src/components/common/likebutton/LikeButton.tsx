@@ -4,9 +4,8 @@
 
 import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 
-import { apiFetch } from '@/lib/fetcher';
 import { useState } from 'react';
-
+import { fetchOnClient } from '@/api/clientFetcher';
 
 interface LikeButtonProps {
   id?: string;
@@ -21,11 +20,10 @@ const LikeButton = ({ id }: LikeButtonProps) => {
     e.preventDefault();
 
     try {
-      await apiFetch(`/api/job_posting/${id}/bookmark/`, {
+      await fetchOnClient(`/api/job_posting/${id}/bookmark/`, {
         method: 'POST',
       });
       setLiked((prev) => !prev);
-
     } catch (error) {
       console.error('찜하기 실패:', error);
     }
