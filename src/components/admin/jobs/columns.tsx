@@ -1,28 +1,7 @@
+import { JobPostingWithRejects } from '@/types/Schema/jobPostingSchema';
 import { ColumnDef } from '@tanstack/react-table';
 
-export type JobPosting = {
-    id: number;
-    title: string;
-    company: string;
-    location: string;
-    employment_type: string;
-    position: string;
-    history: string;
-    recruitment_count: number;
-    education: string;
-    deadline: string;
-    salary: string;
-    summary: string;
-    description: string;
-    status: string;
-    view_count: number;
-    report: number;
-    reject_postings: { id: number; user: { id: number }; content: string }[];
-    user: {
-      id: number;
-    };
-  };
-  
+export type JobPosting = JobPostingWithRejects;
 
 export const columns: ColumnDef<JobPosting>[] = [
   {
