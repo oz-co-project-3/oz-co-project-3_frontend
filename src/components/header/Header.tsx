@@ -31,7 +31,6 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
 
-  
   const handleLogout = async () => {
     try {
       await logoutUser();
@@ -51,15 +50,16 @@ export default function Header() {
 
   return (
     <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between border-b bg-white px-2'>
-      <h1>
-        <Link href='/'>
+      <h1 className='h-[70px] w-[150px]'>
+        <Link href='/' className='relative block h-full w-full'>
           <Image
             src='/logo/logo.gif'
             alt='시니어내일'
-            width={150}
-            height={50}
+            fill
+            sizes='150px'
             priority={true}
             draggable={false}
+            className='object-cover'
           />
         </Link>
       </h1>
@@ -82,14 +82,9 @@ export default function Header() {
       <div className='flex items-center gap-2'>
         {user ? (
           <>
-            <Link href='/dashboard/profile'>
+            <Link href='/dashboard/job-seeker/profile'>
               <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-                개인
-              </Button>
-            </Link>
-            <Link href='/company-dashboard/profile'>
-              <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-                기업
+                대시보드
               </Button>
             </Link>
             <Button

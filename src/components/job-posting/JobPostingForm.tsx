@@ -18,10 +18,11 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { fetchOnClient } from '@/api/clientFetcher';
 import useSWRMutation from 'swr/mutation';
+import uploadImage from '@/api/imageUploader';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
+// 클라이언트 전용으로 렌더링하고 싶을때
 // import dynamic from 'next/dynamic';
-
 // const JobPostingEditor = dynamic(() => import('@/components/common/textEditor/JobPostingEditor'), {
 //   ssr: false,
 // });
@@ -29,6 +30,7 @@ import useSWRMutation from 'swr/mutation';
 export default function JobPostingForm() {
   const [detailJSON, setDetailJSON] = useState<string>('');
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
+  const [temporaryImage, setTemporaryImage] = useState<File | null>(null);
 
   // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
   const { trigger } = useSWRMutation(
@@ -40,6 +42,9 @@ export default function JobPostingForm() {
       });
     },
   );
+
+  // data, isMutating, error 가져와서 마저 처리하기
+  const { trigger: uploadImageTrigger } = useSWRMutation('/api/upload-image/', uploadImage);
 
   const form = useForm<JobPostingRequest>({
     resolver: zodResolver(jobPostingSchemaRequest),
@@ -68,20 +73,29 @@ export default function JobPostingForm() {
     },
   });
 
-  // TODO: API 요청 성공 후 로직 필요함
-  const onSubmit = (data: JobPostingRequest) => {
-    console.table(data);
-
-    // try, catch 로 바꾸기
-    trigger(data)
-      .then((response) => {
-        console.log('성공:', response);
-        // 성공 처리 로직 (예: 알림, 리디렉션 등)
-      })
-      .catch((error) => {
-        console.error('에러:', error);
+  // TODO: API 요청 성공 후 로직 (에러도) 필요함
+  const onSubmit = async (data: JobPostingRequest) => {
+    // 이미지 업로드
+    if (temporaryImage) {
+      try {
+        const uploadedImageUrl = await uploadImageTrigger({ file: temporaryImage });
+        data.image_url = uploadedImageUrl;
+        console.table(data);
+      } catch (error) {
+        console.error('이미지 업로드 실패:', error);
         // 에러 처리 로직
-      });
+      }
+    }
+
+    // 공고 제출
+    try {
+      const response = await trigger(data);
+      console.log('성공:', response);
+      // 성공 처리 로직 (예: 알림, 리디렉션 등)
+    } catch (error) {
+      console.error('에러:', error);
+      // 에러 처리 로직
+    }
   };
 
   useEffect(() => {
@@ -131,7 +145,17 @@ export default function JobPostingForm() {
             <FormItem className='relative'>
               <FormLabel className='text-base font-semibold'>썸네일 이미지</FormLabel>
               <FormControl>
-                <Input placeholder='주소를 입력하세요.' {...field} />
+                <Input
+                  {...field}
+                  type='file'
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setTemporaryImage(file);
+                    }
+                  }}
+                  className='cursor-pointer'
+                />
               </FormControl>
               <FormMessage className='absolute top-0 right-0 text-sm' />
             </FormItem>
@@ -388,7 +412,8 @@ export default function JobPostingForm() {
             <div className='text-sm font-bold'>JSON</div>
             <div>{detailJSON}</div>
           </div> */}
-          <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div>
+          {/* 유효성 검사 오류 표시 */}
+          {/* <div className='text-sm text-red-500'>{JSON.stringify(form.formState.errors)}</div> */}
         </div>
 
         <div className='flex justify-between gap-2'>
@@ -411,3 +436,7 @@ export default function JobPostingForm() {
     </Form>
   );
 }
+
+// 썸네일 이미지 추가
+
+// 폼필드 컴포넌트화

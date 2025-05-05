@@ -2,6 +2,7 @@
 
 import LikeButton from '@/components/common/likebutton/LikeButton';
 import { useParams } from 'next/navigation';
+import ApplyFlow from '../../ApplyFlow';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const params = useParams<{ id: string }>();
@@ -12,9 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className='flex h-[50px] w-[50px] items-center justify-center rounded-2xl border'>
           <LikeButton id={params.id} />
         </div>
-        <button className='bg-main-light h-[50px] w-[500px] rounded-2xl'>
-          <span className='p-1 text-white'>지원하기</span>
-        </button>
+        <ApplyFlow id='1' />
       </footer>
     </div>
   );

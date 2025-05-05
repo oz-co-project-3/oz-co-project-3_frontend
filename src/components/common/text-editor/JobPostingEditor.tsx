@@ -29,7 +29,7 @@ export default function JobPostingEditor({
         listItem: false,
         bulletList: {
           keepMarks: true,
-          // TODO: 이거 없으면 여러줄 동시 선택시 맨윗줄만 불릿
+          // 이거 없으면 여러줄 동시 선택시 맨윗줄만 불릿
           keepAttributes: false,
         },
       }),
@@ -48,15 +48,8 @@ export default function JobPostingEditor({
       }),
       characterCount,
     ],
-    // 일단 테스트용 텍스트 (수정이나 불러오기 했을때, 초기 텍스트로 대체, JSON 으로 넣어주기)
-    content: `
-        <h1>This is a 1st level heading</h1>
-        <p>This is a paragraph</p>
-        <h2>This is a 2nd level heading</h2>
-        <h3>This is a 3rd level heading</h3>
-        <h4>This 4th level heading will be converted to a paragraph, because levels are configured to be only 1, 2 or 3.</h4>
-        asdf
-      `,
+    // 일단 빈 텍스트 (수정이나 불러오기 했을때, 초기 텍스트로 대체)
+    content: ``,
     editorProps: {
       attributes: {
         class: 'min-h-[500px] w-full bg-white p-4 focus:outline-none',
@@ -123,10 +116,3 @@ export default function JobPostingEditor({
     </EditorContext.Provider>
   );
 }
-
-// 버튼 디자인해서 공통 컴포넌트로?
-// 템플릿의 버튼 베끼기
-
-// 툴바 컴포넌트화
-// 툴바 내 카테고리 별 컴포넌트화
-// extensions 까지 컴포넌트화해서 여기서 조립

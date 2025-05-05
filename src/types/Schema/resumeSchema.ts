@@ -9,7 +9,7 @@ export const resumeSchemaRequest = z.object({
     .max(13, '너무 긴 전화번호입니다.')
     .regex(/^01[0-9]-[0-9]{4}-[0-9]{4}$/, '01로 시작하는 11자리 숫자여야 합니다.'),
   email: z.string().email('이메일 형식이 올바르지 않습니다.'),
-  img_url: z
+  image_url: z
     .union([z.literal(''), z.string().url('이미지 링크는 올바른 URL이어야 합니다.')])
     .optional(),
   interests: z.string().optional(),
@@ -22,7 +22,7 @@ export const resumeSchemaRequest = z.object({
   document_url: z
     .union([z.literal(''), z.string().url('포트폴리오 링크는 올바른 URL이어야 합니다.')])
     .optional(),
-  work_experience: z
+  work_experiences: z
     .array(
       z.object({
         company: z.string().min(1, '회사명은 필수입니다.'),
@@ -43,16 +43,25 @@ export const resumeSchemaUpdate = resumeSchemaRequest.partial();
 
 export type ResumeRequest = z.infer<typeof resumeSchemaRequest>;
 export type ResumeUpdate = z.infer<typeof resumeSchemaUpdate>;
-export type ResumeResponse = ResumeRequest & {
+export type ResumeResponse = Omit<ResumeRequest, 'work_experiences'> & {
   id: number;
   user: {
     id: number;
   };
-  work_experience: {
+  work_experiences: {
     id: number;
     resume_id: number;
     company: string;
     period: string;
     position: string;
   }[];
+  created_at: string;
+  updated_at: string;
+};
+
+export type ResumeListResponse = {
+  total: number;
+  offset: number;
+  limit: number;
+  data: ResumeResponse[];
 };
