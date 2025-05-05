@@ -1,7 +1,5 @@
-export default function AdminJobsPage() {
-  return (
-    <div>
-      <h1>공고 관리 페이지입니다.</h1>
-    </div>
-  );
+import JobPostingAdminClient from '@/components/admin/jobs/JobPostingAdminClient';
+
+export default async function AdminJobPostingPage() {
+  return <JobPostingAdminClient />;
 }

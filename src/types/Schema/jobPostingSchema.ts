@@ -37,6 +37,14 @@ export type JobPostingResponse = JobPostingRequest & {
   created_at: string;
   updated_at: string;
 };
+// reject_postings 필드까지 포함한 관리자 테이블/상세용 타입
+export type JobPostingWithRejects = JobPostingResponse & {
+  reject_postings: {
+    id: number;
+    user: { id: number };
+    content: string;
+  }[];
+};
 
 // 최대 글자수 넣어주기
 
