@@ -66,7 +66,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             {/* 임시 주소로 보냄 (기업회원 업그레이드 페이지 미구현) */}
             {!user?.user_type.includes('business') && (
               <Button
-                onClick={() => router.push('/dashboard/business/upgrade')}
+                onClick={() => router.push('/user/register-company')}
                 className='bg-main-light hover:bg-main-dark cursor-pointer text-white'
               >
                 기업 회원 업그레이드
