@@ -9,9 +9,9 @@ export interface SeekerFormData {
   interests?: string[];
   purposes?: string[];
   sources?: string[];
-  user_type: ('normal' | 'business' | 'admin')[];
+  user_type: 'normal' | 'business' | 'admin';
   status: 'seeking' | 'not_seeking' | 'employed';
-  signinMethod?: ('email' | 'naver' | 'kakao')[];
+  signinMethod?: 'email' | 'naver' | 'kakao';
 }
 export interface CompanyFormData {
   business_number: string;
@@ -46,8 +46,8 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  user_type: ('normal' | 'business' | 'admin')[];
-  signinMethod: ('email' | 'naver' | 'kakao')[];
+  user_type: 'normal' | 'business' | 'admin';
+  signinMethod: 'email' | 'naver' | 'kakao';
 }
 
 export interface EmailCheckResponse {
@@ -99,8 +99,6 @@ export interface UserProfileResponse {
   seeker: SeekerProfile | null;
   corp: CorpProfile | null;
 }
-
-
 
 // 관리자용 조회 타입 (BaseUser)
 export interface BaseUser {

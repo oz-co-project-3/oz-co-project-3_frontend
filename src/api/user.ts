@@ -105,7 +105,7 @@ export async function fetchUserProfile(): Promise<UserProfileResponse> {
 
 //회원 탈퇴
 export const deleteUser = async (data: DeleteUserRequest) => {
-  return await fetchOnClient('/api/user/profile/', {
+  return await fetchOnClient('/api/user/withdrawal-user/', {
     method: 'DELETE',
     body: JSON.stringify(data),
   });
@@ -113,7 +113,7 @@ export const deleteUser = async (data: DeleteUserRequest) => {
 
 //네이버 로그인 URL 요청
 export async function getNaverLoginUrl(): Promise<string> {
-  const res = await fetch('http://localhost:8000/api/user/social-login/naver/', {
+  const res = await fetch('http://localhost:3000/api/user/social-login/naver/', {
     method: 'GET',
     credentials: 'include',
   });

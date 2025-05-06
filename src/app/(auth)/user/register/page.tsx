@@ -4,23 +4,21 @@ import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import { SeekerFormData } from '@/types/user';
 import { registerSeeker } from '@/api/user';
 import { useRouter } from 'next/navigation';
-import { convertArrayFieldsToString} from '@/lib/stringArrayConverter';
+import { convertArrayFieldsToString, arrayToString } from '@/lib/stringArrayConverter';
 
 export default function SeekerRegisterPage() {
   const router = useRouter();
 
-  const handleSubmit = async (
-    data: { [key: string]: unknown },
-  ): Promise<void> => {
+  const handleSubmit = async (data: { [key: string]: unknown }): Promise<void> => {
     try {
       const cleaned = convertArrayFieldsToString(data as unknown as SeekerFormData);
-  
+
       const formattedData: SeekerFormData = {
         ...cleaned,
-        user_type: ['normal'],
-        signinMethod: ['email'],
+        user_type: arrayToString(data.user_type as string[]) as 'normal' | 'business' | 'admin',
+        signinMethod: arrayToString(data.signinMethod as string[]) as 'email' | 'naver' | 'kakao',
       };
-  
+
       await registerSeeker(formattedData);
       router.push('/user/email-verification');
     } catch (err) {

@@ -43,7 +43,7 @@ export default function NaverCallbackPage() {
           user_type,
           name: name,
           signinMethod: ['naver'],
-        });
+        }, data.access_token);
 
         router.replace('/');
       } catch (err) {

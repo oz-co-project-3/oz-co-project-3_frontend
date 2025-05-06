@@ -1,6 +1,6 @@
 'use client';
 
-import { loginUser, getNaverLoginUrl } from '@/api/user';
+import { loginUser } from '@/api/user';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { Input } from '@/components/ui/input';
@@ -42,7 +42,7 @@ export default function LoginPage() {
         signinMethod: ['email' as const],
       };
 
-      login(user);
+      login(user, res.access_token);
 
       console.log('로그인 완료:', user);
       router.push('/');
@@ -54,8 +54,16 @@ export default function LoginPage() {
 
   const handleNaverLogin = async () => {
     try {
-      const redirect_url = await getNaverLoginUrl();
-      window.location.href = redirect_url;
+      const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
+      console.log('client_id:', NAVER_CLIENT_ID);
+      const REDIRECT_URI = 'http://localhost:3000/social-login/naver';
+      const STATE = 'naver_login_test_2025';
+
+      const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+        REDIRECT_URI,
+      )}&state=${STATE}`;
+
+      window.location.href = url;
     } catch (err) {
       console.error('네이버 로그인 요청 실패:', err);
       alert('네이버 로그인 요청에 실패했습니다.');

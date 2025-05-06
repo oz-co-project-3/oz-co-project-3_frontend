@@ -1,48 +1,30 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-// import { useAuthStore } from '@/store/useAuthStore';
+import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
+import { stringToArray } from '@/lib/stringArrayConverter';
 
-const seekerNavItems = [
-  { name: '프로필', href: '/dashboard/job-seeker/profile' },
-  { name: '이력서', href: '/dashboard/job-seeker/resume' },
-  { name: '지원한 채용공고', href: '/dashboard/job-seeker/job-postings/applied' },
-  { name: '찜한 채용공고', href: '/dashboard/job-seeker/job-postings/favorite' },
-] as const;
-
-const businessNavItems = [
-  { name: '기업 프로필', href: '/dashboard/business/profile' },
-  { name: '현재 채용공고', href: '/dashboard/business/job-postings/current' },
-  { name: '이전 채용공고', href: '/dashboard/business/job-postings/expired' },
-  { name: '채용공고 등록', href: '/dashboard/business/job-postings/post' },
+const navItems = [
+  { name: '프로필', href: '/dashboard/profile' },
+  { name: '이력서', href: '/dashboard/resume' },
+  { name: '지원한 채용공고', href: '/dashboard/job-postings/applied' },
+  { name: '찜한 채용공고', href: '/dashboard/job-postings/favorite' },
 ] as const;
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  // const { user } = useAuthStore();
-  const router = useRouter();
-
-  // 일단 테스트용 목업 유저
-  const user = {
-    email: 'test_b@test.com',
-    name: 'nagi',
-    user_type: 'normal,business',
-    signinMethod: 'email',
-    id: 2,
-  };
-
-  console.log(user);
-  console.log(user?.user_type.includes('business'));
+  const { user } = useAuthStore();
+  const userTypeList = stringToArray(user?.user_type);
+  const showCompanyAuthButton = userTypeList.length === 1 && userTypeList.includes('normal');
 
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto'>
       <div className='flex w-full flex-1'>
         <div className='mx-auto flex w-full max-w-[1200px] gap-4 py-6'>
-          <nav className='flex flex-col justify-between rounded bg-white px-4 py-8 sm:w-40 md:w-60'>
-            <ul className='flex flex-col gap-2'>
-              {seekerNavItems.map((item) => (
+          <nav className='rounded bg-white px-4 py-8 sm:w-40 md:w-60'>
+            <ul className='flex flex-col gap-4'>
+              {navItems.map((item) => (
                 <li key={item.name} className='w-full'>
                   <Link
                     href={item.href}
@@ -52,38 +34,18 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   </Link>
                 </li>
               ))}
-
-              {user?.user_type.includes('business') && (
-                <>
-                  {/* hr 대신 쓸거 없나 */}
-                  <hr className='my-4' />
-                  {businessNavItems.map((item) => (
-                    <li key={item.name} className='w-full'>
-                      <Link
-                        href={item.href}
-                        className={`${pathname === item.href ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </>
-              )}
             </ul>
-
-            {/* 기업 회원 업그레이드 버튼 */}
-            {/* 임시 주소로 보냄 (기업회원 업그레이드 페이지 미구현) */}
-            {/* 일단 보이게 해놨음, 밑에줄 앞에 ! 붙이기 */}
-            {user?.user_type.includes('business') && (
-              <Button
-                onClick={() => router.push('/dashboard/business/upgrade')}
-                className='bg-main-light hover:bg-main-dark cursor-pointer text-white'
-              >
-                기업 회원 업그레이드
-              </Button>
+            {/* 기업회원 인증 버튼 추가 - 위치 거슬리지만 나중에 수정하겠슴당(수정)*/}
+            {showCompanyAuthButton && (
+              <div className='pt-12'>
+                <Link href='/user/register-company'>
+                  <button className='bg-main-light hover:bg-main-dark w-full rounded-md py-3 text-white'>
+                    기업회원 인증
+                  </button>
+                </Link>
+              </div>
             )}
           </nav>
-
           <div className='flex flex-1 flex-col gap-4'>{children}</div>
         </div>
       </div>
