@@ -57,7 +57,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
     setLoading(true);
 
     try {
-      const url = editTarget ? `/api/admin/chatbot/${editTarget.id}` : '/api/admin/chatbot';
+      const url = editTarget ? `/api/admin/chatbot/${editTarget.id}/` : '/api/admin/chatbot/';
       const method = editTarget ? 'PATCH' : 'POST';
 
       await fetchOnClient(url, {
@@ -73,8 +73,8 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
       });
 
       await onSuccess(); // SWR 새로고침 (목록을 최신화시킴)
-      resetForm(); // 폼 초기화
-      onClose(); // 모달 닫기
+      resetForm();
+      onClose();
     } catch (err) {
       console.error(err);
     } finally {
