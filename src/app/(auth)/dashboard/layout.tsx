@@ -1,9 +1,9 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/store/useAuthStore';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-// import { useAuthStore } from '@/store/useAuthStore';
 
 const seekerNavItems = [
   { name: '프로필', href: '/dashboard/job-seeker/profile' },
@@ -21,20 +21,11 @@ const businessNavItems = [
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  // const { user } = useAuthStore();
+  const { user } = useAuthStore();
   const router = useRouter();
 
-  // 일단 테스트용 목업 유저
-  const user = {
-    email: 'test_b@test.com',
-    name: 'nagi',
-    user_type: 'normal,business',
-    signinMethod: 'email',
-    id: 2,
-  };
-
-  console.log(user);
-  console.log(user?.user_type.includes('business'));
+  // console.log(user);
+  // console.log('business: ', user?.user_type.includes('business'));
 
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto'>
@@ -73,8 +64,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* 기업 회원 업그레이드 버튼 */}
             {/* 임시 주소로 보냄 (기업회원 업그레이드 페이지 미구현) */}
-            {/* 일단 보이게 해놨음, 밑에줄 앞에 ! 붙이기 */}
-            {user?.user_type.includes('business') && (
+            {!user?.user_type.includes('business') && (
               <Button
                 onClick={() => router.push('/dashboard/business/upgrade')}
                 className='bg-main-light hover:bg-main-dark cursor-pointer text-white'

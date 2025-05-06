@@ -6,7 +6,7 @@ export default function Error({ error }: { error: Error }) {
   return (
     <div>
       <div>오류가 발생했습니다!</div>
-      <pre>{error.message}</pre>
+      <pre className='whitespace-pre-wrap'>{error.message}</pre>
     </div>
   );
 }

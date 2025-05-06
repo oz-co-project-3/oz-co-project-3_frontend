@@ -19,6 +19,7 @@ import { ko } from 'date-fns/locale';
 import { fetchOnClient } from '@/api/clientFetcher';
 import useSWRMutation from 'swr/mutation';
 import uploadImage from '@/api/imageUploader';
+import AddressFormField from './AddressFormField';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
 // 클라이언트 전용으로 렌더링하고 싶을때
@@ -130,7 +131,7 @@ export default function JobPostingForm() {
             <FormItem className='relative'>
               <FormLabel className='text-base font-semibold'>회사명</FormLabel>
               <FormControl>
-                <Input placeholder='주소를 입력하세요.' {...field} />
+                <Input placeholder='회사명을 입력하세요.' {...field} />
               </FormControl>
               <FormMessage className='absolute top-0 right-0 text-sm' />
             </FormItem>
@@ -350,8 +351,9 @@ export default function JobPostingForm() {
           </div>
         </div>
 
+        {/* TODO: 다음 주소 API 붙이기 */}
         {/* 근무지 정보 */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name='location'
           render={({ field }) => (
@@ -363,7 +365,8 @@ export default function JobPostingForm() {
               <FormMessage className='absolute top-0 right-0 text-sm' />
             </FormItem>
           )}
-        />
+        /> */}
+        <AddressFormField form={form} />
 
         {/* 회사 약력 */}
         <FormField
