@@ -1,13 +1,18 @@
-'use client';
-
-import { useParams } from 'next/navigation';
 import AdminLayout from '@/components/layout/AdminLayout';
 import DeleteResumeButton from '@/components/resume/DeleteResumeButton';
 import Resume from '@/components/resume/Resume';
+import NotFound from '@/app/not-found';
 
-export default function AdminResumeDetailPage() {
-  const params = useParams();
+interface Props {
+  params: { id?: string };
+}
+
+export default async function AdminResumeDetailPage({ params }: Props) {
   const resumeId = params.id as string;
+
+  if (!resumeId) {
+    NotFound();
+  }
 
   return (
     <AdminLayout>
@@ -24,4 +29,3 @@ export default function AdminResumeDetailPage() {
     </AdminLayout>
   );
 }
-//나중에 API 연동, 그때 async function으로 다시 서버 컴포넌트화 가능
