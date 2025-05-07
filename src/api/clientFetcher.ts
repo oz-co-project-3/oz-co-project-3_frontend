@@ -24,6 +24,16 @@ export async function fetchOnClient<T>(
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
+    if (res.status === 401 && url === '/api/user/profile/') {
+      return {
+        id: 0,
+        email: '',
+        name: '비회원',
+        user_type: 'guest',
+        signinMethod: 'none',
+      } as T;
+    }
+
     console.error('fetch error body:', data);
     throw new Error(data?.message || 'API 요청 실패');
   }
