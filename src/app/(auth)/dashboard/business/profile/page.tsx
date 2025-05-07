@@ -1,8 +1,14 @@
 import CompanyProfile from '@/components/profile/CompanyProfile';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { PublicJobsResponse } from '@/types/publicJob';
 
 export default async function CompanyProfilePage() {
+  // 배포 환경 테스트용
+  const response = await fetch('http://localhost:3000/api/public-jobs?offset=20&limit=20');
+  const publicJobs: PublicJobsResponse = await response.json();
+  console.log('publicJobs: ', publicJobs);
+
   return (
     <>
       <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>

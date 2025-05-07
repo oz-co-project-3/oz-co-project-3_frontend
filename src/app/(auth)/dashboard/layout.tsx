@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <main className='flex h-full w-full flex-col overflow-y-auto'>
       <div className='flex w-full flex-1'>
         <div className='mx-auto flex w-full max-w-[1200px] gap-4 py-6'>
-          <nav className='rounded bg-white px-4 py-8 sm:w-40 md:w-60'>
+          <nav className='flex flex-col justify-between rounded bg-white px-4 py-8 sm:w-40 md:w-60'>
             <ul className='flex flex-col gap-4'>
               {seekerNavItems.map((item) => (
                 <li key={item.name} className='w-full'>
