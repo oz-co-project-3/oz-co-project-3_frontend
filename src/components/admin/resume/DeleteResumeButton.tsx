@@ -16,7 +16,7 @@ export default function DeleteResumeButton({ id }: Props) {
     try {
       setIsDeleting(true);
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/admin/resume/${id}`,
+        `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/admin/resume/${id}/`,
         { method: 'DELETE' },
       );
 
