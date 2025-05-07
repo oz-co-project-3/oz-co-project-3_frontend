@@ -19,15 +19,29 @@ export default function CompanyAuthPage() {
     try {
       const res = await upgradeToBusiness(formData);
 
+      // 👇 기존 user_type과 응답값을 합쳐서 중복 없이 문자열로 구성
+      const prevUserType = user.user_type ?? '';
+      const serverUserType = res?.user_type ?? '';
+
+      const combinedTypes = new Set([
+        ...prevUserType.split(','),
+        ...serverUserType.split(','),
+        'business', // 무조건 추가
+      ]);
+
+      const mergedUserType = Array.from(combinedTypes)
+        .filter(Boolean)
+        .join(',') as 'normal' | 'business' | 'admin';
+
       const updatedUser: User = {
-        id: res.user_id,
-        email: res.email,
-        name: res.name || '',
-        user_type: res.user_type[0] as 'normal' | 'business' | 'admin',
-        signinMethod: res.signinMethod[0] as 'email' | 'naver' | 'kakao',
+        id: res?.user_id ?? 0,
+        email: res?.email ?? '',
+        name: res?.name ?? '',
+        user_type: mergedUserType,
+        signinMethod: res?.signinMethod as 'email' | 'naver' | 'kakao',
       };
 
-      login(updatedUser, res.access_token);
+      login(updatedUser, res?.access_token ?? '');
 
       alert('기업회원 인증 완료!');
       router.push('/');
@@ -37,5 +51,5 @@ export default function CompanyAuthPage() {
     }
   };
 
-  return <CompanyProfileForm type='register' onSubmit={handleSubmit} />;
+  return <CompanyProfileForm type="register" onSubmit={handleSubmit} />;
 }
