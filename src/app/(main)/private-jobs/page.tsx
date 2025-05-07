@@ -12,6 +12,7 @@ export default function PrivateJobsPage() {
   const searchParams = useSearchParams();
   const searchKeyword = searchParams.get('search_keyword'); // .get() 사용
   const { data, loading } = useFilterJobs('일반', searchKeyword || undefined);
+  // console.log('데이터 확인', data);
 
   return (
     <div className='flex h-full justify-center pt-30'>

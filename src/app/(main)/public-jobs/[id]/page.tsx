@@ -1,5 +1,5 @@
 //공공 상세페이지
-export default async function JobDetailPage({ params }: { params: Promise<{ id: number }> }) {
+export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
   // 폴더명이 [id]라면 params.id로 접근
   const { id } = await params;
 

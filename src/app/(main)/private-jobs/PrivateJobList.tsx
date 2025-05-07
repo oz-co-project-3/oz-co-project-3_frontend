@@ -2,7 +2,7 @@
 
 import JobPostingItem from '@/components/common/jobPostingItem';
 import { useSearchParams, usePathname } from 'next/navigation';
-import { JobPostingListResponse } from '@/types/jobPosting';
+import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 import CustomPagination from '@/components/common/pagination/CustomPagination';
 
 export default function PrivateJobList({
@@ -22,6 +22,8 @@ export default function PrivateJobList({
     params.set('page', page.toString()); //복사한거에다 페이지 파라미터 새로 지정할거야
     return `${pathname}?${params.toString()}`; //현재 경로에 새로만든 쿼리 파라미터 붙여서 리턴
   };
+  console.log(posts);
+
   return (
     <div>
       <h2 className='text-2xl font-bold'>채용정보</h2>
@@ -35,7 +37,7 @@ export default function PrivateJobList({
         </header>
         <div className='gap-4'>
           {posts.map((post) => (
-            <JobPostingItem key={post.id} {...post} detailPagePath='/private-jobs' />
+            <JobPostingItem key={post.id} post={post} detailPagePath='/private-jobs' />
           ))}
         </div>
       </section>

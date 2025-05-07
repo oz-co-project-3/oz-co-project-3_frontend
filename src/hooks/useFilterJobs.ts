@@ -1,7 +1,7 @@
 // src/hooks/usePublicJobs.ts
 import { useEffect, useState } from 'react';
 import { useFilterStore } from '@/store/filterStore';
-import { JobPostingListResponse } from '@/types/jobPosting';
+import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 import { useSearchParams } from 'next/navigation';
 
 export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword?: string) {
@@ -40,7 +40,11 @@ export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword
     setLoading(true);
     fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/postings/?${makeQuery()}`)
       .then((res) => res.json())
-      .then((data) => setData(data))
+      // .then((res) => console.log(res))
+      .then((data) => {
+        console.log(data);
+        setData(data);
+      })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

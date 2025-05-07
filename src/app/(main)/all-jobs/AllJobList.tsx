@@ -2,7 +2,7 @@
 
 import JobPostingItem from '@/components/common/jobPostingItem';
 import { useSearchParams, usePathname } from 'next/navigation';
-import { JobPostingListResponse } from '@/types/jobPosting';
+import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 import CustomPagination from '@/components/common/pagination/CustomPagination';
 
 export default function AllJobList({
@@ -35,7 +35,7 @@ export default function AllJobList({
         </header>
         <div className='gap-4'>
           {posts.map((post) => (
-            <JobPostingItem key={post.id} {...post} detailPagePath='/all-jobs' />
+            <JobPostingItem key={post.id} post={post} detailPagePath='/all-jobs' />
           ))}
         </div>
       </section>
