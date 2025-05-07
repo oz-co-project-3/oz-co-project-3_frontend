@@ -1,27 +1,31 @@
-'use client';
-
-import { useParams } from 'next/navigation';
 import AdminLayout from '@/components/layout/AdminLayout';
-import DeleteResumeButton from '@/components/resume/DeleteResumeButton';
-import Resume from '@/components/resume/Resume';
+import ResumeAdmin from '@/components/admin/resume/ResumeAdmin';
+import DeleteResumeButton from '@/components/admin/resume/DeleteResumeButton';
 
-export default function AdminResumeDetailPage() {
-  const params = useParams();
-  const resumeId = params.id as string;
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  try {
+    const { id } = await params;
 
-  return (
-    <AdminLayout>
-      <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
-        <div className='flex items-center justify-between border-b pb-4'>
-          <h2 className='text-2xl font-bold'>이력서 상세</h2>
-          <div className='flex justify-end'>
-            <DeleteResumeButton id={resumeId} />
-          </div>
+    if (!id) {
+      throw new Error('이력서가 없습니다.');
+    }
+
+    return (
+      <AdminLayout>
+        <div className='mb-4 flex justify-end'>
+          <DeleteResumeButton id={id} />
         </div>
-
-        <Resume id={resumeId} />
-      </section>
-    </AdminLayout>
-  );
+        <ResumeAdmin id={id} />
+      </AdminLayout>
+    );
+  } catch (error) {
+    return (
+      <AdminLayout>
+        <div className='p-10 text-center text-red-600'>
+          <h2 className='mb-2 text-xl font-bold'>이력서를 불러오는 데 실패했습니다.</h2>
+          <p className='text-sm'>{(error as Error).message}</p>
+        </div>
+      </AdminLayout>
+    );
+  }
 }
-//나중에 API 연동, 그때 async function으로 다시 서버 컴포넌트화 가능

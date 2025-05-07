@@ -10,22 +10,22 @@ export default function CompanyEditPage() {
   };
 
 
-  const defaultValues: Partial<CompanyProfileFormSchema> = {
-    email: '471EH@gmail.com',
-    company_name: '기태쓰낙원상가',
-    business_start_date: '2020-01-01',
-    business_number: '123-45-67890',
-    company_description: 'Gold teeth sittin on the dash. she a rockstar',
-    manager_name: '마요누아',
-    manager_phone_number: '010-1111-1111',
-    manager_email: 'mayoandnoir@gmail.com',
-    gender: 'male',
-  };
+  // const defaultValues: Partial<CompanyProfileFormSchema> = {
+  //   email: '471EH@gmail.com',
+  //   company_name: '기태쓰낙원상가',
+  //   business_start_date: '2020-01-01',
+  //   business_number: '123-45-67890',
+  //   company_description: 'Gold teeth sittin on the dash. she a rockstar',
+  //   manager_name: '마요누아',
+  //   manager_phone_number: '010-1111-1111',
+  //   manager_email: 'mayoandnoir@gmail.com',
+  //   gender: 'male',
+  // };
 
   return (
     <CompanyProfileForm
       type="edit"
-      defaultValues={defaultValues}
+      // defaultValues={defaultValues}
       onSubmit={handleEditSubmit}
     />
   );

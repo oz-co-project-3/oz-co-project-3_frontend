@@ -11,6 +11,16 @@ export function cn(...inputs: ClassValue[]) {
  * 제로 너비 공백: \u200B, \u200C, \u200D 등
  * 바이트 순서 표시(BOM): \uFEFF
  */
-export function cleanString(str: string) {
+export const cleanString = (str: string): string => {
   return str.replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200D\uFEFF]/g, '');
-}
+};
+
+/**
+ * 위치 정보를 줄여서 표시
+ * @param location 주소
+ * @returns 대략적인 위치 정보
+ */
+export const getBriefLocation = (location: string): string => {
+  const [province, city] = location.split(' ');
+  return `${province} ${city ?? ''}`;
+};

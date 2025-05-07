@@ -19,8 +19,8 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 
-export default async function Resume({ id }: { id: string }) {
-  const resume = await fetchOnServer<ResumeResponse>(`/api/resume/${id}/`);
+export default async function ResumeAdmin({ id }: { id: string }) {
+  const resume = await fetchOnServer<ResumeResponse>(`/api/admin/resume/${id}/`);
   // const user = await fetchOnServer<UserResponse>(`/api/user/profile/${resume.user.id}/`);
   // 유저 정보 받아서, 생년월일 넣어주기
 
@@ -37,8 +37,14 @@ export default async function Resume({ id }: { id: string }) {
         </div>
 
         <div className='flex flex-col gap-5'>
-          <span className='text-zinc-800'>작성일: {format(resume.created_at, 'yyyy-MM-dd')}</span>
-          <span className='text-zinc-800'>수정일: {format(resume.updated_at, 'yyyy-MM-dd')}</span>
+          <span className='text-zinc-800'>
+            작성일:{' '}
+            {resume.created_at ? format(new Date(resume.created_at), 'yyyy-MM-dd') : '날짜 없음'}
+          </span>
+          <span className='text-zinc-800'>
+            수정일:{' '}
+            {resume.updated_at ? format(new Date(resume.updated_at), 'yyyy-MM-dd') : '날짜 없음'}
+          </span>
         </div>
       </div>
 

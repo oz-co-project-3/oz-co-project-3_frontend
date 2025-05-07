@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { fetchOnClient } from '@/api/clientFetcher';
 
 interface Props {
   id: string;
@@ -12,21 +13,17 @@ export default function DeleteResumeButton({ id }: Props) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (!window.confirm('정말 삭제하시겠습니까?')) return;
+    const confirmed = window.confirm('정말 삭제하시겠습니까?');
+    if (!confirmed) return;
+
     try {
       setIsDeleting(true);
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/admin/resume/${id}`,
-        { method: 'DELETE' },
-      );
-
-      if (!res.ok) throw new Error('삭제 실패');
-
+      await fetchOnClient(`/api/admin/resume/${id}/`, { method: 'DELETE' });
       alert('이력서가 삭제되었습니다.');
       router.push('/admin/user');
-    } catch (err) {
-      console.error(err);
-      alert('삭제 실패');
+    } catch (error) {
+      console.error('삭제 실패:', error);
+      alert('삭제 중 오류가 발생했습니다.');
     } finally {
       setIsDeleting(false);
     }

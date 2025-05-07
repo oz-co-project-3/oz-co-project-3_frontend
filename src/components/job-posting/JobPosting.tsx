@@ -22,8 +22,6 @@ export default async function JobPosting({ id }: { id: string }) {
   const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
   console.log(jobPosting);
 
-  // work_time, education, status, view_count, report
-
   return (
     <article className='flex flex-col gap-4'>
       <div className='flex items-center justify-between border-b pb-4'>
