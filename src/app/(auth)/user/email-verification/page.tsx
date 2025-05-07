@@ -15,8 +15,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { verifyEmailCode } from '@/api/user';
 import { useRouter } from 'next/navigation';
 import { resendEmailCode } from '@/api/resendEmailCode';
-import { useAuthStore } from '@/store/useAuthStore';
-
 interface VerificationFormValues {
   verification_code: string;
 }
@@ -33,7 +31,6 @@ export default function EmailVerificationPage() {
   const router = useRouter();
   const [resendCount, setResendCount] = useState(0);
 
-  const login = useAuthStore((state) => state.login);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -52,34 +49,25 @@ export default function EmailVerificationPage() {
     async (data: VerificationFormValues) => {
       try {
         const savedFormData = JSON.parse(localStorage.getItem('registerFormData') || '{}');
-
+  
         if (!savedFormData.email) {
           setError('잘못된 접근입니다. 다시 회원가입을 진행해주세요.');
           return;
         }
-
+  
         await verifyEmailCode({
           email: savedFormData.email,
           verification_code: data.verification_code.trim(),
         });
-
-        login({
-          id: savedFormData.user_id,
-          email: savedFormData.email,
-          name: savedFormData.name,
-          user_type: savedFormData.user_type,
-          signinMethod: 'email',
-        });
-
-        alert('회원가입이 완료되었습니다!');
-        router.push('/');
+  
+        alert('이메일 인증이 완료되었습니다. 로그인 후 이용해 주세요.');
+        router.push('/user/login'); //로그인 페이지로 이동
       } catch (err) {
-        console.error('에러:', err);
-
+        console.error('인증 실패:', err);
         setError('인증 실패 또는 회원가입 실패했습니다.');
       }
     },
-    [router, login],
+    [router],
   );
 
   const handleResendCode = useCallback(async () => {

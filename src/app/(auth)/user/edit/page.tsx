@@ -1,40 +1,57 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import { SeekerFormData } from '@/types/user';
-import { stringToArray } from '@/lib/stringArrayConverter';
+import { fetchUserProfile } from '@/api/user';
+import { convertArrayFieldsToString } from '@/lib/stringArrayConverter';
 
 export default function SeekerEditPage() {
-  const [userData] = useState({
-    name: '나기태',
-    email: '471EH@gmail.com',
-    birth: '1960-01-01',
-    phone_number: '01012345678',
-    gender: 'male' as 'male' | 'female' | 'none',
-    interests: '사무,기술직',
-    purposes: '교육 및 재취업 준비,기타',
-    sources: '네이버 검색',
-  });
+  const [initialData, setInitialData] = useState<Partial<SeekerFormData> | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const safeDefaults: Partial<Omit<SeekerFormData, 'interests' | 'purposes' | 'sources'>> & {
-    interests?: string[];
-    purposes?: string[];
-    sources?: string[];
-  } = {
-    ...userData,
-    interests: stringToArray(userData.interests),
-    purposes: stringToArray(userData.purposes),
-    sources: stringToArray(userData.sources),
+  useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const { base, seeker } = await fetchUserProfile();
+
+        if (!seeker) {
+          throw new Error('구직자 정보가 없습니다.');
+        }
+
+        const parsed = {
+          ...seeker,
+          email: base.email,
+          gender: base.gender,
+          interests: seeker.interests,
+          purposes: seeker.purposes,
+          sources: seeker.sources,
+        };
+
+        setInitialData(parsed);
+      } catch (err) {
+        console.error('프로필 불러오기 실패:', err);
+        alert('회원 정보를 불러오지 못했습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProfile();
+  }, []);
+
+  const handleSubmit = (data: { [key: string]: unknown }) => {
+    const cleaned = convertArrayFieldsToString(data as unknown as SeekerFormData);
+    console.log('📝 회원정보 수정', cleaned);
+    // TODO: 서버로 수정 요청 보내기
   };
 
-  const handleSubmit = (formData: SeekerFormData) => {
-    console.log('📝 회원정보 수정', formData);
-  };
+  if (loading) return <p className='py-10 text-center'>불러오는 중...</p>;
+  if (!initialData) return <p className='py-10 text-center text-red-500'>불러오기 실패</p>;
 
   return (
     <main className='px-4 py-10'>
-      <SeekerProfileForm type='edit' defaultValues={safeDefaults} onSubmit={handleSubmit} />
+      <SeekerProfileForm type='edit' defaultValues={initialData} onSubmit={handleSubmit} />
     </main>
   );
 }
