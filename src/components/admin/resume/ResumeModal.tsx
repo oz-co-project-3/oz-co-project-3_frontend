@@ -2,7 +2,7 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useResumes } from '@/hooks/useResumes';
 
@@ -14,18 +14,12 @@ interface ResumeModalProps {
 
 export function ResumeModal({ userId, open, onClose }: ResumeModalProps) {
   const router = useRouter();
-  const { data: resumes, refetch } = useResumes(userId);
-  const didRefetch = useRef(false); // refetch 무한 호출 방지
+  const { data: resumes = [], refetch } = useResumes(userId);
 
+  // 매번 열릴 때마다 refetch (삭제 등 반영 하기 위해서)
   useEffect(() => {
-    if (open && !didRefetch.current) {
+    if (open) {
       refetch();
-      didRefetch.current = true;
-    }
-
-    // 모달 닫힐 때 다시 refetch 허용
-    if (!open) {
-      didRefetch.current = false;
     }
   }, [open, refetch]);
 
