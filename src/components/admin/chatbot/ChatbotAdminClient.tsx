@@ -7,23 +7,19 @@ import type { ChatbotPrompt } from '@/types/chatbot';
 import ChatbotModal from './ChatbotModal';
 import DataTable from '@/components/admin/table/DataTable';
 import { getColumns } from './columns';
-import { useAuthStore } from '@/store/useAuthStore';
-import { useRouter } from 'next/navigation';
 import { fetchOnClient } from '@/api/clientFetcher';
 
 export default function ChatbotAdminClient() {
   const [openModal, setOpenModal] = useState(false);
   const [editTarget, setEditTarget] = useState<ChatbotPrompt | null>(null);
   const [selectedStep, setSelectedStep] = useState<number | null>(null);
-  const logout = useAuthStore((state) => state.logout);
-  const router = useRouter();
 
   const {
-    data: prompts,
+    data: prompts = [],
     error,
     isLoading,
     mutate,
-  } = useSWR('/api/admin/chatbot', () => fetchOnClient<ChatbotPrompt[]>('/api/admin/chatbot'));
+  } = useSWR<ChatbotPrompt[]>('/api/admin/chatbot/', fetchOnClient);
 
   // STEP 오름차순 정렬 및 필터링
   const filteredPrompts = useMemo(() => {
@@ -51,16 +47,12 @@ export default function ChatbotAdminClient() {
     if (!confirmed) return;
 
     try {
-      await fetchOnClient(`/api/admin/chatbot/${id}`, {
+      await fetchOnClient(`/api/admin/chatbot/${id}/`, {
         method: 'DELETE',
       });
       mutate(); // 목록 갱신
     } catch (err) {
       console.error('삭제 오류:', err);
-      if (err instanceof Error && err.message.includes('세션')) {
-        logout();
-        router.push('/user/login');
-      }
     }
   };
 

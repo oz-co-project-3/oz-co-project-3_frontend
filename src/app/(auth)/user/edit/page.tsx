@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import { SeekerFormData } from '@/types/user';
 import { fetchUserProfile } from '@/api/user';
-import { stringToArray, convertArrayFieldsToString } from '@/lib/stringArrayConverter';
+import { convertArrayFieldsToString } from '@/lib/stringArrayConverter';
 
 export default function SeekerEditPage() {
   const [initialData, setInitialData] = useState<Partial<SeekerFormData> | null>(null);
@@ -14,20 +14,20 @@ export default function SeekerEditPage() {
     const loadProfile = async () => {
       try {
         const { base, seeker } = await fetchUserProfile();
-  
+
         if (!seeker) {
           throw new Error('구직자 정보가 없습니다.');
         }
-  
+
         const parsed = {
           ...seeker,
           email: base.email,
           gender: base.gender,
-          interests: stringToArray(seeker.interests),
-          purposes: stringToArray(seeker.purposes),
-          sources: stringToArray(seeker.sources),
+          interests: seeker.interests,
+          purposes: seeker.purposes,
+          sources: seeker.sources,
         };
-  
+
         setInitialData(parsed);
       } catch (err) {
         console.error('프로필 불러오기 실패:', err);
@@ -36,7 +36,7 @@ export default function SeekerEditPage() {
         setLoading(false);
       }
     };
-  
+
     loadProfile();
   }, []);
 

@@ -11,16 +11,21 @@ import { EmailCheckResponse } from '@/types/user';
 
 // 이메일 인증 코드 검증
 export const verifyEmailCode = async (data: { email: string; verification_code: string }) => {
-  try {
-    const res = await fetchOnClient('/api/user/verify-email', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
-    return res;
-  } catch (error) {
-    console.error('이메일 인증 오류', error);
-    throw error;
-  }
+  return await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/verify-email`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  }).then(async (res) => {
+    const json = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      console.error('verifyEmailCode error body:', json);
+      throw new Error(json?.message?.error || '인증 실패');
+    }
+    return json;
+  });
 };
 
 // 구직자 회원가입

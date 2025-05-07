@@ -27,7 +27,6 @@ import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { SeekerFormData } from '@/types/user';
 
-
 interface SeekerProfileFormProps {
   type: 'register' | 'edit';
   defaultValues?: Partial<SeekerFormData>;
@@ -49,9 +48,9 @@ export default function SeekerProfileForm({
       password_check: '',
       phone_number: '',
       gender: 'none',
-      interests: [] ,
-      purposes: [],
-      sources: [],
+      interests: [] as string[],
+      purposes: [] as string[],
+      sources: [] as string[],
       status: 'seeking',
       ...defaultValues,
     },

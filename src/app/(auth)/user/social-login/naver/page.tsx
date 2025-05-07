@@ -37,13 +37,16 @@ export default function NaverCallbackPage() {
         const data = await res.json();
         const { user_id, email, user_type, name } = data;
 
-        login({
-          id: user_id,
-          email,
-          user_type,
-          name: name,
-          signinMethod: ['naver'],
-        }, data.access_token);
+        login(
+          {
+            id: user_id,
+            email,
+            user_type,
+            name: name,
+            signinMethod: 'naver',
+          },
+          data.access_token,
+        );
 
         router.replace('/');
       } catch (err) {

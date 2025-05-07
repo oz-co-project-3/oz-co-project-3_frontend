@@ -5,7 +5,6 @@ import CompanyProfileForm from '@/components/common/userForms/companyProfileForm
 import { CompanyFormData, User } from '@/types/user';
 import { upgradeToBusiness } from '@/api/user';
 import { useAuthStore } from '@/store/useAuthStore';
-import { stringToArray } from '@/lib/stringArrayConverter';
 
 export default function CompanyAuthPage() {
   const router = useRouter();
@@ -24,11 +23,11 @@ export default function CompanyAuthPage() {
         id: res.user_id,
         email: res.email,
         name: res.name || '',
-        user_type: stringToArray(res.user_type) as User['user_type'],
-        signinMethod: stringToArray(res.signinMethod) as User['signinMethod'],
+        user_type: res.user_type[0] as 'normal' | 'business' | 'admin',
+        signinMethod: res.signinMethod[0] as 'email' | 'naver' | 'kakao',
       };
 
-      login(updatedUser);
+      login(updatedUser, res.access_token);
 
       alert('기업회원 인증 완료!');
       router.push('/');

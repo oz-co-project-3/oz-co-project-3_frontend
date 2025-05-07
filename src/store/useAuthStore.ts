@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthState>((set) => ({
       const user = {
         id: data.base.id,
         email: data.base.email,
-        name: data.seeker.name ?? '',
+        name: data.seeker.name,
         user_type: data.base.user_type,
         signinMethod: data.base.signinMethod,
       };

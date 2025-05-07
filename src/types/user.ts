@@ -73,9 +73,9 @@ export interface SeekerProfile {
   name: string;
   phone_number: string;
   birth: string;
-  interests: string;
-  purposes: string;
-  sources: string;
+  interests: string[];
+  purposes: string[];
+  sources: string[];
   status: 'seeking' | 'not_seeking' | 'employed';
   applied_posting: number[];
   applied_posting_count: number;

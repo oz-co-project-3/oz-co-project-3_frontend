@@ -30,7 +30,7 @@ export const getColumns = (
                 variant='outline'
                 size='sm'
                 className='mr-2 px-2 py-1 text-xs'
-                onClick={() => router.push(`/admin/user/${row.original.base.id}`)}
+                onClick={() => router.push(`/admin/user/${row.original.base.id}/`)}
               >
                 프로필
               </Button>

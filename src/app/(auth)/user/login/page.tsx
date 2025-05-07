@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/store/useAuthStore';
-import { User } from '@/types/user';
 
 interface LoginFormData {
   email: string;
@@ -37,9 +36,9 @@ export default function LoginPage() {
       const user = {
         id: user_id,
         email,
-        user_type: user_type as User['user_type'],
+        user_type: user_type?.[0] as 'normal' | 'business' | 'admin',
         name: name,
-        signinMethod: ['email' as const],
+        signinMethod: 'email' as 'email' | 'naver' | 'kakao',
       };
 
       login(user, res.access_token);

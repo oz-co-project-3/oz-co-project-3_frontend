@@ -1,22 +1,24 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/useAuthStore';
-import { stringToArray } from '@/lib/stringArrayConverter';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
-const navItems = [
-  { name: '프로필', href: '/dashboard/profile' },
-  { name: '이력서', href: '/dashboard/resume' },
-  { name: '지원한 채용공고', href: '/dashboard/job-postings/applied' },
-  { name: '찜한 채용공고', href: '/dashboard/job-postings/favorite' },
+const seekerNavItems = [
+  { name: '프로필', href: '/dashboard/job-seeker/profile' },
+  { name: '이력서', href: '/dashboard/job-seeker/resume' },
+  { name: '지원한 채용공고', href: '/dashboard/job-seeker/job-postings/applied' },
+  { name: '찜한 채용공고', href: '/dashboard/job-seeker/job-postings/favorite' },
 ] as const;
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { user } = useAuthStore();
-  const userTypeList = stringToArray(user?.user_type);
-  const showCompanyAuthButton = userTypeList.length === 1 && userTypeList.includes('normal');
+  const router = useRouter();
+
+  // console.log(user);
+  // console.log('business: ', user?.user_type.includes('business'));
 
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto'>
@@ -24,7 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <div className='mx-auto flex w-full max-w-[1200px] gap-4 py-6'>
           <nav className='rounded bg-white px-4 py-8 sm:w-40 md:w-60'>
             <ul className='flex flex-col gap-4'>
-              {navItems.map((item) => (
+              {seekerNavItems.map((item) => (
                 <li key={item.name} className='w-full'>
                   <Link
                     href={item.href}
@@ -35,15 +37,16 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </li>
               ))}
             </ul>
-            {/* 기업회원 인증 버튼 추가 - 위치 거슬리지만 나중에 수정하겠슴당(수정)*/}
-            {showCompanyAuthButton && (
-              <div className='pt-12'>
-                <Link href='/user/register-company'>
-                  <button className='bg-main-light hover:bg-main-dark w-full rounded-md py-3 text-white'>
-                    기업회원 인증
-                  </button>
-                </Link>
-              </div>
+
+            {/* 기업 회원 업그레이드 버튼 */}
+            {/* 임시 주소로 보냄 (기업회원 업그레이드 페이지 미구현) */}
+            {!user?.user_type.includes('business') && (
+              <Button
+                onClick={() => router.push('/user/register-company')}
+                className='bg-main-light hover:bg-main-dark cursor-pointer text-white'
+              >
+                기업 회원 업그레이드
+              </Button>
             )}
           </nav>
           <div className='flex flex-1 flex-col gap-4'>{children}</div>

@@ -19,6 +19,9 @@ import { ko } from 'date-fns/locale';
 import { fetchOnClient } from '@/api/clientFetcher';
 import useSWRMutation from 'swr/mutation';
 import uploadImage from '@/api/imageUploader';
+import AddressFormField from './AddressFormField';
+import Image from 'next/image';
+import { Label } from '../ui/label';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
 // 클라이언트 전용으로 렌더링하고 싶을때
@@ -31,6 +34,7 @@ export default function JobPostingForm() {
   const [detailJSON, setDetailJSON] = useState<string>('');
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const [temporaryImage, setTemporaryImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
   const { trigger } = useSWRMutation(
@@ -104,6 +108,20 @@ export default function JobPostingForm() {
     });
   }, [detailJSON, form]);
 
+  // 이미지 미리보기 업데이트
+  useEffect(() => {
+    if (!temporaryImage) {
+      setPreviewUrl(null);
+      return;
+    }
+    const generatedUrl = URL.createObjectURL(temporaryImage);
+    setPreviewUrl(generatedUrl);
+
+    return () => {
+      URL.revokeObjectURL(generatedUrl);
+    };
+  }, [temporaryImage]);
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-8'>
@@ -130,32 +148,7 @@ export default function JobPostingForm() {
             <FormItem className='relative'>
               <FormLabel className='text-base font-semibold'>회사명</FormLabel>
               <FormControl>
-                <Input placeholder='주소를 입력하세요.' {...field} />
-              </FormControl>
-              <FormMessage className='absolute top-0 right-0 text-sm' />
-            </FormItem>
-          )}
-        />
-
-        {/* 썸네일 이미지 */}
-        <FormField
-          control={form.control}
-          name='image_url'
-          render={({ field }) => (
-            <FormItem className='relative'>
-              <FormLabel className='text-base font-semibold'>썸네일 이미지</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  type='file'
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      setTemporaryImage(file);
-                    }
-                  }}
-                  className='cursor-pointer'
-                />
+                <Input placeholder='회사명을 입력하세요.' {...field} />
               </FormControl>
               <FormMessage className='absolute top-0 right-0 text-sm' />
             </FormItem>
@@ -163,7 +156,60 @@ export default function JobPostingForm() {
         />
 
         <div className='flex justify-between gap-8 max-md:flex-col'>
-          <div className='flex grow flex-col gap-8'>
+          <div className='flex w-[48%] flex-col gap-8'>
+            {/* 썸네일 이미지 */}
+            <FormField
+              control={form.control}
+              name='image_url'
+              render={({ field }) => (
+                <FormItem className='relative'>
+                  <FormLabel className='text-base font-semibold'>썸네일 이미지</FormLabel>
+                  <div className='flex gap-4'>
+                    <div className='relative h-34 w-full'>
+                      <Image
+                        src={previewUrl ? previewUrl : '/defaultProfile.png'}
+                        alt='썸네일 이미지'
+                        fill
+                        unoptimized
+                        className='rounded-md border object-cover max-md:object-contain'
+                      />
+                    </div>
+                    <div className='flex w-[30%] flex-col justify-between gap-2'>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type='file'
+                          id='thumbnail-image'
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              setTemporaryImage(file);
+                            }
+                          }}
+                          className='hidden'
+                        />
+                      </FormControl>
+                      <Label
+                        htmlFor='thumbnail-image'
+                        className='flex h-[45%] cursor-pointer items-center justify-center rounded-md border hover:bg-zinc-100'
+                      >
+                        이미지 추가
+                      </Label>
+                      <Button
+                        type='button'
+                        variant='outline'
+                        className='h-[45%] cursor-pointer'
+                        onClick={() => setTemporaryImage(null)}
+                      >
+                        이미지 삭제
+                      </Button>
+                    </div>
+                  </div>
+                  <FormMessage className='absolute top-0 right-0 text-sm' />
+                </FormItem>
+              )}
+            />
+
             {/* 급여 */}
             <FormField
               control={form.control}
@@ -221,7 +267,9 @@ export default function JobPostingForm() {
                 </FormItem>
               )}
             />
+          </div>
 
+          <div className='flex w-[48%] flex-col gap-8'>
             {/* 자격 요건 */}
             <FormField
               control={form.control}
@@ -247,9 +295,7 @@ export default function JobPostingForm() {
                 </FormItem>
               )}
             />
-          </div>
 
-          <div className='flex grow flex-col gap-8'>
             {/* 근무 시간 */}
             <FormField
               control={form.control}
@@ -351,19 +397,7 @@ export default function JobPostingForm() {
         </div>
 
         {/* 근무지 정보 */}
-        <FormField
-          control={form.control}
-          name='location'
-          render={({ field }) => (
-            <FormItem className='relative'>
-              <FormLabel className='text-base font-semibold'>근무지 정보</FormLabel>
-              <FormControl>
-                <Input placeholder='주소를 입력하세요.' {...field} />
-              </FormControl>
-              <FormMessage className='absolute top-0 right-0 text-sm' />
-            </FormItem>
-          )}
-        />
+        <AddressFormField form={form} />
 
         {/* 회사 약력 */}
         <FormField

@@ -16,8 +16,16 @@ export default function SwrProvider({ children }: { children: React.ReactNode })
   useEffect(() => {
     const restoreUser = async () => {
       try {
+        const tokenRes = await fetch(
+          `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/refresh-token/`,
+          {
+            method: 'POST',
+            credentials: 'include',
+          },
+        );
+        const { access_token } = await tokenRes.json();
+
         const data = await fetchOnClient<UserProfileResponse>('/api/user/profile/');
-        const tokens = await fetchOnClient<{ access_token: string }>('/api/user/refresh-token/');
         const { base } = data;
         const user = {
           id: base.id,
@@ -27,10 +35,10 @@ export default function SwrProvider({ children }: { children: React.ReactNode })
           signinMethod: base.signinMethod,
         };
 
-        login(user, tokens.access_token);
+        login(user, access_token);
         console.log('유저 상태 복원 완료:', user);
       } catch (error) {
-        console.warn('유저 상태 복원 안됨:', error);
+        console.warn('유저 상태 복원 실패:', error);
       }
     };
 
