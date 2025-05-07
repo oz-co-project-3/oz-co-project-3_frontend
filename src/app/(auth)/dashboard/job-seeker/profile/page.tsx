@@ -1,4 +1,5 @@
 // import fetchOnServer from '@/api/serverFetcher';
+
 import SeekerProfile from '@/components/profile/SeekerProfile';
 import Link from 'next/link';
 
