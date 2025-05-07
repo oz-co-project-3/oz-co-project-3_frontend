@@ -6,6 +6,7 @@ import ApplyFlow from '../../ApplyFlow';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const params = useParams<{ id: string }>();
+  //동적 라우트 파라미터는 항상 string
   return (
     <div className='flex min-h-screen flex-col'>
       <div className='flex-grow'>{children}</div>

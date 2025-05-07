@@ -28,18 +28,23 @@ export const jobPostingSchemaUpdate = jobPostingSchemaRequest.partial();
 export type JobPostingRequest = z.infer<typeof jobPostingSchemaRequest>;
 export type JobPostingUpdate = z.infer<typeof jobPostingSchemaUpdate>;
 export type JobPostingResponse = JobPostingRequest & {
-  id: number;
+  id: string;
   user: {
-    id: number;
+    id: string;
   };
   view_count: number;
   report: number;
   created_at: string;
   updated_at: string;
+  is_bookmarked: boolean;
 };
-
+//동적 라우트 파라미터는 항상 string이라 id에서 오류 계속 발생해 string으로 변경했습니다-유주
+export type JobPostingListResponse = {
+  total: number;
+  offset: number;
+  limit: number;
+  data: JobPostingResponse[];
+};
 // 최대 글자수 넣어주기
-
-// 유주님이 정의한 타입에 detailPagePath 는 빼고 인자 나눠서 전달하라고 얘기하기
 
 // history, summary 엔터 포함 어떻게 하는지?
