@@ -11,14 +11,18 @@ import KeywordRecommand from '@/components/common/searchbar/KeywordRecommand';
 import {
   Carousel,
   CarouselContent,
-  CarouselItem,
+  // CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Suspense } from 'react';
 import Loading from './loading';
+// import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
+// import JobPostingCard from '@/components/job-posting/JobPostingCard';
 
 export default function Home() {
+  // { jobPostings }: { jobPostings: JobPostingResponse[] }
+  // const displayPostings = jobPostings.slice(0, 10);
   return (
     <>
       <ScrollShowSearchBar />
@@ -75,17 +79,12 @@ export default function Home() {
             className='mx-auto flex w-full max-w-2xl'
           >
             <CarouselContent>
-              {Array.from({ length: 5 }).map((_, index) => (
-                <CarouselItem key={index} className='md:basis-1/2 lg:basis-1/3'>
-                  <div className='p-1'>
-                    <div className='gap-4'>
-                      <div className='flex h-[200px] w-[200px] items-center justify-center rounded-2xl border text-lg'>
-                        공고
-                      </div>
-                    </div>
-                  </div>
+              {/* {displayPostings.map((jobPosting) => (
+                <CarouselItem key={jobPosting.id} className='md:basis-1/2 lg:basis-1/3'>
+                  <JobPostingCard jobPosting={jobPosting} />
                 </CarouselItem>
-              ))}
+              ))} */}
+              {/* 패치 붙히고 살리기 */}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />
