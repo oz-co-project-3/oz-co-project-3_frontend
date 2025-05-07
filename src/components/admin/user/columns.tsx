@@ -18,31 +18,37 @@ export const getColumns = (
       accessorKey: 'seeker.name',
       header: '이름',
       cell: ({ row }) => {
-        const seekerName = row.original.seeker?.name;
-        const corpName = row.original.corp?.company_name;
-        const name = seekerName || corpName || '-';
+        const user = row.original;
+        const name = user.seeker?.name || user.corp?.company_name || '-';
+        const userId = user.base.id;
+
+        // user_type 변환 후 확인
+        const userTypes = user.base.user_type.split(',');
+        const isSeeker = userTypes.includes('seeker') || user.seeker !== null;
 
         return (
           <div className='flex items-center gap-2'>
             <span>{name}</span>
-            <div className='ml-6'>
-              <Button
-                variant='outline'
-                size='sm'
-                className='mr-2 px-2 py-1 text-xs'
-                onClick={() => router.push(`/admin/user/${row.original.base.id}/`)}
-              >
-                프로필
-              </Button>
-
+            <div className='ml-6 flex gap-2'>
               <Button
                 variant='outline'
                 size='sm'
                 className='px-2 py-1 text-xs'
-                onClick={() => onOpenResumeModal(row.original.base.id)}
+                onClick={() => router.push(`/admin/user/${userId}/`)}
               >
-                이력서
+                프로필
               </Button>
+
+              {isSeeker && (
+                <Button
+                  variant='outline'
+                  size='sm'
+                  className='px-2 py-1 text-xs'
+                  onClick={() => onOpenResumeModal(userId)}
+                >
+                  이력서
+                </Button>
+              )}
             </div>
           </div>
         );
@@ -63,9 +69,9 @@ export const getColumns = (
       accessorKey: 'base.user_type',
       header: '회원 구분',
       cell: ({ row }) => {
-        const type = row.original.base.user_type;
-        if (type === 'seeker') return '개인회원';
-        if (type === 'business') return '기업회원';
+        const types = row.original.base.user_type.split(',');
+        if (types.includes('business')) return '기업회원';
+        if (types.includes('seeker')) return '개인회원';
         return '-';
       },
     },
