@@ -1,6 +1,4 @@
-'use client';
-
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto'>
       <div className='flex w-full flex-1'>
