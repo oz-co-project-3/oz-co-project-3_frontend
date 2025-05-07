@@ -1,3 +1,5 @@
+'use client';
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 // 링크 주소 수정필요
