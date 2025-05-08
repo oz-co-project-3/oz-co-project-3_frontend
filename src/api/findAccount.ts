@@ -1,7 +1,7 @@
 import { fetchOnClient } from '@/api/clientFetcher';
 
 export async function findEmail(formData: { name: string; phone_number: string }): Promise<string> {
-  const res = await fetchOnClient<{ message: string; data: { email: string } }>(
+  const res = await fetchOnClient<{ email: string }>(
     '/api/user/find-email',
     {
       method: 'POST',
@@ -9,7 +9,7 @@ export async function findEmail(formData: { name: string; phone_number: string }
     },
   );
 
-  return res.data.email;
+  return res.email;
 }
 
 export async function findPassword(formData: {
