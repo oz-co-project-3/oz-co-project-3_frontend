@@ -1,15 +1,20 @@
 import fetchOnServer from '@/api/serverFetcher';
 import JobPosting from '@/components/job-posting/JobPosting';
 import { Button } from '@/components/ui/button';
-import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
+import { AppliedJobPosting, JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  // 이 지원 (사건) 의 엔터티 id
   const { id } = await params;
 
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
+  // 이 지원 (사건) - 여기에 들어있는 공고는 최소한의 정보만 가지고있음 (리스트용)
+  const appliedJobPosting = await fetchOnServer<AppliedJobPosting>(`/api/applicants/seeker/${id}/`);
 
-  // TODO: 마감일 지난거 필터링하기
-  console.log(jobPosting);
+  // 이 지원 (사건) 에 연결되어 있는 공고 정보 (상세)
+  const jobPosting = await fetchOnServer<JobPostingResponse>(
+    `/api/postings/${appliedJobPosting.job_posting_id}/`,
+  );
+  // console.log(jobPosting);
 
   return (
     <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>

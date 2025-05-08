@@ -6,9 +6,7 @@ import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
-
-  // TODO: 마감일 지난거 필터링하기
+  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/postings/${id}/`);
   console.log(jobPosting);
 
   return (
