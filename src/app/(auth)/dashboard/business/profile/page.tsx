@@ -1,3 +1,7 @@
+// 배포 환경 테스트용
+// 정적 프리렌더링 방지 (disableStaticRendering)
+export const dynamic = 'force-dynamic';
+
 import CompanyProfile from '@/components/profile/CompanyProfile';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
