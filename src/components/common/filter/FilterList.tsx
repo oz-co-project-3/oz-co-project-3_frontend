@@ -1,74 +1,56 @@
+// components/FilterList.tsx
 'use client';
-
-import useDropdown from '@/hooks/useDropdown';
-import { MdOutlineArrowDropDownCircle } from 'react-icons/md';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
+import { useFilterStore } from '@/store/filterStore';
 import DropDownFilter from './DropDownFilter';
-export default function FilterList() {
-  const {
-    isRegionOpen,
-    setIsRegionOpen,
-    isJobOpen,
-    setIsJobOpen,
-    isDetailOpen,
-    setIsDetailOpen,
-    selectedRegion,
-    setSelectedRegion,
-    selectedJob,
-    setSelectedJob,
-  } = useDropdown();
 
-  return (
-    <div>
-      <div className='relative flex w-[1400px] justify-between gap-5 rounded-2xl bg-white'>
-        <div
-          className='flex h-[70px] w-[450px] items-center justify-center rounded-2xl border'
-          onClick={() => {
-            setIsRegionOpen(!isRegionOpen);
-            setIsJobOpen(false);
-            setIsDetailOpen(false);
-          }}
-        >
-          <span>지역을 선택해주세요</span>
-          <span className='text-xl text-[#0F8C3B]'>
-            <MdOutlineArrowDropDownCircle />
-          </span>
-        </div>
-        <div
-          className='relative flex w-[450px] items-center justify-center rounded-2xl border'
-          onClick={() => {
-            setIsJobOpen(!isJobOpen);
-            setIsRegionOpen(false);
-            setIsDetailOpen(false);
-          }}
-        >
-          <span>원하는 직종을 선택해주세요</span>
-          <span className='text-xl text-[#0F8C3B]'>
-            <MdOutlineArrowDropDownCircle />
-          </span>
-        </div>
-        <div
-          className='relative flex w-[450px] items-center justify-center rounded-2xl border'
-          onClick={() => {
-            setIsDetailOpen(!isDetailOpen);
-            setIsRegionOpen(false);
-            setIsJobOpen(false);
-          }}
-        >
-          <span>상세 조건을 선택해주세요</span>
-          <span className='text-xl text-[#0F8C3B]'>
-            <MdOutlineArrowDropDownCircle />
-          </span>
-        </div>
-      </div>
-      <DropDownFilter
-        isRegionOpen={isRegionOpen}
-        isJobOpen={isJobOpen}
-        isDetailOpen={isDetailOpen}
-        selectedRegion={selectedRegion}
-        setSelectedRegion={setSelectedRegion}
-        selectedJob={selectedJob}
-        setSelectedJob={setSelectedJob}
-      />
-    </div>
-  );
+export default function FilterList({
+  initialParams,
+}: {
+  initialParams: Record<string, string | string[] | undefined>;
+}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 1. Zustand 상태 초기화
+  useEffect(() => {
+    const getArray = (value: string | string[]): string[] => {
+      return Array.isArray(value) ? value : value?.split(',') || [];
+    };
+
+    useFilterStore.setState({
+      selectedDistricts: getArray(initialParams.location ?? ''),
+      selectedSubcategories: getArray(initialParams.position ?? ''),
+      selectedMethod: getArray(initialParams.employ_method ?? ''),
+      selectedCareer: getArray(initialParams.career ?? ''),
+      selectedEducation: getArray(initialParams.education ?? ''),
+    });
+  }, [initialParams]);
+
+  // 2. 필터 변경 핸들러 (URL 쿼리 동기화)
+  const handleFilterChange = () => {
+    const params = new URLSearchParams(searchParams);
+    const state = useFilterStore.getState();
+
+    const filterMappings = [
+      { key: 'location', value: state.selectedDistricts },
+      { key: 'position', value: state.selectedSubcategories },
+      { key: 'employ_method', value: state.selectedMethod },
+      { key: 'career', value: state.selectedCareer },
+      { key: 'education', value: state.selectedEducation },
+    ];
+
+    filterMappings.forEach(({ key, value }) => {
+      if (value.length > 0) {
+        params.set(key, value.join(','));
+      } else {
+        params.delete(key);
+      }
+    });
+
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
+  return <DropDownFilter onFilterChange={handleFilterChange} />;
 }

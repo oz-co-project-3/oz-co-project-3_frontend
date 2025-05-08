@@ -1,18 +1,49 @@
-'use client';
-
-import { useSearchParams } from 'next/navigation'; // 추가
+// app/public-jobs/page.tsx
 import FilterList from '@/components/common/filter/FilterList';
 import PublicJobList from './PublicJobList';
-import { useFilterJobs } from '@/hooks/useFilterJobs';
-import Image from 'next/image';
-import Loading from '@/app/loading';
+import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 
-export default function PublicJobsPage() {
-  // props 제거
-  const searchParams = useSearchParams();
-  const searchKeyword = searchParams.get('search_keyword'); // .get() 사용
-  const { data, loading } = useFilterJobs('공공', searchKeyword || undefined);
-  console.log(data);
+export default async function PublicJobsPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  // 1. 쿼리 파라미터 추출
+  const {
+    search_keyword,
+    location,
+    position,
+    employ_method,
+    career,
+    education,
+    page = '0',
+  } = searchParams;
+
+  // 2. 서버 측 데이터 페칭
+  const params = new URLSearchParams();
+  params.set('employment_type', '공공');
+
+  const validParams = [
+    { key: 'search_keyword', value: search_keyword },
+    { key: 'location', value: location },
+    { key: 'position', value: position },
+    { key: 'employ_method', value: employ_method },
+    { key: 'career', value: career },
+    { key: 'education', value: education },
+    { key: 'offset', value: page },
+  ];
+
+  validParams.forEach(({ key, value }) => {
+    if (value && value !== 'undefined') params.set(key, String(value));
+  });
+
+  // 3. fetch 캐싱 전략 설정
+  const res = await fetch(`http://localhost:3000/api/public-jobs?/${params}`, {
+    cache: 'no-store', //-> 저장하도록 바꾸자
+  });
+
+  if (!res.ok) throw new Error('데이터를 불러오는 데 실패했습니다');
+  const data: JobPostingListResponse = await res.json();
 
   return (
     <div className='flex h-full justify-center pt-30'>
@@ -22,19 +53,10 @@ export default function PublicJobsPage() {
         <div className='bg-white'>
           <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
           <div className='mb-10 flex space-x-2'>
-            <FilterList />
+            <FilterList initialParams={searchParams} />
           </div>
         </div>
-        {loading ? (
-          <Loading />
-        ) : data && data.data.length > 0 ? (
-          <PublicJobList data={data} />
-        ) : (
-          <div className='flex flex-col items-center justify-center'>
-            <Image src='/SadCharacter2.png' alt='슬픈곰돌이 남' width={200} height={200} />
-            <div>검색 결과가 없습니다.</div>
-          </div>
-        )}
+        <PublicJobList data={data} />
       </main>
     </div>
   );

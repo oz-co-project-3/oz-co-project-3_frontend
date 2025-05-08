@@ -1,33 +1,15 @@
 'use client';
 
-import { JOB_CATEGORIES } from '../../../constants/jobCategories';
-import { REGIONS } from '../../../constants/region';
+import { REGIONS } from '@/constants/region';
+import { JOB_CATEGORIES } from '@/constants/jobCategories';
+import { useFilterStore } from '@/store/filterStore';
 import { FiChevronRight } from 'react-icons/fi';
 import { RiResetLeftFill } from 'react-icons/ri';
 import { EMPLOYMENT_TYPES } from '@/constants/employmentType';
 import { CAREER } from '@/constants/career';
 import { EDUCATION } from '@/constants/education';
-import { useFilterStore } from '@/store/filterStore';
 
-interface DropDownFilterProps {
-  isRegionOpen: boolean;
-  isJobOpen: boolean;
-  isDetailOpen: boolean;
-  selectedRegion: keyof typeof REGIONS | null;
-  setSelectedRegion: (region: keyof typeof REGIONS) => void;
-  selectedJob: keyof typeof JOB_CATEGORIES | null;
-  setSelectedJob: (job: keyof typeof JOB_CATEGORIES) => void;
-}
-
-export default function DropDownFilter({
-  isRegionOpen,
-  isJobOpen,
-  isDetailOpen,
-  selectedRegion,
-  setSelectedRegion,
-  selectedJob,
-  setSelectedJob,
-}: DropDownFilterProps) {
+export default function DropDownFilter({ onFilterChange }: { onFilterChange: () => void }) {
   const {
     selectedDistricts,
     setSelectedDistricts,
@@ -43,278 +25,138 @@ export default function DropDownFilter({
     resetAll,
   } = useFilterStore();
 
-  // 전체 선택/해제 함수
-  const toggleAllDistricts = () => {
-    if (!selectedRegion) return;
-    const allDistricts = [selectedRegion, ...REGIONS[selectedRegion]];
-    // 이미 모두 선택되었으면 해제, 아니면 전체 선택
+  // 전체 지역 선택/해제 예시 함수
+  const toggleAllDistricts = (region: keyof typeof REGIONS) => {
+    const allDistricts = [region, ...REGIONS[region]];
     if (allDistricts.every((d) => selectedDistricts.includes(d))) {
-      setSelectedDistricts([]);
+      setSelectedDistricts(selectedDistricts.filter((d) => !allDistricts.includes(d)));
     } else {
-      setSelectedDistricts(allDistricts);
+      setSelectedDistricts([
+        ...selectedDistricts,
+        ...allDistricts.filter((d) => !selectedDistricts.includes(d)),
+      ]);
     }
+    onFilterChange();
+  };
+
+  // 필터 토글 시 상태 변경 후 onFilterChange 호출
+  const handleToggle = (action: () => void) => {
+    action();
+    onFilterChange();
+  };
+
+  // 초기화 버튼
+  const handleReset = () => {
+    resetAll();
+    onFilterChange();
   };
 
   return (
-    <div>
-      <div>
-        {/* 지역 드롭다운 */}
-        {isRegionOpen && (
-          <div
-            className='flex w-[1400px] rounded-t-2xl border bg-white'
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* 시/도 리스트 */}
-            <div className='h-[400px] w-1/3 overflow-y-scroll border-r'>
-              {(Object.keys(REGIONS) as Array<keyof typeof REGIONS>).map((region) => (
-                <div
-                  key={region}
-                  className={`flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100 ${
-                    selectedRegion === region ? 'bg-gray-100 font-bold' : ''
-                  }`}
-                  onClick={() => setSelectedRegion(region)}
-                >
-                  {region}
-                  <FiChevronRight />
-                </div>
-              ))}
+    <div className='dropdown-filter'>
+      <section>
+        <h3>지역</h3>
+        <div className='region-list'>
+          {Object.keys(REGIONS).map((region) => (
+            <div key={region}>
+              <button
+                type='button'
+                onClick={() => toggleAllDistricts(region as keyof typeof REGIONS)}
+                className='region-toggle'
+              >
+                {region}
+                <FiChevronRight />
+              </button>
+              <div className='district-list'>
+                {[region, ...REGIONS[region as keyof typeof REGIONS]].map((district) => (
+                  <label key={district}>
+                    <input
+                      type='checkbox'
+                      checked={selectedDistricts.includes(district)}
+                      onChange={() => handleToggle(() => toggleDistrict(district))}
+                    />
+                    {district}
+                  </label>
+                ))}
+              </div>
             </div>
-            {/* 구/군/시 리스트 */}
-            <div className='w-2/3 px-4 py-2'>
-              {selectedRegion ? (
-                <div>
-                  <div className='grid grid-cols-4 gap-2'>
-                    {/* 전체 선택 체크박스 */}
-                    <div key={selectedRegion}>
-                      <label>
-                        <input
-                          type='checkbox'
-                          checked={[selectedRegion, ...REGIONS[selectedRegion]].every((d) =>
-                            selectedDistricts.includes(d),
-                          )}
-                          onChange={toggleAllDistricts}
-                          className='cursor-pointer rounded border px-3 py-1 font-bold'
-                        />
-                        {selectedRegion} 전체
-                      </label>
-                    </div>
-                    {/* 개별 구/군/시 체크박스 */}
-                    {REGIONS[selectedRegion].map((district: string) => (
-                      <div key={district}>
-                        <label>
-                          <input
-                            type='checkbox'
-                            checked={selectedDistricts.includes(district)}
-                            className='cursor-pointer rounded border px-3 py-1'
-                            onChange={() => toggleDistrict(district)}
-                          />
-                          {district}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className='text-gray-400'>지역을 선택하세요</div>
-              )}
-            </div>
-          </div>
-        )}
+          ))}
+        </div>
+      </section>
 
-        {/* 직업 드롭다운 */}
-        {isJobOpen && (
-          <div
-            className='flex w-[1400px] rounded-t-2xl border bg-white'
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className='w-1/3 border-r'>
-              {(Object.keys(JOB_CATEGORIES) as Array<keyof typeof JOB_CATEGORIES>).map((job) => (
-                <div
-                  key={job}
-                  className={`flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100 ${
-                    selectedJob === job ? 'bg-gray-100 font-bold' : ''
-                  }`}
-                  onClick={() => setSelectedJob(job)}
-                >
-                  {job}
-                  <FiChevronRight />
-                </div>
-              ))}
+      <section>
+        <h3>직무</h3>
+        <div className='job-list'>
+          {Object.keys(JOB_CATEGORIES).map((category) => (
+            <div key={category}>
+              <strong>{category}</strong>
+              <div>
+                {JOB_CATEGORIES[category as keyof typeof JOB_CATEGORIES].map((sub) => (
+                  <label key={sub}>
+                    <input
+                      type='checkbox'
+                      checked={selectedSubcategories.includes(sub)}
+                      onChange={() => handleToggle(() => toggleSubcategory(sub))}
+                    />
+                    {sub}
+                  </label>
+                ))}
+              </div>
             </div>
-            {/* 직업상세 */}
-            <div className='w-2/3 px-4 py-2'>
-              {selectedJob ? (
-                <div>
-                  <div className='mb-2 font-semibold'>{selectedJob} 전체</div>
-                  <div className='grid grid-cols-4 gap-2'>
-                    {JOB_CATEGORIES[selectedJob].map((subcategory: string) => (
-                      <div key={subcategory} className='flex gap-1'>
-                        <label>
-                          <input
-                            type='checkbox'
-                            checked={selectedSubcategories.includes(subcategory)}
-                            onChange={() => toggleSubcategory(subcategory)}
-                            className='cursor-pointer rounded border px-3 py-1 hover:bg-blue-100'
-                          />
-                          {subcategory}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className='text-gray-400'>직업을 선택하세요</div>
-              )}
-            </div>
-          </div>
-        )}
+          ))}
+        </div>
+      </section>
 
-        {/* 상세조건 드롭다운 */}
-        {isDetailOpen && (
-          <div
-            className='w-[1400px] rounded-t-2xl border bg-white'
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className='px-4 py-2'>
-              <div className='font-semibold'>고용형태</div>
-              <div className='flex flex-wrap gap-2'>
-                {EMPLOYMENT_TYPES.map((type) => (
-                  <label key={type}>
-                    <input
-                      type='checkbox'
-                      checked={selectedMethod.includes(type)}
-                      onChange={() => toggleMethod(type)}
-                    />
-                    {type}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className='px-4 py-2'>
-              <div className='font-semibold'>경력여부</div>
-              <div className='flex flex-wrap gap-2'>
-                {CAREER.map((career) => (
-                  <label key={career}>
-                    <input
-                      type='checkbox'
-                      checked={selectedCareer.includes(career)}
-                      onChange={() => toggleCareer(career)}
-                    />
-                    {career}
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className='px-4 py-2'>
-              <div className='font-semibold'>학력</div>
-              <div className='flex flex-wrap gap-2'>
-                {EDUCATION.map((education) => (
-                  <label key={education}>
-                    <input
-                      type='checkbox'
-                      checked={selectedEducation.includes(education)}
-                      onChange={() => toggleEducation(education)}
-                    />
-                    {education}
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-      {/* 선택 뜨는 곳 */}
-      <div className='mt-4 flex flex-wrap gap-2 p-4'>
-        {/* 지역 */}
-        {selectedDistricts.map((district) => (
-          <span
-            key={district}
-            className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-blue-600'
-          >
-            {district}
-            <button
-              className='ml-1 text-blue-400 hover:text-blue-700'
-              onClick={() => toggleDistrict(district)}
-              type='button'
-            >
-              X
-            </button>
-          </span>
-        ))}
-        {/* 직업 */}
-        {selectedSubcategories.map((subcategory) => (
-          <span
-            key={subcategory}
-            className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-green-600'
-          >
-            {subcategory}
-            <button
-              className='ml-1 text-blue-400 hover:text-blue-700'
-              onClick={() => toggleSubcategory(subcategory)}
-              type='button'
-            >
-              X
-            </button>
-          </span>
-        ))}
-        {/* 상세조건 */}
-        {selectedMethod.map((method) => (
-          <span
-            key={method}
-            className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-gray-700'
-          >
-            {method}
-            <button
-              className='ml-1 text-blue-400 hover:text-blue-700'
-              onClick={() => toggleMethod(method)}
-              type='button'
-            >
-              X
-            </button>
-          </span>
-        ))}
-        {selectedCareer.map((career) => (
-          <span
-            key={career}
-            className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-gray-700'
-          >
-            {career}
-            <button
-              className='ml-1 text-blue-400 hover:text-blue-700'
-              onClick={() => toggleCareer(career)}
-              type='button'
-            >
-              X
-            </button>
-          </span>
-        ))}
-        {selectedEducation.map((education) => (
-          <span
-            key={education}
-            className='inline-block rounded-full border bg-white px-3 py-1 text-sm font-medium text-gray-700'
-          >
-            {education}
-            <button
-              className='ml-1 text-blue-400 hover:text-blue-700'
-              onClick={() => toggleEducation(education)}
-              type='button'
-            >
-              X
-            </button>
-          </span>
-        ))}
-      </div>
-      <div className='flex'>
-        <button
-          onClick={resetAll}
-          className='ml-auto flex cursor-pointer rounded-md border bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100'
-        >
-          <span>초기화</span>
-          <div className='flex items-center'>
-            <RiResetLeftFill />
-          </div>
-        </button>
-      </div>
+      <section>
+        <h3>고용형태</h3>
+        <div className='method-list'>
+          {EMPLOYMENT_TYPES.map((type) => (
+            <label key={type}>
+              <input
+                type='checkbox'
+                checked={selectedMethod.includes(type)}
+                onChange={() => handleToggle(() => toggleMethod(type))}
+              />
+              {type}
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3>경력</h3>
+        <div className='career-list'>
+          {CAREER.map((career) => (
+            <label key={career}>
+              <input
+                type='checkbox'
+                checked={selectedCareer.includes(career)}
+                onChange={() => handleToggle(() => toggleCareer(career))}
+              />
+              {career}
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3>학력</h3>
+        <div className='education-list'>
+          {EDUCATION.map((edu) => (
+            <label key={edu}>
+              <input
+                type='checkbox'
+                checked={selectedEducation.includes(edu)}
+                onChange={() => handleToggle(() => toggleEducation(edu))}
+              />
+              {edu}
+            </label>
+          ))}
+        </div>
+      </section>
+
+      <button type='button' className='reset-btn' onClick={handleReset}>
+        <RiResetLeftFill /> 전체 초기화
+      </button>
     </div>
   );
 }
