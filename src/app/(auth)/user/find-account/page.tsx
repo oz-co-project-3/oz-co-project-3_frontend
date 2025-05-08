@@ -138,13 +138,14 @@ export default function FindAccountTab() {
           </TabsContent>
         </Tabs>
 
-        {/* 찾은 이메일 보여주는 모달쓰*/}
+        {/* 찾은 이메일 보여주는 모달 */}
         <Dialog open={showEmailModal} onOpenChange={setShowEmailModal}>
           <DialogContent className='max-w-sm'>
             <DialogHeader>
-              <DialogTitle>찾은 이메일</DialogTitle>
+              <DialogTitle>이메일 찾기 완료</DialogTitle>
             </DialogHeader>
-            <p className='mt-4 text-center text-lg font-semibold'>{foundEmail}</p>
+            <p className='mt-4 text-center text-sm text-muted-foreground'>회원가입 시 사용한 이메일입니다.</p>
+            <p className='mt-1 text-center text-lg font-semibold'>{foundEmail}</p>
             <DialogFooter className='mt-6'>
               <Button
                 className='bg-main-light hover:bg-main-dark w-full text-white'
@@ -156,7 +157,7 @@ export default function FindAccountTab() {
           </DialogContent>
         </Dialog>
 
-        {/* 비밀번호 찾기 모달쓰 */}
+        {/* 비밀번호 찾기 모달 */}
         <Dialog open={showPwSuccessModal} onOpenChange={setShowPwSuccessModal}>
           <DialogContent className='max-w-sm'>
             <DialogHeader>
