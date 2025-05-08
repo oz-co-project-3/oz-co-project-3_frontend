@@ -6,6 +6,9 @@ export default async function AppliedJobPostingsPage() {
   const jobPostings = await fetchOnServer<AppliedJobPosting[]>('/api/applicants/seeker/');
   console.log(jobPostings);
 
+  // 지원 취소 까지 다 응답으로 옴.
+  // 필터링해서 지원 된거만? 아니면 탭으로 나눠서 둘다 보여주기?
+
   return (
     <>
       <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
