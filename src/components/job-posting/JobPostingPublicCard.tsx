@@ -1,5 +1,9 @@
 import { getBriefLocation } from '@/lib/utils';
-import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
+import {
+  AppliedJobPosting,
+  FavoriteJobPosting,
+  JobPostingResponse,
+} from '@/types/Schema/jobPostingSchema';
 import { Bookmark } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -7,8 +11,10 @@ import Link from 'next/link';
 export default async function JobPostingPublicCard({
   jobPosting,
 }: {
-  jobPosting: JobPostingResponse;
+  jobPosting: JobPostingResponse | FavoriteJobPosting | AppliedJobPosting;
 }) {
+  // 여기선 intanceof 사용할 수 없음. (여긴 런타임이라서 타입 체크 불가능)
+
   return (
     <div className='relative flex w-[32%] cursor-pointer flex-col overflow-hidden rounded-md border transition-all duration-150 hover:scale-105'>
       <Link
@@ -35,7 +41,7 @@ export default async function JobPostingPublicCard({
         <span className='text-sm text-gray-500'>
           {getBriefLocation(jobPosting?.location ?? '')}
         </span>
-        <span className='text-sm text-gray-500'>마감일: {jobPosting?.deadline ?? '상시모집'}</span>
+        <span className='text-sm text-gray-500'>마감일: {jobPosting.deadline ?? '상시모집'}</span>
       </div>
 
       {/* TODO: 찜하기 api 연결 필요 (아이콘 바꿔도 상관없음) (클라이언트 컴포넌트로 따로 분리) */}

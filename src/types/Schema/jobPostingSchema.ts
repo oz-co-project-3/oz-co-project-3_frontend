@@ -38,17 +38,14 @@ export type JobPostingResponse = JobPostingRequest & {
   updated_at: string;
   is_bookmarked: boolean;
 };
-//동적 라우트 파라미터는 항상 string이라 id에서 오류 계속 발생해 string으로 변경했습니다-유주
+
+// 동적 라우트 파라미터는 항상 string이라 id에서 오류 계속 발생해 string으로 변경했습니다-유주
 export type JobPostingListResponse = {
   total: number;
   offset: number;
   limit: number;
   data: JobPostingResponse[];
 };
-
-// 최대 글자수 넣어주기
-
-// history, summary 엔터 포함 어떻게 하는지?
 
 // reject_postings 필드까지 포함한 관리자 테이블/상세용 타입
 export type JobPostingWithRejects = JobPostingResponse & {
@@ -59,5 +56,29 @@ export type JobPostingWithRejects = JobPostingResponse & {
   }[];
 };
 
-// 최대 글자수 넣어주기
+export type FavoriteJobPosting = Pick<
+  JobPostingResponse,
+  'company' | 'employ_method' | 'id' | 'image_url' | 'title' | 'location' | 'deadline'
+>;
 
+// id -> job_posting_id
+export type AppliedJobPosting = Pick<
+  JobPostingResponse,
+  | 'title'
+  | 'company'
+  | 'position'
+  | 'location'
+  | 'image_url'
+  | 'deadline'
+  | 'status'
+  | 'created_at'
+  | 'updated_at'
+> & {
+  job_posting_id: JobPostingResponse['id'];
+  id: number;
+  user_id: number;
+  resume_id: number;
+  memo: string;
+};
+
+// 최대 글자수 넣어주기
