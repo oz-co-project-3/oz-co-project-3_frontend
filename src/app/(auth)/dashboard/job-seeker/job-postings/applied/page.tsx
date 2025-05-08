@@ -1,13 +1,12 @@
 import fetchOnServer from '@/api/serverFetcher';
 import JobPostingPublicCard from '@/components/job-posting/JobPostingPublicCard';
-import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
+import { AppliedJobPosting } from '@/types/Schema/jobPostingSchema';
 
 export default async function AppliedJobPostingsPage() {
-  // const jobPostings = await fetchOnServer<JobPostingResponse[]>('/api/applicants/corporate/');
-  // 아직 빈 배열이라, 임시로 모든 공고 조회
-
-  const jobPostings = await fetchOnServer<JobPostingResponse[]>('/api/job_posting/');
+  const jobPostings = await fetchOnServer<AppliedJobPosting[]>('/api/applicants/seeker/');
   console.log(jobPostings);
+
+  // 데이터 다듬기 (키 이름 정리)
 
   return (
     <>
