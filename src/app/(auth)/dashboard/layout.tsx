@@ -3,7 +3,10 @@
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/useAuthStore';
 import Link from 'next/link';
+import useSWR from 'swr';
+import { fetchOnClient } from '@/api/clientFetcher';
 import { usePathname, useRouter } from 'next/navigation';
+import { UserProfileResponse } from '@/types/user';
 
 const seekerNavItems = [
   { name: '프로필', href: '/dashboard/job-seeker/profile' },
@@ -16,6 +19,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const { user } = useAuthStore();
   const router = useRouter();
+
+  const { data: profile } = useSWR<UserProfileResponse | null>(
+    user ? '/api/user/profile/' : null,
+    fetchOnClient,
+  );
+  const isBusiness = profile?.base.user_type?.includes('business');
 
   // console.log(user);
   // console.log('business: ', user?.user_type.includes('business'));
@@ -40,7 +49,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
             {/* 기업 회원 업그레이드 버튼 */}
             {/* 임시 주소로 보냄 (기업회원 업그레이드 페이지 미구현) */}
-            {!user?.user_type.includes('business') && (
+            {!isBusiness && (
               <Button
                 onClick={() => router.push('/user/register-company')}
                 className='bg-main-light hover:bg-main-dark cursor-pointer text-white'

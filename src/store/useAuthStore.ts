@@ -1,7 +1,8 @@
 // store/useAuthStore.ts
 import { create } from 'zustand';
 import { User } from '@/types/user';
-
+import { fetchOnClient } from '@/api/clientFetcher';
+import { UserProfileResponse } from '@/types/user';
 
 interface AuthState {
   user: User | null;
@@ -15,30 +16,47 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   accessToken: null,
+
   login: (user, token) => set({ user, accessToken: token }),
+
   logout: () => set({ user: null, accessToken: null }),
+
   setAccessToken: (token) => set({ accessToken: token }),
+
   restoreUser: async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/profile/`, {
-        credentials: 'include',
+      const tokenRes = await fetch(
+        `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/refresh-token/`,
+        {
+          method: 'POST',
+          credentials: 'include',
+        },
+      );
+
+      if (!tokenRes.ok) throw new Error('refresh-token 요청 실패');
+
+      const { access_token } = await tokenRes.json();
+      if (!access_token) throw new Error('access_token 없음');
+
+      const data = await fetchOnClient<UserProfileResponse>('/api/user/profile/', {
+        method: 'GET',
       });
 
-      if (!res.ok) throw new Error('로그인 상태가 없습니다. 다시 로그인해주세요.');
-      const data = await res.json();
+      const { base } = data;
 
-      const user = {
-        id: data.base.id,
-        email: data.base.email,
-        name: data.seeker.name,
-        user_type: data.base.user_type,
-        signinMethod: data.base.signinMethod,
+      const user: User = {
+        id: base.id,
+        email: base.email,
+        name: data.seeker?.name ?? data.corp?.manager_name ?? '',
+        user_type: base.user_type,
+        signinMethod: base.signinMethod,
       };
 
-      set({ user, accessToken: data.access_token });
+      set({ user, accessToken: access_token });
+      console.log('복원 완료:', user);
     } catch (err) {
-      console.warn('로그인 복원 실패:', err);
-      set({ user: null });
+      console.warn('복원 실패:', err);
+      set({ user: null, accessToken: null });
     }
   },
 }));

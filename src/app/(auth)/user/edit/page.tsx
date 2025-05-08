@@ -13,7 +13,9 @@ export default function SeekerEditPage() {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const { base, seeker } = await fetchUserProfile();
+        const profile = await fetchUserProfile();
+        if (!profile) throw new Error('프로필 데이터를 가져올 수 없습니다.');
+        const { base, seeker } = profile;
 
         if (!seeker) {
           throw new Error('구직자 정보가 없습니다.');
