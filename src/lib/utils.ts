@@ -24,3 +24,9 @@ export const getBriefLocation = (location: string): string => {
   const [province, city] = location.split(' ');
   return `${province} ${city ?? ''}`;
 };
+
+//보이는 글자 제한
+export function truncate(str?: string, max = 100) {
+  if (!str) return '';
+  return str.length > max ? str.slice(0, max) + '...' : str;
+}
