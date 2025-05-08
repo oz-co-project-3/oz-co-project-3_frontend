@@ -1,56 +1,98 @@
-// components/FilterList.tsx
 'use client';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
-import { useFilterStore } from '@/store/filterStore';
+import { useRouter } from 'next/navigation';
+import { useState, useRef } from 'react';
 import DropDownFilter from './DropDownFilter';
+import { MdOutlineArrowDropDownCircle } from 'react-icons/md';
+
+type FilterState = {
+  location: string[];
+  position: string[];
+  employ_method: string[];
+  career: string[];
+  education: string[];
+};
 
 export default function FilterList({
   initialParams,
 }: {
-  initialParams: Record<string, string | string[] | undefined>;
+  initialParams: Record<string, string | string[]>;
 }) {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  // 1. Zustand 상태 초기화
-  useEffect(() => {
-    const getArray = (value: string | string[]): string[] => {
-      return Array.isArray(value) ? value : value?.split(',') || [];
-    };
+  // 1. 로컬 필터 상태 관리
+  const [localFilters, setLocalFilters] = useState<FilterState>({
+    location: Array.isArray(initialParams.location)
+      ? initialParams.location
+      : initialParams.location?.split(',') || [],
+    position: Array.isArray(initialParams.position)
+      ? initialParams.position
+      : initialParams.position?.split(',') || [],
+    employ_method: Array.isArray(initialParams.employ_method)
+      ? initialParams.employ_method
+      : initialParams.employ_method?.split(',') || [],
+    career: Array.isArray(initialParams.career)
+      ? initialParams.career
+      : initialParams.career?.split(',') || [],
+    education: Array.isArray(initialParams.education)
+      ? initialParams.education
+      : initialParams.education?.split(',') || [],
+  });
 
-    useFilterStore.setState({
-      selectedDistricts: getArray(initialParams.location ?? ''),
-      selectedSubcategories: getArray(initialParams.position ?? ''),
-      selectedMethod: getArray(initialParams.employ_method ?? ''),
-      selectedCareer: getArray(initialParams.career ?? ''),
-      selectedEducation: getArray(initialParams.education ?? ''),
+  // 2. 검색 실행 핸들러
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    Object.entries(localFilters).forEach(([key, value]) => {
+      if (value.length > 0) params.set(key, value.join(','));
     });
-  }, [initialParams]);
-
-  // 2. 필터 변경 핸들러 (URL 쿼리 동기화)
-  const handleFilterChange = () => {
-    const params = new URLSearchParams(searchParams);
-    const state = useFilterStore.getState();
-
-    const filterMappings = [
-      { key: 'location', value: state.selectedDistricts },
-      { key: 'position', value: state.selectedSubcategories },
-      { key: 'employ_method', value: state.selectedMethod },
-      { key: 'career', value: state.selectedCareer },
-      { key: 'education', value: state.selectedEducation },
-    ];
-
-    filterMappings.forEach(({ key, value }) => {
-      if (value.length > 0) {
-        params.set(key, value.join(','));
-      } else {
-        params.delete(key);
-      }
-    });
-
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.push(`?${params.toString()}`);
   };
 
-  return <DropDownFilter onFilterChange={handleFilterChange} />;
+  // 3. 드롭다운 상태 관리
+  const [activeDropdown, setActiveDropdown] = useState<null | 'region' | 'job' | 'detail'>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div className='relative' ref={wrapperRef}>
+      <div className='mb-4 flex gap-4'>
+        {/* 필터 버튼들 */}
+        <button
+          className={`filter-btn ${activeDropdown === 'region' ? 'active' : ''}`}
+          onClick={() => setActiveDropdown((prev) => (prev === 'region' ? null : 'region'))}
+        >
+          지역 선택
+          <MdOutlineArrowDropDownCircle className='ml-2' />
+        </button>
+
+        <button
+          className={`filter-btn ${activeDropdown === 'job' ? 'active' : ''}`}
+          onClick={() => setActiveDropdown((prev) => (prev === 'job' ? null : 'job'))}
+        >
+          직무 선택
+          <MdOutlineArrowDropDownCircle className='ml-2' />
+        </button>
+
+        <button
+          className={`filter-btn ${activeDropdown === 'detail' ? 'active' : ''}`}
+          onClick={() => setActiveDropdown((prev) => (prev === 'detail' ? null : 'detail'))}
+        >
+          상세 조건
+          <MdOutlineArrowDropDownCircle className='ml-2' />
+        </button>
+
+        <button className='search-btn' onClick={handleSearch}>
+          검색하기
+        </button>
+      </div>
+
+      {/* 드롭다운 필터 */}
+      {activeDropdown && (
+        <DropDownFilter
+          type={activeDropdown}
+          filters={localFilters}
+          onFilterChange={setLocalFilters}
+          onClose={() => setActiveDropdown(null)}
+        />
+      )}
+    </div>
+  );
 }
