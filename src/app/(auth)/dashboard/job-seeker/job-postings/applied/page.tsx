@@ -6,8 +6,6 @@ export default async function AppliedJobPostingsPage() {
   const jobPostings = await fetchOnServer<AppliedJobPosting[]>('/api/applicants/seeker/');
   console.log(jobPostings);
 
-  // 데이터 다듬기 (키 이름 정리)
-
   return (
     <>
       <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
@@ -19,7 +17,7 @@ export default async function AppliedJobPostingsPage() {
             </div>
           ) : (
             jobPostings.map((jobPosting) => (
-              <JobPostingPublicCard key={jobPosting.id} jobPosting={jobPosting} />
+              <JobPostingPublicCard key={jobPosting.id} jobPosting={jobPosting} path='applied' />
             ))
           )}
         </div>

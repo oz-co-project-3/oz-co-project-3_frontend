@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </li>
               ))}
 
-              {user?.user_type.includes('business') && (
+              {isBusiness && (
                 <>
                   {/* hr 대신 쓸거 없나 */}
                   <hr className='my-4' />

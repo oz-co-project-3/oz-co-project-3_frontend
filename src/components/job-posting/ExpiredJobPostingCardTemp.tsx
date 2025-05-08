@@ -12,7 +12,10 @@ export default async function ExpiredJobPostingCardTemp({
 
   return (
     <section className='relative flex cursor-pointer gap-4 rounded-md border px-8 py-6 max-sm:flex-col sm:justify-between'>
-      <Link href={`/dashboard/business/job-postings/expired/id`} className='absolute inset-0 grow'>
+      <Link
+        href={`/dashboard/business/job-postings/expired/${jobPosting.id}`}
+        className='absolute inset-0 grow'
+      >
         <span className='sr-only'>공고 상세보기</span>
       </Link>
 

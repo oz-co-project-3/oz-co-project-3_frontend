@@ -1,4 +1,3 @@
-import fetchOnServer from '@/api/serverFetcher';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import {
   BookCheck,
@@ -17,11 +16,7 @@ import {
 import JobPostingViewer from '../common/text-editor/JobPostingViewer';
 import { format } from 'date-fns';
 
-export default async function JobPosting({ id }: { id: string }) {
-  console.log(id);
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
-  console.log(jobPosting);
-
+export default async function JobPosting({ jobPosting }: { jobPosting: JobPostingResponse }) {
   return (
     <article className='flex flex-col gap-4'>
       <div className='flex items-center justify-between border-b pb-4'>
