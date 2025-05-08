@@ -3,23 +3,21 @@
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import JobPostingTable from './JobPostingTable';
-import { JobPosting } from './columns';
-import useSWR from 'swr';
-import { fetchOnClient } from '@/api/clientFetcher';
+import useJobPostingList from '@/hooks/useJobPostingList';
 
 export default function JobPostingAdminClient() {
   const [tab, setTab] = useState<'approved' | 'unapproved'>('approved');
+  const { postings } = useJobPostingList();
 
-  // 전체 공고 데이터 요청
-  const { data = [] } = useSWR<JobPosting[]>('/api/admin/job-posting/', fetchOnClient);
+  const approvedStatuses = ['모집중', '마감 임박', '모집 종료', '블라인드'];
+  const approvedPostings = postings.filter((item) =>
+    approvedStatuses.includes(item.status),
+  );
 
-  // 승인 공고: status가 아래 중 하나일 때
-  const approvedStatuses = ['모집중', '"마감 임박', '모집 종료', '블라인드'];
-  const approvedPostings = data.filter((item) => approvedStatuses.includes(item.status));
-
-  // 미승인 공고: Pending or Rejected
   const unapprovedStatuses = ['대기중', '반려됨'];
-  const unapprovedPostings = data.filter((item) => unapprovedStatuses.includes(item.status));
+  const unapprovedPostings = postings.filter((item) =>
+    unapprovedStatuses.includes(item.status),
+  );
 
   return (
     <div className='p-50 pt-20 pb-20'>
