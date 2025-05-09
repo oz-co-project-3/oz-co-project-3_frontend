@@ -23,7 +23,7 @@ export default function JobPostingViewer({ content }: { content: string }) {
         listItem: false,
         bulletList: {
           keepMarks: true,
-          // TODO: 이거 없으면 여러줄 동시 선택시 맨윗줄만 불릿
+          // 이거 없으면 여러줄 동시 선택시 맨윗줄만 불릿
           keepAttributes: false,
         },
       }),

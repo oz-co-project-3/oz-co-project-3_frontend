@@ -36,11 +36,10 @@ export default function LoginPage() {
       const user = {
         id: user_id,
         email,
-        user_type: user_type?.[0] as 'normal' | 'business' | 'admin',
+        user_type: user_type?.split(',')[0] as 'normal' | 'business' | 'admin',
         name: name,
         signinMethod: 'email' as 'email' | 'naver' | 'kakao',
       };
-
       login(user, res.access_token);
 
       console.log('로그인 완료:', user);
@@ -54,8 +53,8 @@ export default function LoginPage() {
   const handleNaverLogin = async () => {
     try {
       const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
-      console.log('client_id:', NAVER_CLIENT_ID);
-      const REDIRECT_URI = 'http://localhost:3000/social-login/naver';
+      console.log('네이버 CLIENT_ID:', process.env.NEXT_PUBLIC_NAVER_CLIENT_ID);
+      const REDIRECT_URI = 'http://localhost:3000/naver/callback/'; // 사용자가 돌아올 URI
       const STATE = 'naver_login_test_2025';
 
       const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${encodeURIComponent(
@@ -67,6 +66,20 @@ export default function LoginPage() {
       console.error('네이버 로그인 요청 실패:', err);
       alert('네이버 로그인 요청에 실패했습니다.');
     }
+  };
+
+  const handleKakaoLogin = () => {
+    const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
+    const REDIRECT_URI = 'http://localhost:3000/kakao/callback/';
+
+    const STATE = crypto.randomUUID(); // 랜덤 state 생성
+    localStorage.setItem('kakao_login_state', STATE); // localStorage에 저장
+
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+      REDIRECT_URI!,
+    )}&state=${STATE}`; //state 포함
+
+    window.location.href = kakaoAuthUrl;
   };
 
   return (
@@ -108,7 +121,9 @@ export default function LoginPage() {
         <div className='mt-6'>
           <hr className='my-5' />
           <div className='flex flex-col items-center gap-3'>
-            <Image src='/kakao.png' alt='카카오 로그인' width={300} height={45} />
+            <button onClick={handleKakaoLogin}>
+              <Image src='/kakao.png' alt='카카오 로그인' width={300} height={45} />
+            </button>
             <button onClick={handleNaverLogin}>
               <Image src='/naver.png' alt='네이버 로그인' width={300} height={45} />
             </button>

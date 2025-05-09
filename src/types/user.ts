@@ -32,8 +32,8 @@ export interface LoginResponseData {
   email: string;
   name: string;
   user_id: number;
-  user_type: ('normal' | 'business' | 'admin')[];
-  signinMethod: ('email' | 'naver' | 'kakao')[];
+  user_type: 'normal' | 'business' | 'admin';
+  signinMethod: 'email' | 'naver' | 'kakao';
 }
 
 export interface DeleteUserRequest {
@@ -46,7 +46,7 @@ export interface User {
   id: number;
   email: string;
   name: string;
-  user_type: 'normal' | 'business' | 'admin';
+  user_type: string;
   signinMethod: 'email' | 'naver' | 'kakao';
 }
 
