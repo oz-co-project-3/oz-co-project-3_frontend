@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { useChatbotStore } from '@/store/chatbotStore';
+import { ChatbotResponse } from '@/types/chatbot';
 
 export default function ChatbotPopup() {
   const socketRef = useRef<WebSocket | null>(null);
@@ -25,14 +26,14 @@ export default function ChatbotPopup() {
     socketRef.current = ws;
 
     ws.onopen = () => {
-    console.log('WebSocket 연결 성공')
-    ws.send('');
-    }
+      console.log('WebSocket 연결 성공');
+      ws.send('');
+    };
 
     ws.onmessage = (event) => {
       try {
-        console.log('받은 메시지:', event.data); 
-        const data = JSON.parse(event.data);
+        console.log('WebSocket 응답 도착:', event.data);
+        const data: ChatbotResponse = JSON.parse(event.data);
         setChatData(data);
         if (data.answer) appendBotMessage(data.answer);
       } catch (err) {
@@ -41,7 +42,7 @@ export default function ChatbotPopup() {
     };
 
     ws.onerror = (err) => {
-      console.error('WebSocket 에러 발생. 연결 상태를 확인하세요:', err);
+      console.error('WebSocket 에러 발생:', err);
     };
     ws.onclose = () => console.log('WebSocket 연결 종료');
 

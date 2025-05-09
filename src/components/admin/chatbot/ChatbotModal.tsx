@@ -55,7 +55,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const url = editTarget ? `/api/admin/chatbot/${editTarget.id}` : '/api/admin/chatbot';
+      const url = editTarget ? `/api/admin/chatbot/${editTarget.id}/` : '/api/admin/chatbot/';
       const method = editTarget ? 'PATCH' : 'POST';
 
       // POST 시에는 id 없는 구조(ChatbotBase)로 전송
