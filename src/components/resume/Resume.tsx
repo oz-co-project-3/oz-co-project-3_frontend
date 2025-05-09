@@ -47,11 +47,11 @@ export default async function Resume({ id }: { id: string }) {
         <div className='relative aspect-[7/9] w-full max-w-[300px]'>
           {/* 프로필 이미지 */}
           <Image
-            src={resume.image_url ? resume.image_url : '/defaultProfile.png'}
+            src={resume.image_url ? resume.image_url : '/Character2.png'}
             alt='profile'
             fill
             unoptimized
-            className={`rounded-md object-cover ${resume.image_url ? '' : 'border'}`}
+            className={`rounded-md object-contain ${resume.image_url ? '' : 'border'}`}
           />
         </div>
         <div className='flex min-w-[300px] grow flex-col gap-6 rounded-md border p-4 sm:p-8 md:p-12'>

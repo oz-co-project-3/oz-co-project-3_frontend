@@ -18,8 +18,10 @@ import { useEffect } from 'react';
 import ImageResize from 'tiptap-extension-resize-image';
 
 export default function JobPostingEditor({
+  defaultJSON,
   setDetailJSON,
 }: {
+  defaultJSON: string;
   setDetailJSON: (json: string) => void;
 }) {
   const editor = useEditor({
@@ -48,8 +50,7 @@ export default function JobPostingEditor({
       }),
       characterCount,
     ],
-    // 일단 빈 텍스트 (수정이나 불러오기 했을때, 초기 텍스트로 대체)
-    content: ``,
+    content: JSON.parse(defaultJSON) ?? ``,
     editorProps: {
       attributes: {
         class: 'min-h-[500px] w-full bg-white p-4 focus:outline-none',

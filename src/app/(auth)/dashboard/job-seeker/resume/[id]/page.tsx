@@ -1,6 +1,7 @@
 import fetchOnServer from '@/api/serverFetcher';
 import ConfirmButton from '@/components/common/ConfirmButton';
 import Resume from '@/components/resume/Resume';
+import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -16,6 +17,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       method: 'DELETE',
     });
     console.log(response);
+    // 관련 경로 캐시 무효화
+    revalidatePath('/dashboard/job-seeker/resume');
     redirect('/dashboard/job-seeker/resume');
   };
 
