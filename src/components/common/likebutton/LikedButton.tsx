@@ -1,3 +1,5 @@
+'use client';
+
 import { fetchOnClient } from '@/api/clientFetcher';
 import { AiOutlineStar } from 'react-icons/ai';
 import { AiFillStar } from 'react-icons/ai';
