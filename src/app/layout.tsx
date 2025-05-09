@@ -34,7 +34,7 @@ export default async function RootLayout({
           <AuthInitializer />
           <AutoTokenRefresher />
           <Header />
-          <div className='min-h-[calc(100vh-70px)] pt-[70px] pb-16'>{children}</div>
+          <div className='min-h-[calc(100vh)] pt-[70px] pb-16'>{children}</div>
           <Footer />
         </SwrProvider>
       </body>
