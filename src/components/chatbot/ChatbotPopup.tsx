@@ -3,85 +3,67 @@
 import { useEffect, useRef, useState } from 'react';
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import type { ChatbotResponse } from '@/types/chatbot';
-
-interface ChatMessage {
-  sender: 'user' | 'bot';
-  message: string;
-}
+import { useChatbotStore } from '@/store/chatbotStore';
 
 export default function ChatbotPopup() {
   const socketRef = useRef<WebSocket | null>(null);
+  const [resetFlag, setResetFlag] = useState(false);
 
-  const [chatData, setChatData] = useState<ChatbotResponse | null>(null);
-  const [selectionPath, setSelectionPath] = useState<string[]>([]);
-  const [chatLog, setChatLog] = useState<ChatMessage[]>([]);
-  const [resetFlag, setResetFlag] = useState(false); // 리셋용
-
-  console.log('WS:', process.env.NEXT_PUBLIC_WS_URL);
-  console.log('INTERNAL:', process.env.INTERNAL_BASE_URL);
-  console.log('EXTERNAL:', process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL);
+  const {
+    chatData,
+    chatLog,
+    selectionPath,
+    setChatData,
+    setSelectionPath,
+    appendBotMessage,
+    appendUserMessage,
+    reset,
+  } = useChatbotStore();
 
   useEffect(() => {
-    console.log(process.env.NEXT_PUBLIC_WS_URL);
     const ws = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL!}/api/ws/`);
     socketRef.current = ws;
 
     ws.onopen = () => {
-      ws.send(''); // 초기 프롬프트 요청
-    };
+    console.log('WebSocket 연결 성공')
+    ws.send('');
+    }
 
     ws.onmessage = (event) => {
       try {
-        console.log('WebSocket 응답 도착:', event.data);
-        const data: ChatbotResponse = JSON.parse(event.data);
+        console.log('받은 메시지:', event.data); 
+        const data = JSON.parse(event.data);
         setChatData(data);
-
-        if (data.answer) {
-          setChatLog((prev) => [...prev, { sender: 'bot', message: data.answer }]); // bot 응답 누적
-        }
+        if (data.answer) appendBotMessage(data.answer);
       } catch (err) {
         console.error('JSON 파싱 오류:', err);
       }
     };
 
     ws.onerror = (err) => {
-      console.error('WebSocket 에러 발생:', err);
+      console.error('WebSocket 에러 발생. 연결 상태를 확인하세요:', err);
     };
+    ws.onclose = () => console.log('WebSocket 연결 종료');
 
-    ws.onclose = (event) => {
-      console.log(`WebSocket 연결 종료 (code: ${event.code})`);
-    };
+    return () => ws.close();
+  }, [resetFlag, setChatData, appendBotMessage]);
 
-    return () => {
-      ws.close();
-    };
-  }, [resetFlag]); // resetFlag로 연결 재설정
-
-  // 옵션 선택
   const handleSelect = (option: string) => {
     const trimmed = option.trim();
-    const newPath = [...selectionPath, trimmed];
-    setSelectionPath(newPath);
-
-    setChatLog((prev) => [...prev, { sender: 'user', message: `"${trimmed}"` }]); // 유저 선택 누적
+    setSelectionPath([...selectionPath, trimmed]);
+    appendUserMessage(`"${trimmed}"`);
     socketRef.current?.send(trimmed);
-    console.log('[선택한 옵션 전송]:', trimmed);
   };
 
-  // 뒤로가기
   const handleBack = () => {
     if (selectionPath.length === 0) return;
-    setSelectionPath((prev) => prev.slice(0, -1));
-    socketRef.current?.send('reverse'); // 서버에 'reverse' 요청해서 뒤로가기
+    setSelectionPath(selectionPath.slice(0, -1));
+    socketRef.current?.send('reverse');
   };
 
-  // 전체 리셋
   const handleReset = () => {
-    setSelectionPath([]);
-    setChatData(null);
-    setChatLog([]); // 대화 기록 초기화
-    setResetFlag((prev) => !prev); // WebSocket 재연결
+    reset();
+    setResetFlag((prev) => !prev);
   };
 
   return (
@@ -89,17 +71,15 @@ export default function ChatbotPopup() {
       side='bottom'
       className='!right-26 bottom-[170px] !left-auto w-full max-w-[360px] overflow-y-auto rounded-2xl border bg-white p-6 shadow-lg'
     >
-      {/* 뒤로가기 버튼 */}
       <div className='flex items-center justify-between'>
         <button onClick={handleBack} disabled={selectionPath.length === 0}>
-          <span className='text-xl text-gray-500'>{'←'}</span>
+          <span className='text-xl text-gray-500'>←</span>
         </button>
         <SheetHeader>
           <SheetTitle className='sr-only'>챗봇</SheetTitle>
         </SheetHeader>
       </div>
 
-      {/* 누적된 채팅 로그 */}
       <div className='flex flex-col gap-4'>
         {chatLog.map((chat, idx) => (
           <div key={idx} className={chat.sender === 'user' ? 'text-right' : 'text-left'}>
@@ -114,7 +94,6 @@ export default function ChatbotPopup() {
         ))}
       </div>
 
-      {/* 옵션 버튼들 */}
       {chatData?.options && (
         <div className='flex flex-wrap gap-2'>
           {chatData.options
@@ -133,19 +112,16 @@ export default function ChatbotPopup() {
         </div>
       )}
 
-      {/* 종료 버튼 및 이동 버튼 */}
       <div className='mt-6 flex justify-end gap-2'>
         {chatData?.is_terminate && (
           <Button onClick={handleReset} variant='outline' className='rounded-md px-3 py-1 text-sm'>
             돌아가기
           </Button>
         )}
-        {chatData?.url && chatData.url.trim() !== '' && (
+        {chatData?.url && (
           <Button
             onClick={() => {
-              if (chatData.url) {
-                window.location.href = chatData.url;
-              }
+              if (chatData.url) window.location.href = chatData.url;
             }}
             className='bg-main-light rounded-md px-3 py-1 text-sm text-white hover:bg-green-600'
           >
