@@ -13,8 +13,8 @@ import {
   PencilLine,
   UsersRound,
 } from 'lucide-react';
-import JobPostingViewer from '../common/text-editor/JobPostingViewer';
 import { format } from 'date-fns';
+import JobPostingViewerLoader from './JobPostingViewerLoader';
 
 export default async function JobPosting({ jobPosting }: { jobPosting: JobPostingResponse }) {
   return (
@@ -161,7 +161,7 @@ export default async function JobPosting({ jobPosting }: { jobPosting: JobPostin
           <PencilLine className='size-4' />
           <span className='text-main-light'>상세 모집 내용</span>
         </h3>
-        <JobPostingViewer content={jobPosting.description} />
+        <JobPostingViewerLoader content={jobPosting.description} />
       </div>
     </article>
   );
