@@ -14,17 +14,19 @@ import { Button } from '@/components/ui/button';
 import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import CompanyProfileForm from '@/components/common/userForms/companyProfileForm';
 
-import { fetchUserProfile } from '@/api/user';
+import { fetchUserProfile, updateSeekerProfile, updateBusinessProfile } from '@/api/user';
 import { convertArrayFieldsToString } from '@/lib/stringArrayConverter';
 import { useRouter } from 'next/navigation';
-import { SeekerFormData, CompanyFormData } from '@/types/user';
+import { CorpProfile, CompanyFormData, SeekerFormData } from '@/types/user';
+import useSWR from 'swr';
 
 export default function UserEditPage() {
   const [userType, setUserType] = useState<string[]>([]);
   const [defaultSeeker, setDefaultSeeker] = useState<SeekerFormData | null>(null);
-  const [defaultCompany, setDefaultCompany] = useState<CompanyFormData | null>(null);
+  const [defaultCompany, setDefaultCompany] = useState<CorpProfile | null>(null);
   const [tab, setTab] = useState<'seeker' | 'company'>('seeker');
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const { mutate } = useSWR('/api/user/profile/', fetchUserProfile);
 
   const router = useRouter();
 
@@ -65,13 +67,27 @@ export default function UserEditPage() {
     loadData();
   }, []);
 
-  const handleSeekerSubmit = (data: { [key: string]: unknown }) => {
+  const handleSeekerSubmit = async (data: { [key: string]: unknown }) => {
     const cleaned = convertArrayFieldsToString(data);
-    console.log('📝 일반회원 수정:', cleaned);
+    try {
+      await updateSeekerProfile(cleaned); // PATCH API 호출
+      await mutate(); // SWR로 상태 갱신
+      alert('회원정보가 수정되었습니다!');
+    } catch (err) {
+      console.error('수정 실패:', err);
+      alert('회원정보 수정 중 오류가 발생했습니다.');
+    }
   };
 
-  const handleCompanySubmit = (data: CompanyFormData) => {
-    console.log('📝 기업회원 수정:', data);
+  const handleCompanySubmit = async (data: CompanyFormData) => {
+    try {
+      await updateBusinessProfile(data as unknown as Record<string, unknown>);
+      await mutate();
+      alert('회원정보가 수정되었습니다!');
+    } catch (err) {
+      console.error('수정 실패:', err);
+      alert('회원정보 수정 중 오류가 발생했습니다.');
+    }
   };
 
   const handleCompanyTabClick = () => {

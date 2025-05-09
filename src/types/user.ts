@@ -39,7 +39,7 @@ export interface LoginResponseData {
 export interface DeleteUserRequest {
   password: string;
   is_active: boolean;
-  reason: string;
+  leave_reason: string;
 }
 
 export interface User {
