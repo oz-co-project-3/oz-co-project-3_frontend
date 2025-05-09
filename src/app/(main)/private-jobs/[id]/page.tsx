@@ -9,7 +9,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
   const { id } = await params;
 
   const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/postings/${id}/`);
-  console.log(jobPosting);
+  // console.log(jobPosting);
 
   return (
     <div>

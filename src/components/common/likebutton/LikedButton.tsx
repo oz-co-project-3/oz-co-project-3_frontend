@@ -24,6 +24,7 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
       onSuccess: () => {
         // 요청 성공 시 상태 유지
         console.log('북마크 상태 변경 성공');
+        setIsModalOpen(true);
       },
       onError: () => {
         // 요청 실패 시 상태 원복
