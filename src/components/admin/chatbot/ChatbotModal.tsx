@@ -5,9 +5,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import type { ChatbotPrompt } from '@/types/chatbot';
-import type { KeyedMutator } from 'swr';
 import { Textarea } from '@/components/ui/textarea';
+import type { ChatbotPrompt, ChatbotBase } from '@/types/chatbot';
+import type { KeyedMutator } from 'swr';
 import { fetchOnClient } from '@/api/clientFetcher';
 
 interface Props {
@@ -23,26 +23,26 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
   const [answer, setAnswer] = useState('');
   const [options, setOptions] = useState('');
   const [isTerminate, setIsTerminate] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [redirectUrl, setRedirectUrl] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  // 모달 열릴 때 초기값 설정
   useEffect(() => {
-    if (open) {
-      if (editTarget) {
-        setStep(editTarget.step);
-        setSelectionPath(editTarget.selection_path);
-        setAnswer(editTarget.answer);
-        setOptions(editTarget.options || '');
-        setIsTerminate(editTarget.is_terminate);
-        setRedirectUrl(editTarget.url || '');
-      } else {
-        resetForm();
-      }
+    if (!open) return;
+    //수정 모드
+    if (editTarget) {
+      setStep(editTarget.step);
+      setSelectionPath(editTarget.selection_path);
+      setAnswer(editTarget.answer);
+      setOptions(editTarget.options || '');
+      setIsTerminate(editTarget.is_terminate);
+      setRedirectUrl(editTarget.url || '');
+    } else {
+      // 추가 모드
+      resetForm();
     }
   }, [open, editTarget]);
+  
 
-  // 폼 초기화
   const resetForm = () => {
     setStep(1);
     setSelectionPath('');
@@ -52,31 +52,32 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
     setRedirectUrl('');
   };
 
-  // 저장 또는 수정 요청
   const handleSubmit = async () => {
     setLoading(true);
-
     try {
       const url = editTarget ? `/api/admin/chatbot/${editTarget.id}/` : '/api/admin/chatbot/';
       const method = editTarget ? 'PATCH' : 'POST';
 
+      // POST 시에는 id 없는 구조(ChatbotBase)로 전송
+      const bodyData: ChatbotBase = {
+        step,
+        selection_path: selectionPath.trim(),
+        answer,
+        options: options.trim() || null,
+        is_terminate: isTerminate,
+        url: redirectUrl.trim() || undefined,
+      };
+
       await fetchOnClient(url, {
         method,
-        body: JSON.stringify({
-          step,
-          selection_path: selectionPath.trim(),
-          answer,
-          options: options.trim(),
-          is_terminate: isTerminate,
-          url: redirectUrl.trim(),
-        }),
+        body: JSON.stringify(bodyData),
       });
 
-      await onSuccess(); // SWR 새로고침 (목록을 최신화시킴)
+      await onSuccess();
       resetForm();
       onClose();
     } catch (err) {
-      console.error(err);
+      console.error('저장 실패:', err);
     } finally {
       setLoading(false);
     }
@@ -101,7 +102,11 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
             value={selectionPath}
             onChange={(e) => setSelectionPath(e.target.value)}
           />
-          <Textarea placeholder='응답' value={answer} onChange={(e) => setAnswer(e.target.value)} />
+          <Textarea
+            placeholder='응답 내용'
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          />
           <Input
             placeholder='옵션 (쉼표로 구분)'
             value={options}
@@ -116,6 +121,7 @@ export default function ChatbotModal({ open, onClose, onSuccess, editTarget }: P
             value={redirectUrl}
             onChange={(e) => setRedirectUrl(e.target.value)}
           />
+
           <div className='mt-4 text-right'>
             <Button onClick={handleSubmit} disabled={loading}>
               {loading ? '저장 중...' : '저장'}
