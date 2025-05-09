@@ -43,9 +43,9 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
     setIsBookmarked(newBookmarkState);
 
     // 북마크 상태가 true로 변경될 때만 모달 열기
-    if (newBookmarkState) {
-      setIsModalOpen(true);
-    }
+    // if (newBookmarkState) {
+    //   setIsModalOpen(true);
+    // }
 
     // API 요청 실행
     trigger().catch(() => {

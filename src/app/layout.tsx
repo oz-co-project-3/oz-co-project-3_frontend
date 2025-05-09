@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import localFont from 'next/font/local';
 import type { Metadata } from 'next';
 import Header from '@/components/header/Header';
+import Footer from '@/components/footer/Footer';
 import SwrProvider from '@/store/SwrProvider';
 import AutoTokenRefresher from '@/components/common/AutoTokenRefresher';
 import AuthInitializer from '@/components/common/AuthInitializer';
@@ -28,14 +29,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang='ko' className={`${pretendard.variable} h-full`}>
-      <body
-        className={`${pretendard.className} bg-background-ivory h-full min-h-screen antialiased`}
-      >
+      <body className={`${pretendard.className} bg-background-ivory antialiased`}>
         <SwrProvider>
           <AuthInitializer />
           <AutoTokenRefresher />
           <Header />
-          <div className='h-full pt-[70px]'>{children}</div>
+          <div className='min-h-[calc(100vh-70px)] pt-[70px] pb-16'>{children}</div>
+          <Footer />
         </SwrProvider>
       </body>
     </html>
