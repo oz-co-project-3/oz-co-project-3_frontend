@@ -1,27 +1,24 @@
 import fetchOnServer from '@/api/serverFetcher';
 import ConfirmButton from '@/components/common/ConfirmButton';
 import JobPosting from '@/components/job-posting/JobPosting';
+import { Button } from '@/components/ui/button';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
-
-  // TODO: 마감일 안 지난거 필터링하기
+  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/postings/${id}/`);
   console.log(jobPosting);
 
-  const deleteJobPosting = async () => {
+  const cancelLike = async () => {
     'use server';
 
-    // TODO: 에러 처리 (try, catch)
-    const response = await fetchOnServer(`/api/job_posting/${id}/`, {
-      method: 'DELETE',
+    const response = await fetchOnServer(`/api/job_posting/${id}/bookmark/`, {
+      method: 'POST',
     });
     console.log(response);
-    redirect('/dashboard/business/job-postings/expired');
+    redirect('/dashboard/job-seeker/job-postings/favorite');
   };
 
   return (
@@ -30,18 +27,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       <JobPosting jobPosting={jobPosting} />
 
       <div className='z-10 flex min-w-32 gap-2 py-4 max-lg:flex-col max-lg:pt-2'>
-        <Link
-          href={`/dashboard/business/job-postings/expired/${id}/edit`}
-          className='bg-main-light hover:bg-main-dark flex grow cursor-pointer items-center justify-center rounded-md p-2 text-white'
-        >
-          수정
-        </Link>
         <ConfirmButton
-          handleAction={deleteJobPosting}
-          title='삭제'
-          contentText='삭제한 공고는 복구할 수 없습니다.'
-          actionType='warning'
+          handleAction={cancelLike}
+          title='찜 취소'
+          contentText='찜 목록에서 제거 하시겠습니까?'
+          actionType='normal'
         />
+        <Button className='bg-main-light hover:bg-main-dark flex grow cursor-pointer items-center justify-center rounded-md p-2 py-5 text-white'>
+          지원
+        </Button>
       </div>
     </section>
   );

@@ -1,3 +1,5 @@
+'use client';
+
 import { fetchOnClient } from '@/api/clientFetcher';
 import {
   Dialog,

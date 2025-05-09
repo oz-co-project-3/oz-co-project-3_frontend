@@ -1,4 +1,3 @@
-import fetchOnServer from '@/api/serverFetcher';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import {
   BookCheck,
@@ -14,14 +13,10 @@ import {
   PencilLine,
   UsersRound,
 } from 'lucide-react';
-import JobPostingViewer from '../common/text-editor/JobPostingViewer';
 import { format } from 'date-fns';
+import JobPostingViewerLoader from './JobPostingViewerLoader';
 
-export default async function JobPosting({ id }: { id: string }) {
-  console.log(id);
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
-  console.log(jobPosting);
-
+export default async function JobPosting({ jobPosting }: { jobPosting: JobPostingResponse }) {
   return (
     <article className='flex flex-col gap-4'>
       <div className='flex items-center justify-between border-b pb-4'>
@@ -166,7 +161,7 @@ export default async function JobPosting({ id }: { id: string }) {
           <PencilLine className='size-4' />
           <span className='text-main-light'>상세 모집 내용</span>
         </h3>
-        <JobPostingViewer content={jobPosting.description} />
+        <JobPostingViewerLoader content={jobPosting.description} />
       </div>
     </article>
   );

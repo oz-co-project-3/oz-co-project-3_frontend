@@ -1,8 +1,10 @@
-// src/hooks/usePublicJobs.ts
+'use client';
+
 import { useEffect, useState } from 'react';
 import { useFilterStore } from '@/store/filterStore';
 import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 import { useSearchParams } from 'next/navigation';
+import { fetchOnClient } from '@/api/clientFetcher';
 
 export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword?: string) {
   const {
@@ -38,14 +40,18 @@ export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/postings/?${makeQuery()}`)
-      .then((res) => res.json())
-      // .then((res) => console.log(res))
+
+    // fetchOnClient 사용
+    fetchOnClient<JobPostingListResponse>(`/api/postings/?${makeQuery()}`)
       .then((data) => {
         console.log(data);
         setData(data);
       })
+      .catch((error) => {
+        console.error('공고 데이터 로드 실패:', error);
+      })
       .finally(() => setLoading(false));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     searchKeyword,

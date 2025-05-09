@@ -5,6 +5,7 @@ import Header from '@/components/header/Header';
 import SwrProvider from '@/store/SwrProvider';
 import AutoTokenRefresher from '@/components/common/AutoTokenRefresher';
 import AuthInitializer from '@/components/common/AuthInitializer';
+import { ChatbotButtonWrapper } from '@/components/chatbot/ChatbotButtonWrapper';
 import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
 
 const pretendard = localFont({
@@ -38,6 +39,7 @@ export default async function RootLayout({
           <Header />
           <LoginRequiredModal />
           <div className='h-full pt-[70px]'>{children}</div>
+          <ChatbotButtonWrapper />
         </SwrProvider>
       </body>
     </html>
