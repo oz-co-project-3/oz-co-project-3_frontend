@@ -11,6 +11,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 //찜한 공고의 id
 interface LikeButtonProps {
   id: string;
+  isBookmarked: boolean;
 }
 
 interface BookmarkResponse {
