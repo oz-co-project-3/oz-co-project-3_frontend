@@ -1,14 +1,14 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { AdminUser } from '@/types/user';
+import { UserProfileResponse } from '@/types/user';
 import { Button } from '@/components/ui/button';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export const getColumns = (
   router: AppRouterInstance,
   onOpenResumeModal: (userId: number) => void,
-): ColumnDef<AdminUser>[] => {
+): ColumnDef<UserProfileResponse>[] => {
   return [
     {
       accessorKey: 'base.id',

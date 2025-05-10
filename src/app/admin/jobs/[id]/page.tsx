@@ -2,8 +2,8 @@ import JobPostingAdmin from '@/components/admin/jobs/JobPostingAdmin';
 import AdminLayout from '@/components/layout/AdminLayout';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = await params;
-    console.log(id);
+  const { id } = await params;
+  console.log(id);
 
   try {
     if (!id) throw new Error('공고 ID가 유효하지 않습니다.');

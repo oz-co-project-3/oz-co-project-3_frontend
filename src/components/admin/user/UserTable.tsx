@@ -5,9 +5,9 @@ import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import DataTable from '../table/DataTable';
 import { getColumns } from './columns';
-import { AdminUser } from '@/types/user';
 import { ResumeModal } from '../resume/ResumeModal';
 import { fetchOnClient } from '@/api/clientFetcher';
+import { UserProfileResponse } from '@/types/user';
 
 interface UserTableProps {
   userType: 'seeker' | 'business';
@@ -17,7 +17,7 @@ export function UserTable({ userType }: UserTableProps) {
   const router = useRouter();
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
-  const { data = [], isLoading } = useSWR<AdminUser[]>('/api/admin/user/', fetchOnClient);
+  const { data = [], isLoading } = useSWR<UserProfileResponse[]>('/api/admin/user/', fetchOnClient);
 
   // 사용자 유형에 따라 필터링
   const filteredUsers = useMemo(() => {

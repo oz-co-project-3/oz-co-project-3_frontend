@@ -1,12 +1,16 @@
 import fetchOnServer from '@/api/serverFetcher';
 import ConfirmButton from '@/components/common/ConfirmButton';
 import Resume from '@/components/resume/Resume';
+import { ResumeResponse } from '@/types/Schema/resumeSchema';
+import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   console.log(id);
+
+  const resume = await fetchOnServer<ResumeResponse>(`/api/resume/${id}/`);
 
   const deleteResume = async () => {
     'use server';
@@ -16,13 +20,15 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       method: 'DELETE',
     });
     console.log(response);
+    // 관련 경로 캐시 무효화
+    revalidatePath('/dashboard/job-seeker/resume');
     redirect('/dashboard/job-seeker/resume');
   };
 
   return (
     <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
-      <h2 className='border-b pb-4 text-2xl font-bold'>이력서 조회 (몇번째 칸인지 써주기?)</h2>
-      <Resume id={id} />
+      <h2 className='border-b pb-4 text-2xl font-bold'>이력서 조회</h2>
+      <Resume resume={resume} />
 
       <div className='z-10 flex min-w-32 gap-2 py-4 max-lg:flex-col max-lg:pt-2'>
         <Link

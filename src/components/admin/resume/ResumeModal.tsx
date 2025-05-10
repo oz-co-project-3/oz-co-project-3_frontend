@@ -40,7 +40,7 @@ export function ResumeModal({ userId, open, onClose }: ResumeModalProps) {
                 variant='outline'
                 className='w-full justify-start'
                 onClick={() => {
-                  router.push(`/admin/resume/${resume.id}/`);
+                  router.push(`/admin/resume/${resume.id}`);
                   onClose();
                 }}
               >

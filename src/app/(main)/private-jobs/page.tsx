@@ -31,8 +31,9 @@ export default function PrivateJobsPage() {
           <PrivateJobList data={data} />
         ) : (
           <div className='flex flex-col items-center justify-center'>
-            <Image src='/SadCharacter1.png' alt='슬픈곰돌이 여' width={200} height={200} />
+            <Image src='/SadCharacter1.png' alt='검색 결과 없음' width={200} height={200} />
             <div>검색 결과가 없습니다.</div>
+            <div>검색 조건을 변경하면 더 많은 결과를 찾을수 있어요!</div>
           </div>
         )}
       </main>

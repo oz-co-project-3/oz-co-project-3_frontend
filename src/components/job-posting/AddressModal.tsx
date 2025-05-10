@@ -7,7 +7,7 @@ type ModalProps = {
   content: React.ReactNode;
 };
 
-// ref 전달 받고 않음. (일단 킵)
+// 현재는 ref 전달 받고있지 않음. (일단 킵)
 function AddressModal({ isOpen, closeModal, content }: ModalProps, ref: React.Ref<HTMLDivElement>) {
   if (!isOpen) return null;
 

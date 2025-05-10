@@ -3,8 +3,8 @@ import { UserProfileResponse } from '@/types/user';
 import { formatDate } from 'date-fns';
 import Image from 'next/image';
 
-export default async function SeekerProfile({ id }: { id?: Promise<string> }) {
-  const userId = await id;
+export default async function SeekerProfile({ id }: { id?: string }) {
+  const userId = id;
   console.log('개인유저 id: ', userId);
 
   let user: UserProfileResponse;
@@ -23,11 +23,11 @@ export default async function SeekerProfile({ id }: { id?: Promise<string> }) {
       <div className='flex flex-col items-center gap-4 rounded-md border p-8'>
         <div className='relative h-48 w-48 overflow-hidden rounded-full border md:h-60 md:w-60 lg:h-80 lg:w-80'>
           <Image
-            src={user.seeker?.profile_url ?? '/defaultProfile.png'}
+            src={user.seeker?.profile_url ?? '/Character1.png'}
             alt='profile'
             fill
             unoptimized
-            className='object-cover'
+            className='object-contain'
           />
         </div>
         <div className='flex w-full justify-between border-b pb-4'>
