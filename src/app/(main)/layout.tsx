@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <br />
         <hr />
       </nav>
-      <main className='pt-[120px]'>{children}</main>
+      <main className='pt-[80px]'>{children}</main>
     </div>
   );
 }
