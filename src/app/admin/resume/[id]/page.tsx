@@ -1,6 +1,8 @@
 import AdminLayout from '@/components/layout/AdminLayout';
-import ResumeAdmin from '@/components/admin/resume/ResumeAdmin';
 import DeleteResumeButton from '@/components/admin/resume/DeleteResumeButton';
+import fetchOnServer from '@/api/serverFetcher';
+import { ResumeResponse } from '@/types/Schema/resumeSchema';
+import Resume from '@/components/resume/Resume';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   try {
@@ -10,12 +12,14 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       throw new Error('이력서가 없습니다.');
     }
 
+    const resume: ResumeResponse = await fetchOnServer(`/api/admin/resume/${id}/`);
+
     return (
       <AdminLayout>
         <div className='mb-4 flex justify-end'>
           <DeleteResumeButton id={id} />
         </div>
-        <ResumeAdmin id={id} />
+        <Resume resume={resume} />
       </AdminLayout>
     );
   } catch (error) {
