@@ -37,7 +37,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       },
     );
     console.log(response);
-    // 네트워크탭에 안찍힘;; 왜? 근데 작동은 함
     redirect('/dashboard/job-seeker/job-postings/applied');
   };
 

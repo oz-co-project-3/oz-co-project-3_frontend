@@ -6,8 +6,14 @@ export default async function AppliedJobPostingsPage() {
   const jobPostings = await fetchOnServer<AppliedJobPosting[]>('/api/applicants/seeker/');
   console.log(jobPostings);
 
-  // 지원 취소 까지 다 응답으로 옴.
+  // TODO: 지원 취소 까지 다 응답으로 옴.
   // 필터링해서 지원 된거만? 아니면 탭으로 나눠서 둘다 보여주기?
+  // const appliedJobPostings = jobPostings.filter(
+  //   (jobPosting) => jobPosting.status === '지원 완료',
+  // );
+  // const withdrawnJobPostings = jobPostings.filter(
+  //   (jobPosting) => jobPosting.status === '지원 취소',
+  // );
 
   return (
     <>
