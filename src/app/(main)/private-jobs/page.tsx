@@ -11,7 +11,7 @@ export default function PrivateJobsPage() {
   // searchParams가 Promise이므로 await 필요
   const searchParams = useSearchParams();
   const searchKeyword = searchParams.get('search_keyword'); // .get() 사용
-  const { data, loading } = useFilterJobs('일반', searchKeyword || undefined);
+  const { data, loading } = useFilterJobs('일반', searchKeyword || undefined); //훅을 이용해 필터링된 채용 정보 데이터를 가져온다
   // console.log('데이터 확인', data);
 
   return (
