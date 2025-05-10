@@ -3,6 +3,9 @@
 import useDropdown from '@/hooks/useDropdown';
 import { MdOutlineArrowDropDownCircle } from 'react-icons/md';
 import DropDownFilter from './DropDownFilter';
+import { useFilterStore } from '@/store/filterStore';
+import { useEffect } from 'react';
+
 export default function FilterList() {
   const {
     isRegionOpen,
@@ -11,11 +14,21 @@ export default function FilterList() {
     setIsJobOpen,
     isDetailOpen,
     setIsDetailOpen,
-    selectedRegion,
-    setSelectedRegion,
+    selectedRegion: dropdownRegion,
+    setSelectedRegion: setDropdownRegion,
     selectedJob,
     setSelectedJob,
   } = useDropdown();
+
+  // filterStore에서 상태 가져오기
+  const { selectedRegion: storeRegion, setSelectedRegion: setStoreRegion } = useFilterStore();
+
+  // 두 상태 동기화
+  useEffect(() => {
+    if (dropdownRegion !== storeRegion) {
+      setStoreRegion(dropdownRegion);
+    }
+  }, [dropdownRegion, storeRegion, setStoreRegion]);
 
   return (
     <div>
@@ -64,8 +77,8 @@ export default function FilterList() {
         isRegionOpen={isRegionOpen}
         isJobOpen={isJobOpen}
         isDetailOpen={isDetailOpen}
-        selectedRegion={selectedRegion}
-        setSelectedRegion={setSelectedRegion}
+        selectedRegion={dropdownRegion}
+        setSelectedRegion={setDropdownRegion}
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}
       />

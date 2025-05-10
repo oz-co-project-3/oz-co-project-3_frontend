@@ -1,10 +1,9 @@
-import fetchOnServer from '@/api/serverFetcher';
 import { ResumeResponse } from '@/types/Schema/resumeSchema';
 import { format } from 'date-fns';
 import {
   BookCheck,
   Briefcase,
-  Calendar,
+  // Calendar,
   GraduationCap,
   Link,
   Mail,
@@ -19,12 +18,11 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 
-export default async function Resume({ id }: { id: string }) {
-  const resume = await fetchOnServer<ResumeResponse>(`/api/resume/${id}/`);
+export default async function Resume({ resume }: { resume: ResumeResponse }) {
   // const user = await fetchOnServer<UserResponse>(`/api/user/profile/${resume.user.id}/`);
-  // 유저 정보 받아서, 생년월일 넣어주기
+  // 유저 정보 받아서, 생년월일 넣어주기?
 
-  console.log(resume);
+  // console.log(resume);
 
   return (
     <article className='flex flex-col gap-8 rounded-md'>
@@ -47,11 +45,11 @@ export default async function Resume({ id }: { id: string }) {
         <div className='relative aspect-[7/9] w-full max-w-[300px]'>
           {/* 프로필 이미지 */}
           <Image
-            src={resume.image_url ? resume.image_url : '/defaultProfile.png'}
+            src={resume.image_url ? resume.image_url : '/Character2.png'}
             alt='profile'
             fill
             unoptimized
-            className={`rounded-md object-cover ${resume.image_url ? '' : 'border'}`}
+            className={`rounded-md object-contain ${resume.image_url ? '' : 'border'}`}
           />
         </div>
         <div className='flex min-w-[300px] grow flex-col gap-6 rounded-md border p-4 sm:p-8 md:p-12'>
@@ -62,13 +60,13 @@ export default async function Resume({ id }: { id: string }) {
             </h3>
             <span className='text-zinc-800'>{resume.name}</span>
           </div>
-          <div className='flex items-center justify-between'>
+          {/* <div className='flex items-center justify-between'>
             <h3 className='flex items-center gap-4 text-lg font-bold'>
               <Calendar className='size-4' />
               <span>생년월일</span>
             </h3>
             <span className='text-zinc-800'>생년월일 이력서 폼에 없음!</span>
-          </div>
+          </div> */}
           <div className='flex items-center justify-between'>
             <h3 className='flex items-center gap-4 text-lg font-bold'>
               <Phone className='size-4' />

@@ -2,6 +2,7 @@ import fetchOnServer from '@/api/serverFetcher';
 import ConfirmButton from '@/components/common/ConfirmButton';
 import JobPosting from '@/components/job-posting/JobPosting';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
+import { revalidatePath } from 'next/cache';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
@@ -21,7 +22,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       method: 'DELETE',
     });
     console.log(response);
-    redirect('/dashboard/business/job-postings/expired');
+    // 관련 경로 캐시 무효화
+    revalidatePath('/dashboard/business/job-postings/current');
+    redirect('/dashboard/business/job-postings/current');
   };
 
   return (
@@ -31,7 +34,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
       <div className='z-10 flex min-w-32 gap-2 py-4 max-lg:flex-col max-lg:pt-2'>
         <Link
-          href={`/dashboard/business/job-postings/expired/${id}/edit`}
+          href={`/dashboard/business/job-postings/current/${id}/edit`}
           className='bg-main-light hover:bg-main-dark flex grow cursor-pointer items-center justify-center rounded-md p-2 text-white'
         >
           수정

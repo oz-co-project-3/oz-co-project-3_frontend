@@ -9,7 +9,9 @@ import { PublicJobsResponse } from '@/types/publicJob';
 
 export default async function CompanyProfilePage() {
   // 배포 환경 테스트용
-  const response = await fetch('http://localhost:3000/api/public-jobs?offset=20&limit=20');
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/public-jobs?offset=20&limit=20`,
+  );
   const publicJobs: PublicJobsResponse = await response.json();
   console.log('publicJobs: ', publicJobs);
 

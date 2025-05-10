@@ -47,6 +47,14 @@ jobs:
           build-args: |
             NEXT_PUBLIC_EXTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_EXTERNAL_BASE_URL }}
             NEXT_PUBLIC_WS_URL=${{ secrets.NEXT_PUBLIC_WS_URL }}
+            NEXT_PUBLIC_KAKAO_CLIENT_ID=${{ secrets.NEXT_PUBLIC_KAKAO_CLIENT_ID }}
+            NEXT_PUBLIC_KAKAO_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_KAKAO_REDIRECT_URI }}
+            NEXT_PUBLIC_KAKAO_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_KAKAO_CLIENT_SECRET }}
+            NEXT_PUBLIC_NAVER_CLIENT_ID=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_ID }}
+            NEXT_PUBLIC_NAVER_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_SECRET }}
+            NEXT_PUBLIC_NAVER_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_NAVER_REDIRECT_URI }}
+            NEXT_PUBLIC_NAVER_STATE=${{ secrets.NEXT_PUBLIC_NAVER_STATE }}
+            NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
 
       # 캐시 최적화 (선택사항)
       - name: Move cache

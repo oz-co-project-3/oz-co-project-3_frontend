@@ -1,30 +1,31 @@
 'use client';
 
-// import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormMessage, FormControl, FormItem, FormLabel, FormField } from '../ui/form';
 import useSWRMutation from 'swr/mutation';
 import { fetchOnClient } from '@/api/clientFetcher';
 import { Input } from '../ui/input';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { resumeSchemaRequest, ResumeRequest } from '@/types/Schema/resumeSchema';
+import { resumeSchemaRequest, ResumeRequest, ResumeResponse } from '@/types/Schema/resumeSchema';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import uploadImage from '@/api/imageUploader';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
-export default function ResumeForm() {
+export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeResponse }) {
   const [temporaryImage, setTemporaryImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const router = useRouter();
 
   // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
   const { trigger } = useSWRMutation(
-    '/api/resume/',
+    defaultResume ? `/api/resume/${defaultResume.id}` : '/api/resume/',
     async (url: string, { arg }: { arg: ResumeRequest }) => {
       return fetchOnClient(url, {
-        method: 'POST',
+        method: defaultResume ? 'PATCH' : 'POST',
         body: JSON.stringify(arg),
       });
     },
@@ -39,26 +40,44 @@ export default function ResumeForm() {
     // reValidateMode: 'onBlur', // 이후에는 포커스를 잃을 때마다 검증
     mode: 'onTouched', // 한 번 터치된 필드에 대해
     reValidateMode: 'onChange', // 이후에는 값이 변경될 때마다 검증
-    defaultValues: {
-      title: '',
-      visibility: false, // 제출 시 공개로 변경
-      name: '',
-      phone_number: '',
-      email: '',
-      image_url: undefined,
-      interests: '',
-      desired_area: '',
-      education: undefined,
-      school_name: undefined,
-      graduation_status: undefined,
-      introduce: '',
-      status: '작성중', // 제출 시 구직중으로 변경
-      document_url: undefined,
-      work_experiences: [
-        { company: '', period: '', position: '' },
-        { company: '', period: '', position: '' },
-      ],
-    },
+    defaultValues: defaultResume
+      ? {
+          title: defaultResume.title,
+          visibility: defaultResume.visibility, // 제출 시 공개로 변경
+          name: defaultResume.name,
+          phone_number: defaultResume.phone_number,
+          email: defaultResume.email,
+          image_url: undefined,
+          interests: defaultResume.interests,
+          desired_area: defaultResume.desired_area,
+          education: defaultResume.education,
+          school_name: defaultResume.school_name === '' ? undefined : defaultResume.school_name,
+          graduation_status: defaultResume.graduation_status,
+          introduce: defaultResume.introduce,
+          status: defaultResume.status,
+          document_url: defaultResume.document_url === '' ? undefined : defaultResume.document_url,
+          work_experiences: defaultResume.work_experiences,
+        }
+      : {
+          title: '',
+          visibility: false, // 제출 시 공개로 변경
+          name: '',
+          phone_number: '',
+          email: '',
+          image_url: undefined,
+          interests: '',
+          desired_area: '',
+          education: undefined,
+          school_name: undefined,
+          graduation_status: undefined,
+          introduce: '',
+          status: '작성중', // 제출 시 구직중으로 변경
+          document_url: undefined,
+          work_experiences: [
+            { company: '', period: '', position: '' },
+            { company: '', period: '', position: '' },
+          ],
+        },
   });
 
   const workExperience = useFieldArray({
@@ -89,6 +108,9 @@ export default function ResumeForm() {
 
     // 이력서 제출
     try {
+      if (defaultResume && defaultResume.image_url) {
+        data.image_url = defaultResume.image_url;
+      }
       const response = await trigger(data);
       console.log('이력서 제출 성공:', response);
       // 성공 처리 로직 (예: 알림, 리디렉션 등)
@@ -153,11 +175,11 @@ export default function ResumeForm() {
                 </FormControl>
                 <div className='relative h-87 w-full'>
                   <Image
-                    src={previewUrl ? previewUrl : '/defaultProfile.png'}
+                    src={previewUrl ? previewUrl : (defaultResume?.image_url ?? '/Character2.png')}
                     alt='이력서 이미지'
                     fill
                     unoptimized
-                    className='rounded-md object-cover max-md:object-contain'
+                    className='rounded-md object-contain'
                   />
                 </div>
                 <Button
@@ -468,7 +490,12 @@ export default function ResumeForm() {
         </div>
 
         <div className='flex justify-between gap-2'>
-          <Button className='bg-danger grow cursor-pointer hover:bg-amber-700'>취소하기</Button>
+          <Button
+            className='bg-danger grow cursor-pointer hover:bg-amber-700'
+            onClick={() => router.back()}
+          >
+            취소하기
+          </Button>
           <Button type='submit' className='bg-main-light hover:bg-main-dark grow cursor-pointer'>
             저장하기
           </Button>

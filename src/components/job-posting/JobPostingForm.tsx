@@ -4,7 +4,11 @@ import { useEffect, useState } from 'react';
 import JobPostingEditor from '../common/text-editor/JobPostingEditor';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { JobPostingRequest, jobPostingSchemaRequest } from '@/types/Schema/jobPostingSchema';
+import {
+  JobPostingRequest,
+  JobPostingResponse,
+  jobPostingSchemaRequest,
+} from '@/types/Schema/jobPostingSchema';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover';
@@ -22,6 +26,7 @@ import uploadImage from '@/api/imageUploader';
 import AddressFormField from './AddressFormField';
 import Image from 'next/image';
 import { Label } from '../ui/label';
+import { useRouter } from 'next/navigation';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
 // 클라이언트 전용으로 렌더링하고 싶을때
@@ -30,18 +35,23 @@ import { Label } from '../ui/label';
 //   ssr: false,
 // });
 
-export default function JobPostingForm() {
+export default function JobPostingForm({
+  defaultJobPosting,
+}: {
+  defaultJobPosting?: JobPostingResponse;
+}) {
   const [detailJSON, setDetailJSON] = useState<string>('');
   const [isCalendarOpen, setIsCalendarOpen] = useState<boolean>(false);
   const [temporaryImage, setTemporaryImage] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const router = useRouter();
 
   // 컴포넌트 분리라던가. 좀 더 생각해보기 (data, isMutating, error 가져와서 마저 처리하기)
   const { trigger } = useSWRMutation(
-    '/api/job_posting/',
+    defaultJobPosting ? `/api/job_posting/${defaultJobPosting.id}` : '/api/job_posting/',
     async (url: string, { arg }: { arg: JobPostingRequest }) => {
       return fetchOnClient(url, {
-        method: 'POST',
+        method: defaultJobPosting ? 'PATCH' : 'POST',
         body: JSON.stringify(arg),
       });
     },
@@ -56,25 +66,45 @@ export default function JobPostingForm() {
     // reValidateMode: 'onBlur', // 이후에는 포커스를 잃을 때마다 검증
     mode: 'onTouched', // 한 번 터치된 필드에 대해
     reValidateMode: 'onChange', // 이후에는 값이 변경될 때마다 검증
-    defaultValues: {
-      company: '',
-      title: '',
-      location: '',
-      employment_type: '일반',
-      employ_method: '정규직',
-      work_time: '',
-      position: '',
-      history: undefined,
-      recruitment_count: 0,
-      education: '',
-      deadline: '', // YYYY-MM-DD
-      salary: '협의 후 결정',
-      summary: undefined,
-      description: '',
-      status: '모집중',
-      career: '경력무관',
-      image_url: undefined,
-    },
+    defaultValues: defaultJobPosting
+      ? {
+          company: defaultJobPosting.company,
+          title: defaultJobPosting.title,
+          location: defaultJobPosting.location,
+          employment_type: defaultJobPosting.employment_type,
+          employ_method: defaultJobPosting.employ_method,
+          work_time: defaultJobPosting.work_time,
+          position: defaultJobPosting.position,
+          history: defaultJobPosting.history === '' ? undefined : defaultJobPosting.history,
+          recruitment_count: defaultJobPosting.recruitment_count,
+          education: defaultJobPosting.education,
+          deadline: defaultJobPosting.deadline, // YYYY-MM-DD
+          salary: defaultJobPosting.salary,
+          summary: defaultJobPosting.summary === '' ? undefined : defaultJobPosting.summary,
+          description: defaultJobPosting.description,
+          status: defaultJobPosting.status,
+          career: defaultJobPosting.career,
+          image_url: undefined,
+        }
+      : {
+          company: '',
+          title: '',
+          location: '',
+          employment_type: '일반',
+          employ_method: '정규직',
+          work_time: '',
+          position: '',
+          history: undefined,
+          recruitment_count: 0,
+          education: '',
+          deadline: '', // YYYY-MM-DD
+          salary: '협의 후 결정',
+          summary: undefined,
+          description: '',
+          status: '모집중',
+          career: '경력무관',
+          image_url: undefined,
+        },
   });
 
   // TODO: API 요청 성공 후 로직 (에러도) 필요함
@@ -93,6 +123,9 @@ export default function JobPostingForm() {
 
     // 공고 제출
     try {
+      if (defaultJobPosting && defaultJobPosting.image_url) {
+        data.image_url = defaultJobPosting.image_url;
+      }
       const response = await trigger(data);
       console.log('성공:', response);
       // 성공 처리 로직 (예: 알림, 리디렉션 등)
@@ -167,7 +200,11 @@ export default function JobPostingForm() {
                   <div className='flex gap-4'>
                     <div className='relative h-34 w-full'>
                       <Image
-                        src={previewUrl ? previewUrl : '/defaultProfile.png'}
+                        src={
+                          previewUrl
+                            ? previewUrl
+                            : (defaultJobPosting?.image_url ?? '/Character1.png')
+                        }
                         alt='썸네일 이미지'
                         fill
                         unoptimized
@@ -440,7 +477,10 @@ export default function JobPostingForm() {
         {/* 상세 모집 내용 */}
         <div className='flex flex-col gap-2'>
           <span className='font-semibold'>상세 모집 내용</span>
-          <JobPostingEditor setDetailJSON={setDetailJSON} />
+          <JobPostingEditor
+            defaultJSON={defaultJobPosting?.description ?? ''}
+            setDetailJSON={setDetailJSON}
+          />
           {/* 데이터 형식 미리보기 */}
           {/* <div className='mt-4'>
             <div className='text-sm font-bold'>JSON</div>
@@ -453,7 +493,7 @@ export default function JobPostingForm() {
         <div className='flex justify-between gap-2'>
           <Button
             className='bg-danger grow cursor-pointer hover:bg-amber-700'
-            onClick={() => console.log('클릭')}
+            onClick={() => router.back()}
           >
             취소하기
           </Button>
