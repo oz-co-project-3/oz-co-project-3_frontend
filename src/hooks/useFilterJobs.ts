@@ -40,11 +40,11 @@ export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword
         // 대분류에 속한 소분류들만 대분류+소분류 형태로 처리
         const formattedLocations = subDistricts.map((district) => `${selectedRegion} ${district}`);
         params.set('location', formattedLocations.join(','));
-        console.log('대분류+소분류 조합:', formattedLocations);
+        // console.log('대분류+소분류 조합:', formattedLocations);
       } else {
         // 소분류가 없으면 대분류만 사용
         params.set('location', selectedRegion);
-        console.log('대분류만 선택:', selectedRegion);
+        // console.log('대분류만 선택:', selectedRegion);
       }
     } else if (selectedDistricts.length) {
       // 예외 처리: selectedRegion이 없지만 소분류가 있는 경우
@@ -62,7 +62,7 @@ export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword
     }
 
     const queryString = params.toString();
-    console.log('최종 쿼리 문자열:', queryString);
+    // console.log('최종 쿼리 문자열:', queryString);
     return queryString;
   }, [
     employmentType,

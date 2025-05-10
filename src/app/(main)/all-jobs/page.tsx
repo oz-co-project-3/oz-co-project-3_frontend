@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import AllJobList from './AllJobList';
 import Image from 'next/image';
+import Loading from '@/app/loading';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +32,7 @@ export default async function AllJobsPage({
         </h1>
         <hr />
         <div className='mb-10 flex space-x-2'></div>
-        <Suspense fallback={<div>로딩 중...</div>}>
+        <Suspense fallback={<Loading />}>
           {data.data.length > 0 ? (
             <AllJobList data={data} />
           ) : (
@@ -41,6 +42,7 @@ export default async function AllJobsPage({
                 <Image src='/SadCharacter1.png' alt='슬픈곰돌이 여' width={200} height={200} />
               </div>
               <div>검색 결과가 없습니다.</div>
+              <div>검색 조건을 변경하면 더 많은 결과를 찾을수 있어요!</div>
             </div>
           )}
         </Suspense>
