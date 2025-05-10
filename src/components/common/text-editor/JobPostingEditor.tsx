@@ -50,7 +50,7 @@ export default function JobPostingEditor({
       }),
       characterCount,
     ],
-    content: JSON.parse(defaultJSON) ?? ``,
+    content: defaultJSON ? JSON.parse(defaultJSON) : '',
     editorProps: {
       attributes: {
         class: 'min-h-[500px] w-full bg-white p-4 focus:outline-none',
