@@ -1,6 +1,10 @@
 import { create } from 'zustand';
+import { REGIONS } from '@/constants/region';
 
 interface FilterState {
+  selectedRegion: keyof typeof REGIONS | null;
+  setSelectedRegion: (region: keyof typeof REGIONS | null) => void;
+
   selectedDistricts: string[];
   setSelectedDistricts: (districts: string[]) => void;
   toggleDistrict: (district: string) => void;
@@ -25,6 +29,9 @@ interface FilterState {
 }
 
 export const useFilterStore = create<FilterState>((set) => ({
+  selectedRegion: null,
+  setSelectedRegion: (region) => set({ selectedRegion: region }),
+
   selectedDistricts: [],
   setSelectedDistricts: (districts) => set({ selectedDistricts: districts }),
   toggleDistrict: (district) =>
@@ -72,6 +79,7 @@ export const useFilterStore = create<FilterState>((set) => ({
 
   resetAll: () =>
     set({
+      selectedRegion: null,
       selectedDistricts: [],
       selectedSubcategories: [],
       selectedMethod: [],

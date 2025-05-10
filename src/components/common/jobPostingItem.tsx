@@ -13,7 +13,7 @@ export default function JobPostingItem({ post, detailPagePath }: JobPostingItemP
       <Link className='block' href={`${detailPagePath}/${post.id}`}>
         <div className='flex flex-row justify-between border-b-2 bg-white py-2 hover:shadow-lg'>
           {/* 근무지 */}
-          <div className='flex h-[80px] w-[150px] flex-col items-center justify-center'>
+          <div className='flex h-[80px] w-[150px] flex-col items-center justify-center pl-2 text-center'>
             <span>{post.location}</span>
           </div>
           {/* 모집제목/기업명 */}
@@ -22,7 +22,7 @@ export default function JobPostingItem({ post, detailPagePath }: JobPostingItemP
             <span className='truncate'>{post.company}</span>
           </div>
           {/* 근무요약 */}
-          <div className='flex h-[80px] w-[300px] flex-col justify-center'>
+          <div className='flex h-[80px] w-[300px] flex-col justify-center text-center'>
             <span className='truncate'>{post.summary}</span>
           </div>
           {/* 근무형태 */}
