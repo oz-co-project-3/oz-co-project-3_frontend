@@ -72,7 +72,10 @@ export default function DropDownFilter({
                   className={`flex cursor-pointer items-center px-4 py-2 hover:bg-gray-100 ${
                     selectedRegion === region ? 'bg-gray-100 font-bold' : ''
                   }`}
-                  onClick={() => setSelectedRegion(region)}
+                  onClick={() => {
+                    setSelectedRegion(region);
+                    console.log('대분류 선택됨:', region);
+                  }}
                 >
                   {region}
                   <FiChevronRight />
@@ -106,7 +109,10 @@ export default function DropDownFilter({
                             type='checkbox'
                             checked={selectedDistricts.includes(district)}
                             className='cursor-pointer rounded border px-3 py-1'
-                            onChange={() => toggleDistrict(district)}
+                            onChange={() => {
+                              console.log('소분류 선택:', district, '대분류:', selectedRegion);
+                              toggleDistrict(district);
+                            }}
                           />
                           {district}
                         </label>

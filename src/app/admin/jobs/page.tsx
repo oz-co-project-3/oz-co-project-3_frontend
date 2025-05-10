@@ -1,5 +1,10 @@
 import JobPostingAdminClient from '@/components/admin/jobs/JobPostingAdminClient';
+import AdminLayout from '@/components/layout/AdminLayout';
 
-export default async function AdminJobPostingPage() {
-  return <JobPostingAdminClient />;
+export default function AdminJobListPage() {
+  return (
+    <AdminLayout>
+      <JobPostingAdminClient />
+    </AdminLayout>
+  );
 }

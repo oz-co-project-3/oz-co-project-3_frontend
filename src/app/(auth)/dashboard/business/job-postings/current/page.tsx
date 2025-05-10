@@ -25,6 +25,7 @@ export default async function CurrentJobPostingsPage() {
             채용 공고 등록
           </Link>
         </div>
+
         {jobPostings.map((jobPosting) => (
           <JobPostingPrivateCard key={jobPosting.id} jobPosting={jobPosting} />
         ))}

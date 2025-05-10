@@ -1,9 +1,21 @@
 import Link from 'next/link';
-import DeleteResumeButton from './DeleteResumeButton';
+import DeleteButton from '../common/ConfirmButton';
 import { ResumeResponse } from '@/types/Schema/resumeSchema';
 import { formatDate } from 'date-fns';
+import fetchOnServer from '@/api/serverFetcher';
+import { redirect } from 'next/navigation';
 
 export default async function ResumeCard({ resume }: { resume: ResumeResponse }) {
+  const deleteResume = async () => {
+    'use server';
+    // TODO: 에러 처리 (try, catch)
+    const response = await fetchOnServer(`/api/resume/${resume.id}/`, {
+      method: 'DELETE',
+    });
+    console.log(response);
+    redirect('/dashboard/job-seeker/resume');
+  };
+
   return (
     <article className='relative flex flex-col gap-2 rounded-md border lg:flex-row'>
       <Link
@@ -37,7 +49,12 @@ export default async function ResumeCard({ resume }: { resume: ResumeResponse })
         >
           수정
         </Link>
-        <DeleteResumeButton id={`${resume.id}`} />
+        <DeleteButton
+          handleAction={deleteResume}
+          title='삭제'
+          contentText='삭제한 이력서는 복구할 수 없습니다.'
+          actionType='warning'
+        />
       </div>
     </article>
   );

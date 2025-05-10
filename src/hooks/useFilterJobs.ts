@@ -1,8 +1,11 @@
-// src/hooks/usePublicJobs.ts
-import { useEffect, useState } from 'react';
+'use client';
+
+import { useEffect, useState, useCallback } from 'react';
 import { useFilterStore } from '@/store/filterStore';
 import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 import { useSearchParams } from 'next/navigation';
+import { fetchOnClient } from '@/api/clientFetcher';
+import { REGIONS } from '@/constants/region';
 
 export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword?: string) {
   const {
@@ -11,19 +14,43 @@ export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword
     selectedMethod,
     selectedCareer,
     selectedEducation,
+    selectedRegion,
   } = useFilterStore();
   const [data, setData] = useState<JobPostingListResponse>();
   const searchParams = useSearchParams();
-  const page = Number(searchParams.get('page')) || 0; // 쿼리 파라미터에서 페이지 번호 가져오기, 없으면 0로 설정
+  const page = Number(searchParams.get('page')) || 0;
 
   const [loading, setLoading] = useState(false);
 
   // 쿼리스트링 생성
-  function makeQuery() {
+  const makeQuery = useCallback(() => {
     const params = new URLSearchParams();
     params.set('employment_type', employmentType);
     if (searchKeyword) params.set('search_keyword', searchKeyword);
-    if (selectedDistricts.length) params.set('location', selectedDistricts.join(','));
+
+    // 지역 필터링 로직 개선
+    if (selectedRegion) {
+      const subDistricts = selectedDistricts.filter(
+        (district) =>
+          // 소분류인지 확인 (대분류 목록에 없으면 소분류)
+          !Object.keys(REGIONS).includes(district),
+      );
+
+      if (subDistricts.length > 0) {
+        // 대분류에 속한 소분류들만 대분류+소분류 형태로 처리
+        const formattedLocations = subDistricts.map((district) => `${selectedRegion} ${district}`);
+        params.set('location', formattedLocations.join(','));
+        console.log('대분류+소분류 조합:', formattedLocations);
+      } else {
+        // 소분류가 없으면 대분류만 사용
+        params.set('location', selectedRegion);
+        console.log('대분류만 선택:', selectedRegion);
+      }
+    } else if (selectedDistricts.length) {
+      // 예외 처리: selectedRegion이 없지만 소분류가 있는 경우
+      params.set('location', selectedDistricts.join(','));
+    }
+
     if (selectedSubcategories.length) params.set('position', selectedSubcategories.join(','));
     if (selectedMethod.length) params.set('employ_method', selectedMethod.join(','));
     if (selectedCareer.length) params.set('career', selectedCareer.join(','));
@@ -32,23 +59,15 @@ export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword
       params.set('offset', page.toString());
     } else {
       params.set('offset', (page - 1).toString());
-    } // 페이지 번호 추가
-    return params.toString();
-  }
+    }
 
-  useEffect(() => {
-    setLoading(true);
-    fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/postings/?${makeQuery()}`)
-      .then((res) => res.json())
-      // .then((res) => console.log(res))
-      .then((data) => {
-        console.log(data);
-        setData(data);
-      })
-      .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const queryString = params.toString();
+    console.log('최종 쿼리 문자열:', queryString);
+    return queryString;
   }, [
+    employmentType,
     searchKeyword,
+    selectedRegion,
     selectedDistricts,
     selectedSubcategories,
     selectedMethod,
@@ -56,6 +75,20 @@ export function useFilterJobs(employmentType: '공공' | '일반', searchKeyword
     selectedEducation,
     page,
   ]);
+
+  useEffect(() => {
+    setLoading(true);
+
+    fetchOnClient<JobPostingListResponse>(`/api/postings/?${makeQuery()}`)
+      .then((data) => {
+        console.log('API 응답:', data);
+        setData(data);
+      })
+      .catch((error) => {
+        console.error('공고 데이터 로드 실패:', error);
+      })
+      .finally(() => setLoading(false));
+  }, [makeQuery]);
 
   return { data, loading };
 }
