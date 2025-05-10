@@ -33,7 +33,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           contentText='찜 목록에서 제거 하시겠습니까?'
           actionType='normal'
         />
-        <ApplyButton />
+        <ApplyButton jobPostingId={id} />
       </div>
     </section>
   );

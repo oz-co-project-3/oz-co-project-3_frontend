@@ -10,13 +10,22 @@ import {
 import { Button } from '@/components/ui/button';
 // import { useEffect } from 'react';
 // import { useRouter } from 'next/navigation';
-// import { useResumes } from '@/hooks/useResumes';
 import { ResumeListResponse } from '@/types/Schema/resumeSchema';
 import useSWR from 'swr';
 import { fetchOnClient } from '@/api/clientFetcher';
 import { Check } from 'lucide-react';
+import { useState } from 'react';
+import { TriggerWithArgs } from 'swr/mutation';
 
-export function ResumeListModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+export function ResumeListModal({
+  open,
+  onClose,
+  action,
+}: {
+  open: boolean;
+  onClose: () => void;
+  action: TriggerWithArgs<unknown, unknown, string, number>;
+}) {
   // const router = useRouter();
   const {
     data: resumes,
@@ -25,7 +34,9 @@ export function ResumeListModal({ open, onClose }: { open: boolean; onClose: () 
     // isLoading,
   } = useSWR<ResumeListResponse>(`/api/resume/`, fetchOnClient);
 
-  console.log(resumes);
+  // console.log(resumes);
+
+  const [selectedResumeId, setSelectedResumeId] = useState<number | null>(null);
 
   // 매번 열릴 때마다 mutate (삭제 등 반영 하기 위해서), 꼭 필요함?
   // useEffect(() => {
@@ -49,27 +60,27 @@ export function ResumeListModal({ open, onClose }: { open: boolean; onClose: () 
               {resumes?.data.map((resume) => (
                 <li
                   key={resume.id}
-                  className='flex cursor-pointer justify-between rounded-md border px-4 py-3 hover:bg-zinc-100'
+                  className={`flex cursor-pointer justify-between rounded-md border px-4 py-3 hover:bg-zinc-100 ${
+                    selectedResumeId === resume.id ? 'bg-zinc-100' : ''
+                  }`}
+                  onClick={() => setSelectedResumeId(resume.id)}
                 >
-                  {/* <Button
-                    variant='outline'
-                    className='w-full justify-start'
-                    onClick={() => {
-                      // 지원할 이력서 선택 (선택된 이력서 상태로 저장?)
-                      // router.push(`/admin/resume/${resume.id}/`);
-                      // onClose();
-                    }}
-                  > */}
                   {resume.title}
-                  <Check className='h-4 w-4' />
-                  {/* </Button> */}
+                  {selectedResumeId === resume.id && <Check className='text-main-light h-4 w-4' />}
                 </li>
               ))}
             </ul>
           )}
         </div>
         <DialogFooter>
-          <Button type='submit' className='bg-main-light hover:bg-main-dark cursor-pointer'>
+          <Button
+            className='bg-main-light hover:bg-main-dark cursor-pointer'
+            disabled={!selectedResumeId}
+            onClick={() => {
+              console.log(selectedResumeId);
+              action(selectedResumeId!);
+            }}
+          >
             지원
           </Button>
         </DialogFooter>
