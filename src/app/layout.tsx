@@ -35,11 +35,11 @@ export default async function RootLayout({
         <SwrProvider>
           <AuthInitializer />
           <AutoTokenRefresher />
+          <LoginRequiredModal />
           <Header />
           <div className='min-h-[calc(100vh)] pt-[70px] pb-16'>{children}</div>
           <ChatbotButtonWrapper />
           <Footer />
-          <LoginRequiredModal />
           <div className='h-full pt-[70px]'>{children}</div>
         </SwrProvider>
       </body>
