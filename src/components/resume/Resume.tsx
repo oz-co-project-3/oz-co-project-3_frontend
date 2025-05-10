@@ -23,7 +23,6 @@ export default async function Resume({ resume }: { resume: ResumeResponse }) {
   // 유저 정보 받아서, 생년월일 넣어주기?
 
   // console.log(resume);
-  console.log(resume.created_at, resume.updated_at);
 
   return (
     <article className='flex flex-col gap-8 rounded-md'>
