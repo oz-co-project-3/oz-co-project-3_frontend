@@ -16,11 +16,13 @@ export default function ConfirmButton({
   title,
   contentText,
   actionType,
+  formId,
 }: {
-  handleAction: () => void;
+  handleAction?: () => void;
   title: string;
   contentText: string;
   actionType: 'normal' | 'warning' | 'emphasis';
+  formId?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,6 +43,7 @@ export default function ConfirmButton({
     <>
       <Button
         onClick={() => setIsOpen(true)}
+        type='button'
         className={`${extraClass} grow cursor-pointer rounded-md px-2.5 py-5`}
       >
         {title}
@@ -54,14 +57,19 @@ export default function ConfirmButton({
           <DialogFooter>
             <Button
               variant='outline'
+              type='button'
               onClick={() => setIsOpen(false)}
               className='hover:cursor-pointer'
             >
               취소
             </Button>
             <Button
+              type={formId ? 'submit' : 'button'}
+              form={formId ? formId : undefined}
               onClick={() => {
-                handleAction();
+                if (handleAction) {
+                  handleAction();
+                }
                 setIsOpen(false);
               }}
               className='bg-main-light hover:bg-main-dark hover:cursor-pointer'
