@@ -5,13 +5,18 @@ import Link from 'next/link';
 
 export default async function CurrentJobPostingsPage() {
   const jobPostings = await fetchOnServer<JobPostingResponse[]>('/api/job_posting/');
-  console.log(jobPostings);
+  // console.log(jobPostings);
 
-  // TODO: 마감일 지나지 않은 것만 필터링하기
-  // const currentJobPostings = jobPostings.filter(
-  //   (jobPosting) => jobPosting.deadline > new Date(), // 대충 이런식으로 (로직 안맞음 아직)
-  // );
-  // console.log(currentJobPostings);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const currentJobPostings = jobPostings.filter((jobPosting) => {
+    const deadlineString = jobPosting.deadline; // 'yyyy-mm-dd'
+    const [year, month, day] = deadlineString.split('-').map(Number);
+    const deadlineDate = new Date(year, month - 1, day);
+    return deadlineDate >= today;
+  });
+  console.log(currentJobPostings);
 
   return (
     <>
@@ -26,9 +31,15 @@ export default async function CurrentJobPostingsPage() {
           </Link>
         </div>
 
-        {jobPostings.map((jobPosting) => (
-          <JobPostingPrivateCard key={jobPosting.id} jobPosting={jobPosting} />
-        ))}
+        {currentJobPostings.length === 0 ? (
+          <div className='flex flex-col items-center justify-center gap-2 py-8'>
+            <p className='text-lg text-gray-500'>현재 진행중인 채용공고가 없습니다.</p>
+          </div>
+        ) : (
+          currentJobPostings.map((jobPosting) => (
+            <JobPostingPrivateCard key={jobPosting.id} jobPosting={jobPosting} />
+          ))
+        )}
       </section>
     </>
   );
