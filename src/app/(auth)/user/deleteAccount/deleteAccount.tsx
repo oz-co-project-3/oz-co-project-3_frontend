@@ -20,7 +20,7 @@ export default function DeleteAccountFlow() {
       await deleteUser({
         password,
         is_active: false,
-        reason,
+        leave_reason: reason,
       });
       logout();
       localStorage.clear();
