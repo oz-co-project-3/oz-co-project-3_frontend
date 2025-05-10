@@ -23,7 +23,6 @@ export default async function ResumeAdmin({ id }: { id: string }) {
   const resume = await fetchOnServer<ResumeResponse>(`/api/admin/resume/${id}/`);
   // const user = await fetchOnServer<UserResponse>(`/api/user/profile/${resume.user.id}/`);
   // 유저 정보 받아서, 생년월일 넣어주기
-
   console.log(resume);
 
   return (

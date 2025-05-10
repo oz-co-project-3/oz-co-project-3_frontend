@@ -3,8 +3,8 @@ import { UserProfileResponse } from '@/types/user';
 import { formatDate } from 'date-fns';
 import Image from 'next/image';
 
-export default async function CompanyProfile({ id }: { id?: Promise<string> }) {
-  const userId = await id;
+export default async function CompanyProfile({ id }: { id?: string }) {
+  const userId = id;
   console.log('기업유저 id: ', userId, ' (회사 프로필 페이지)');
 
   let user: UserProfileResponse;

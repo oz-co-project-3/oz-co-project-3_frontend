@@ -3,8 +3,8 @@ import { UserProfileResponse } from '@/types/user';
 import { formatDate } from 'date-fns';
 import Image from 'next/image';
 
-export default async function SeekerProfile({ id }: { id?: Promise<string> }) {
-  const userId = await id;
+export default async function SeekerProfile({ id }: { id?: string }) {
+  const userId = id;
   console.log('개인유저 id: ', userId);
 
   let user: UserProfileResponse;
