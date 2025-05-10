@@ -27,6 +27,7 @@ import AddressFormField from './AddressFormField';
 import Image from 'next/image';
 import { Label } from '../ui/label';
 import { useRouter } from 'next/navigation';
+import ConfirmButton from '../common/ConfirmButton';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
 // 클라이언트 전용으로 렌더링하고 싶을때
@@ -129,6 +130,7 @@ export default function JobPostingForm({
       const response = await trigger(data);
       console.log('성공:', response);
       // 성공 처리 로직 (예: 알림, 리디렉션 등)
+      router.push('/dashboard/business/job-postings/current');
     } catch (error) {
       console.error('에러:', error);
       // 에러 처리 로직
@@ -157,7 +159,11 @@ export default function JobPostingForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-8'>
+      <form
+        id='jobPostingForm'
+        onSubmit={form.handleSubmit(onSubmit)}
+        className='flex flex-col gap-8'
+      >
         {/* 채용 공고 제목 */}
         <FormField
           control={form.control}
@@ -495,16 +501,14 @@ export default function JobPostingForm({
             className='bg-danger grow cursor-pointer hover:bg-amber-700'
             onClick={() => router.back()}
           >
-            취소하기
+            취소
           </Button>
-          <Button
-            type='submit'
-            className='bg-main-light hover:bg-main-dark grow cursor-pointer'
-            // disabled={!form.formState.isValid}
-            onClick={() => form.trigger()}
-          >
-            저장하기
-          </Button>
+          <ConfirmButton
+            title='저장'
+            contentText='채용 공고를 저장하시겠습니까?'
+            actionType='emphasis'
+            formId='jobPostingForm'
+          />
         </div>
       </form>
     </Form>

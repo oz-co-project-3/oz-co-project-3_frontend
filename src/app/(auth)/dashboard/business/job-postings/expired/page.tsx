@@ -7,11 +7,16 @@ export default async function PreviousJobPostingsPage() {
   const jobPostings = await fetchOnServer<JobPostingResponse[]>('/api/job_posting/');
   console.log(jobPostings);
 
-  // TODO: 마감일 지난 것만 필터링하기
-  // const expiredJobPostings = jobPostings.filter(
-  //   (jobPosting) => jobPosting.deadline < new Date(), // 대충 이런식으로 (로직 안맞음 아직)
-  // );
-  // console.log(expiredJobPostings);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const expiredJobPostings = jobPostings.filter((jobPosting) => {
+    const deadlineString = jobPosting.deadline; // 'yyyy-mm-dd'
+    const [year, month, day] = deadlineString.split('-').map(Number);
+    const deadlineDate = new Date(year, month - 1, day);
+    return deadlineDate < today;
+  });
+  console.log(expiredJobPostings);
 
   return (
     <>
@@ -26,9 +31,15 @@ export default async function PreviousJobPostingsPage() {
           </Link>
         </div>
 
-        {jobPostings.map((jobPosting) => (
-          <ExpiredJobPostingCardTemp key={jobPosting.id} jobPosting={jobPosting} />
-        ))}
+        {expiredJobPostings.length === 0 ? (
+          <div className='flex flex-col items-center justify-center gap-2 py-8'>
+            <p className='text-lg text-gray-500'>마감일이 지난 채용공고가 없습니다.</p>
+          </div>
+        ) : (
+          expiredJobPostings.map((jobPosting) => (
+            <ExpiredJobPostingCardTemp key={jobPosting.id} jobPosting={jobPosting} />
+          ))
+        )}
       </section>
     </>
   );

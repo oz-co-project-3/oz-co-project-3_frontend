@@ -14,6 +14,7 @@ import { useState, useEffect } from 'react';
 import uploadImage from '@/api/imageUploader';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import ConfirmButton from '../common/ConfirmButton';
 
 export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeResponse }) {
   const [temporaryImage, setTemporaryImage] = useState<File | null>(null);
@@ -113,6 +114,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
       }
       const response = await trigger(data);
       console.log('이력서 제출 성공:', response);
+      router.push('/dashboard/job-seeker/resume');
       // 성공 처리 로직 (예: 알림, 리디렉션 등)
     } catch (error) {
       console.error('이력서 제출 실패:', error);
@@ -136,7 +138,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-8'>
+      <form id='resumeForm' onSubmit={form.handleSubmit(onSubmit)} className='flex flex-col gap-8'>
         {/* 채용 공고 제목 */}
         <FormField
           control={form.control}
@@ -494,11 +496,14 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
             className='bg-danger grow cursor-pointer hover:bg-amber-700'
             onClick={() => router.back()}
           >
-            취소하기
+            취소
           </Button>
-          <Button type='submit' className='bg-main-light hover:bg-main-dark grow cursor-pointer'>
-            저장하기
-          </Button>
+          <ConfirmButton
+            title='저장'
+            contentText='이력서를 저장하시겠습니까?'
+            actionType='emphasis'
+            formId='resumeForm'
+          />
         </div>
       </form>
     </Form>
