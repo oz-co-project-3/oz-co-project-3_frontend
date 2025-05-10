@@ -496,10 +496,10 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
             className='bg-danger grow cursor-pointer hover:bg-amber-700'
             onClick={() => router.back()}
           >
-            취소하기
+            취소
           </Button>
           <ConfirmButton
-            title='저장하기'
+            title='저장'
             contentText='이력서를 저장하시겠습니까?'
             actionType='emphasis'
             formId='resumeForm'
