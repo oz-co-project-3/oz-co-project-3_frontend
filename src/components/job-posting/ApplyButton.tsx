@@ -1,13 +1,27 @@
 'use client';
 
-// import { useAuthStore } from '@/store/useAuthStore';
+import { fetchOnClient } from '@/api/clientFetcher';
 import { Button } from '../ui/button';
 import { ResumeListModal } from './ResumeListModal';
 import { useState } from 'react';
+import useSWRMutation from 'swr/mutation';
 
-export default function ApplyButton() {
-  // const { user } = useAuthStore();
+export default function ApplyButton({ jobPostingId }: { jobPostingId: string }) {
   const [isListModalOpen, setIsListModalOpen] = useState(false);
+
+  const { trigger } = useSWRMutation(
+    `/api/postings/${jobPostingId}/applicant/`,
+    async (url: string, { arg }: { arg: number }) => {
+      return fetchOnClient(url, {
+        method: 'POST',
+        body: JSON.stringify({
+          resume: arg.toString(),
+          status: '지원 중',
+          memo: '',
+        }),
+      });
+    },
+  );
 
   return (
     <>
@@ -19,9 +33,9 @@ export default function ApplyButton() {
       </Button>
       {isListModalOpen && (
         <ResumeListModal
-          // userId={user.id}
           open={isListModalOpen}
           onClose={() => setIsListModalOpen(false)}
+          action={trigger}
         />
       )}
     </>
