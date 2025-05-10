@@ -1,7 +1,7 @@
 import fetchOnServer from '@/api/serverFetcher';
 import ConfirmButton from '@/components/common/ConfirmButton';
 import JobPosting from '@/components/job-posting/JobPosting';
-import { Button } from '@/components/ui/button';
+import ApplyButton from '@/components/job-posting/ApplyButton';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import { redirect } from 'next/navigation';
 
@@ -33,9 +33,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           contentText='찜 목록에서 제거 하시겠습니까?'
           actionType='normal'
         />
-        <Button className='bg-main-light hover:bg-main-dark flex grow cursor-pointer items-center justify-center rounded-md p-2 py-5 text-white'>
-          지원
-        </Button>
+        <ApplyButton />
       </div>
     </section>
   );

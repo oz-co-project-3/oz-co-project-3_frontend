@@ -23,11 +23,11 @@ export default async function CompanyProfile({ id }: { id?: Promise<string> }) {
       <div className='flex flex-col items-center gap-4 rounded-md border p-8'>
         <div className='relative h-40 w-60 overflow-hidden rounded-md border md:h-56 md:w-80 lg:h-68 lg:w-100'>
           <Image
-            src={user.corp?.profile_url ?? '/logo/logo.gif'}
+            src={user.corp?.profile_url ?? '/Character2.png'}
             alt='company profile'
             fill
             unoptimized
-            className='object-cover'
+            className='object-contain'
           />
         </div>
         <div className='flex w-full justify-between border-b pb-4'>
