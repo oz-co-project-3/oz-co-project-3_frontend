@@ -54,7 +54,7 @@ export default function LoginPage() {
     try {
       const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
       console.log('네이버 CLIENT_ID:', process.env.NEXT_PUBLIC_NAVER_CLIENT_ID);
-      const REDIRECT_URI = 'http://localhost:3000/naver/callback/'; // 사용자가 돌아올 URI
+      const REDIRECT_URI = 'https://senior-tomorrow.o-r.kr/naver/callback/'; // 사용자가 돌아올 URI
       const STATE = 'naver_login_test_2025';
 
       const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${encodeURIComponent(
@@ -70,7 +70,7 @@ export default function LoginPage() {
 
   const handleKakaoLogin = () => {
     const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
-    const REDIRECT_URI = 'http://localhost:3000/kakao/callback/';
+    const REDIRECT_URI = 'https://senior-tomorrow.o-r.kr/kakao/callback/';
 
     const STATE = crypto.randomUUID(); // 랜덤 state 생성
     localStorage.setItem('kakao_login_state', STATE); // localStorage에 저장
