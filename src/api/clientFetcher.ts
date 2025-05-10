@@ -15,16 +15,22 @@ export async function fetchOnClient<T>(
     ...customHeaders,
   };
 
-  const res = await fetch(`${baseUrl}${url}`, {
+  const response = await fetch(`${baseUrl}${url}`, {
     ...restOptions,
     headers,
     credentials: 'include',
   });
 
-  const data = await res.json().catch(() => ({}));
+  const contentType = response.headers.get('Content-Type');
 
-  if (!res.ok) {
-    if (res.status === 401 && url === '/api/user/profile/') {
+  const isJson = contentType?.includes('application/json');
+  const rawData = isJson
+    ? await response.json().catch(() => ({}))
+    : await response.text().catch(() => '');
+
+  if (!response.ok) {
+    // 예외적으로 유저 정보 요청은 401일 때 guest 처리
+    if (response.status === 401 && url === '/api/user/profile/') {
       return {
         id: 0,
         email: '',
@@ -34,10 +40,17 @@ export async function fetchOnClient<T>(
       } as T;
     }
 
-    console.error('fetch error body:', data);
-    throw new Error(data?.message || 'API 요청 실패');
+    const errorMessage =
+      typeof rawData === 'string'
+        ? rawData
+        : typeof rawData === 'object' && 'message' in rawData
+        ? String(rawData.message)
+        : 'API 요청 실패';
+
+    console.error('fetch error body:', rawData);
+    throw new Error(errorMessage);
   }
 
-  console.log('[요청 데이터]', data);
-  return data;
+  console.log('[요청 성공]', rawData);
+  return rawData as T;
 }

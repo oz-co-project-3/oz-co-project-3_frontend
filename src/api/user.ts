@@ -91,6 +91,22 @@ export const deleteUser = async (data: DeleteUserRequest) => {
   });
 };
 
+// 일반 회원 정보 수정
+export async function updateSeekerProfile(data: Record<string, unknown>) {
+  return await fetchOnClient('/api/user/profile/update/?target_type=normal', {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
+// 기업 회원 정보 수정
+export async function updateBusinessProfile(data: Record<string, unknown>) {
+  return await fetchOnClient('/api/user/profile/update/?target_type=business', {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
+}
+
 // 네이버 로그인 URL 요청
 export const getNaverLoginUrl = async (): Promise<string> => {
   const res = await fetchOnClient<{ auth_url: string }>(

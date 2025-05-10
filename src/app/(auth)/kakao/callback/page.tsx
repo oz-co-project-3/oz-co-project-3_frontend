@@ -27,6 +27,7 @@ export default function KakaoCallbackPage() {
           {
             method: 'POST',
             skipContentType: false,
+            credentials: 'include',
             body: JSON.stringify({ code, state: storedState }),
           },
         );
