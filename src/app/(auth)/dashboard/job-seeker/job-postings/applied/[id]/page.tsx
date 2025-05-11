@@ -2,6 +2,7 @@ import fetchOnServer from '@/api/serverFetcher';
 import ConfirmButton from '@/components/common/ConfirmButton';
 import JobPosting from '@/components/job-posting/JobPosting';
 import { AppliedJobPosting, JobPostingResponse } from '@/types/Schema/jobPostingSchema';
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -36,23 +37,22 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         }),
       },
     );
-    console.log(response);
+    console.log('지원 취소 응답: ', response);
+    revalidatePath('/dashboard/job-seeker/job-postings/applied');
     redirect('/dashboard/job-seeker/job-postings/applied');
   };
 
   return (
     <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
-      {/* <h2 className='border-b pb-4 text-2xl font-bold'>공고 상세 조회</h2> */}
+      <h2 className='border-b pb-4 text-center text-2xl font-bold'>지원한 채용 공고 조회</h2>
       <JobPosting jobPosting={jobPosting} />
 
-      <div className='z-10 flex min-w-32 gap-2 py-4 max-lg:flex-col max-lg:pt-2'>
-        <ConfirmButton
-          handleAction={withdrawApplication}
-          title='지원 취소'
-          contentText='지원했던 내역은 담당자가 취소 후에도 확인할 수 있습니다.'
-          actionType='warning'
-        />
-      </div>
+      <ConfirmButton
+        handleAction={withdrawApplication}
+        title='지원 취소'
+        contentText='지원했던 내역은 담당자가 취소 후에도 확인할 수 있습니다.'
+        actionType='warning'
+      />
     </section>
   );
 }

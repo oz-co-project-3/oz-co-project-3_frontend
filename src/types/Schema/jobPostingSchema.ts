@@ -70,7 +70,6 @@ export type AppliedJobPosting = Pick<
   | 'location'
   | 'image_url'
   | 'deadline'
-  | 'status'
   | 'created_at'
   | 'updated_at'
 > & {
@@ -79,6 +78,7 @@ export type AppliedJobPosting = Pick<
   user_id: number;
   resume_id: number;
   memo: string;
+  status: '지원 중' | '지원 취소';
 };
 
 // 최대 글자수 넣어주기

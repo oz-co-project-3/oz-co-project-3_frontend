@@ -10,8 +10,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
 
   const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
-
-  // TODO: 마감일 안 지난거 필터링하기
   console.log(jobPosting);
 
   const deleteJobPosting = async () => {
