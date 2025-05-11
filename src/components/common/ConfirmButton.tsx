@@ -44,7 +44,7 @@ export default function ConfirmButton({
       <Button
         onClick={() => setIsOpen(true)}
         type='button'
-        className={`${extraClass} grow cursor-pointer rounded-md px-2.5 py-5`}
+        className={`${extraClass} cursor-pointer rounded-md px-4 py-2 text-base`}
       >
         {title}
       </Button>
