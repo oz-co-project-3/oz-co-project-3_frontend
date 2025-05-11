@@ -93,17 +93,23 @@ export const deleteUser = async (data: DeleteUserRequest) => {
 
 // 일반 회원 정보 수정
 export async function updateSeekerProfile(data: Record<string, unknown>) {
-  return await fetchOnClient('/api/user/profile/update/?target_type=normal', {
+  return fetchOnClient('/api/user/profile/update/?target_type=normal', {
     method: 'PATCH',
     body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
 
 // 기업 회원 정보 수정
 export async function updateBusinessProfile(data: Record<string, unknown>) {
-  return await fetchOnClient('/api/user/profile/update/?target_type=business', {
+  return fetchOnClient('/api/user/profile/update/?target_type=business', {
     method: 'PATCH',
     body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
 

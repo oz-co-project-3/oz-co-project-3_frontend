@@ -36,7 +36,7 @@ export default function LoginPage() {
       const user = {
         id: user_id,
         email,
-        user_type: user_type?.split(',')[0] as 'normal' | 'business' | 'admin',
+        user_type: user_type,
         name: name,
         signinMethod: 'email' as 'email' | 'naver' | 'kakao',
       };

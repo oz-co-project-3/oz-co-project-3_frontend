@@ -39,7 +39,7 @@ export interface LoginResponseData {
 export interface DeleteUserRequest {
   password: string;
   is_active: boolean;
-  leave_reason: string;
+  reason: string;
 }
 
 export interface User {
@@ -73,11 +73,11 @@ export interface SeekerProfile {
   name: string;
   phone_number: string;
   birth: string;
-  interests: string[];
-  purposes: string[];
-  sources: string[];
+  interests: string;
+  purposes: string;
+  sources: string;
   status: 'seeking' | 'not_seeking' | 'employed';
-  applied_posting: number[];
+  applied_posting: number;
   applied_posting_count: number;
   profile_url: string;
 }
