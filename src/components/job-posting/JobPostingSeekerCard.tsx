@@ -7,7 +7,7 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default async function JobPostingPublicCard({
+export default async function JobPostingSeekerCard({
   jobPosting,
   path,
 }: {

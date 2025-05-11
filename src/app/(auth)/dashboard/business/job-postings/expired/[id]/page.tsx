@@ -27,7 +27,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   return (
     <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
-      {/* <h2 className='border-b pb-4 text-2xl font-bold'>공고 상세 조회</h2> */}
+      <div className='flex justify-between border-b pb-4'>
+        <h2 className='text-main-light mb-6 text-2xl font-bold'>이전 채용 공고 조회</h2>
+        {/* 클라이언트 컴포넌트로 따로 컴포넌트화 */}
+        <button>지원자 조회</button>
+      </div>
       <JobPosting jobPosting={jobPosting} />
 
       <div className='z-10 flex min-w-32 gap-2 py-4 max-lg:flex-col max-lg:pt-2'>
@@ -42,6 +46,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           title='삭제'
           contentText='삭제한 공고는 복구할 수 없습니다.'
           actionType='warning'
+          extraClass='grow h-full'
         />
       </div>
     </section>

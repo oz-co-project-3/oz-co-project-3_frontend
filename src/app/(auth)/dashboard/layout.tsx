@@ -27,6 +27,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user } = useAuthStore();
   const router = useRouter();
 
+  console.log(pathname);
+
   const { data: profile } = useSWR<UserProfileResponse | null>(
     user ? '/api/user/profile/' : null,
     fetchOnClient,
@@ -43,7 +45,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <li key={item.name} className='w-full'>
                   <Link
                     href={item.href}
-                    className={`${pathname === item.href ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
+                    className={`${pathname.includes(item.href) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
                   >
                     {item.name}
                   </Link>
@@ -58,7 +60,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     <li key={item.name} className='w-full'>
                       <Link
                         href={item.href}
-                        className={`${pathname === item.href ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
+                        className={`${pathname.includes(item.href) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
                       >
                         {item.name}
                       </Link>
