@@ -26,9 +26,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <p>{publicJob.preferenceDetail}</p>
           <p>{publicJob.hiringProcess}</p>
           <p>{publicJob.postedAt}</p>
-          <Link href={publicJob.url ?? ''} target='_blank' className='absolute inset-0 grow'>
-            <span className='sr-only'>공고 링크</span>
-          </Link>
+          {publicJob.url && (
+            <Link href={publicJob.url} target='_blank'>
+              공고 링크
+            </Link>
+          )}
         </div>
       </div>
     </div>

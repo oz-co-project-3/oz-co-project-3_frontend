@@ -14,8 +14,8 @@ export type PublicJobPostingResponse = {
   recrutSeNm: string | null;
   prefCondCn: string | null;
   recrutNope: number | null;
-  pbancBgngYmd: string | null;
-  pbancEndYmd: string | null;
+  pbancBgngYmd: string;
+  pbancEndYmd: string;
   recrutPbancTtl: string | null;
   srcUrl: string | null;
   replmprYn: string | null;
@@ -32,7 +32,7 @@ export type PublicJobPostingResponse = {
   steps: string[] | null;
 };
 
-// 데이터 타입 정제
+// 데이터 타입 정제, id 추가
 export type PublicJobPosting = {
   id: number;
   title: string | null; // recrutPbancTtl
@@ -47,8 +47,8 @@ export type PublicJobPosting = {
   preference: string | null; // prefCondCn
   preferenceDetail: string | null; // prefCn
   hiringProcess: string | null; // scrnprcdrMthdExpln
-  postedAt: string | null; // pbancBgngYmd
-  deadline: string | null; // pbancEndYmd
+  postedAt: string; // pbancBgngYmd
+  deadline: string; // pbancEndYmd
   url: string | null; // srcUrl
 };
 
