@@ -4,6 +4,7 @@ import ConfirmButton from '@/components/common/ConfirmButton';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { revalidatePath } from 'next/cache';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -19,6 +20,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       method: 'DELETE',
     });
     console.log(response);
+    revalidatePath('/dashboard/business/job-postings/current');
     redirect('/dashboard/business/job-postings/current');
   };
 

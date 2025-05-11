@@ -4,7 +4,6 @@ import {
   FavoriteJobPosting,
   JobPostingResponse,
 } from '@/types/Schema/jobPostingSchema';
-import { Bookmark } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -45,9 +44,6 @@ export default async function JobPostingPublicCard({
         </span>
         <span className='text-sm text-gray-500'>마감일: {jobPosting.deadline ?? '상시모집'}</span>
       </div>
-
-      {/* TODO: 찜하기 api 연결 필요 (아이콘 바꿔도 상관없음) (클라이언트 컴포넌트로 따로 분리) */}
-      <Bookmark className='absolute right-2 bottom-2 z-20' />
     </div>
   );
 }

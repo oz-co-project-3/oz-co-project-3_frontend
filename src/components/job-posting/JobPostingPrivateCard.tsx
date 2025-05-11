@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import Link from 'next/link';
+import BusinessButtonBundle from './BusinessButtonBundle';
 
 export default async function JobPostingPrivateCard({
   jobPosting,
@@ -8,7 +8,7 @@ export default async function JobPostingPrivateCard({
   jobPosting: JobPostingResponse;
 }) {
   return (
-    <section className='relative flex cursor-pointer gap-4 rounded-md border px-8 py-6 max-sm:flex-col sm:justify-between'>
+    <section className='relative flex cursor-pointer gap-4 rounded-md border px-4 py-2 max-sm:flex-col sm:justify-between md:px-8 md:py-6'>
       <Link
         href={`/dashboard/business/job-postings/current/${jobPosting.id}`}
         className='absolute inset-0 grow'
@@ -16,31 +16,25 @@ export default async function JobPostingPrivateCard({
         <span className='sr-only'>공고 상세보기</span>
       </Link>
 
-      <div className='flex grow flex-col justify-between'>
+      <div className='flex grow flex-col justify-between gap-2'>
         <h3 className='text-lg font-bold'>{jobPosting.title}</h3>
 
-        <div className='flex gap-2'>
-          <span className='rounded-md bg-gray-100 px-2 py-1 text-sm'>{jobPosting.position}</span>
-          <span className='rounded-md bg-gray-100 px-2 py-1 text-sm'>
-            {jobPosting.employ_method}
-          </span>
-          <span className='rounded-md bg-gray-100 px-2 py-1 text-sm'>
-            마감일: {jobPosting.deadline}
-          </span>
-          <span className='rounded-md bg-gray-100 px-2 py-1 text-sm'>
-            조회수: {jobPosting.view_count}
-          </span>
+        <div className='flex flex-wrap gap-2'>
+          <div className='rounded-md bg-gray-100 px-2 py-1 text-sm'>{jobPosting.position}</div>
+          <div className='rounded-md bg-gray-100 px-2 py-1 text-sm'>{jobPosting.employ_method}</div>
+          <div className='rounded-md bg-gray-100 px-2 py-1 text-sm'>
+            <span className='text-gray-500'>마감:</span>{' '}
+            {jobPosting.deadline.slice(5).replace('-', '/')}
+          </div>
+          <div className='rounded-md bg-gray-100 px-2 py-1 text-sm'>
+            <span className='text-gray-500'>조회:</span> {jobPosting.view_count}
+          </div>
         </div>
       </div>
 
       {/* 컴포넌트 분리 */}
       {/* job_posting 받아온거에서 status가 open 이면 이걸로 렌더링 (마감일 안 지났으면?) */}
-      <div className='z-10 flex gap-2 sm:flex-wrap sm:justify-end'>
-        <Button className='sm:w-[48%]'>지원자 보기</Button>
-        <Button className='sm:w-[48%]'>마감일 연장</Button>
-        <Button className='sm:w-[48%]'>수정</Button>
-        <Button className='sm:w-[48%]'>삭제</Button>
-      </div>
+      <BusinessButtonBundle id={jobPosting.id} />
 
       {/* job_posting 받아온거에서 status가 closed 이면 이걸로 렌더링 (마감일 지났으면?) */}
       {/* <div className='flex min-w-40 gap-2 sm:flex-col sm:justify-end'>
