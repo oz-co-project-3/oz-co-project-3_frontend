@@ -34,6 +34,7 @@ export type PublicJobPostingResponse = {
 
 // 데이터 타입 정제
 export type PublicJobPosting = {
+  id: number;
   title: string | null; // recrutPbancTtl
   company: string | null; // instNm
   job: string | null; // ncsCdNmLst

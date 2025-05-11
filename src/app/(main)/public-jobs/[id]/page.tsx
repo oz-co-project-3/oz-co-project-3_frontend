@@ -1,26 +1,35 @@
-import fetchOnServer from '@/api/serverFetcher';
-import JobPosting from '@/components/job-posting/JobPosting';
-import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
-import LikedButton from '@/components/common/likebutton/LikedButton';
-import ApplyFlow from '../../ApplyFlow';
+import { PublicJobPosting } from '@/types/publicJob';
+import Link from 'next/link';
 
-//공공 상세페이지
-export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
-  // 폴더명이 [id]라면 params.id로 접근
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/postings/${id}/`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/public-jobs?id=${id}`);
+  const publicJob: PublicJobPosting = (await response.json()).data;
+  console.log('publicJob: ', publicJob);
 
   return (
-    <div>
-      <JobPosting jobPosting={jobPosting} />
-      <div className='flex min-h-screen flex-col'>
-        <footer className='fixed bottom-0 left-0 z-50 flex h-[80px] w-full flex-row items-center justify-center gap-1 bg-white'>
-          <div className='flex h-[50px] w-[50px] items-center justify-center rounded-2xl border'>
-            <LikedButton id={jobPosting.id} is_bookmarked={jobPosting.is_bookmarked} />
-          </div>
-          <ApplyFlow id={jobPosting.id} />
-        </footer>
+    <div className='flex h-full w-full flex-col overflow-y-auto'>
+      <div className='flex w-full flex-1'>
+        <div className='mx-auto flex w-full max-w-[1200px] flex-col gap-4 rounded-md bg-white py-8'>
+          <h3 className='text-lg font-bold'>{publicJob.title}</h3>
+          <p>{publicJob.company}</p>
+          <p>{publicJob.location}</p>
+          <p>{publicJob.deadline}</p>
+          <p>{publicJob.job}</p>
+          <p>{publicJob.position}</p>
+          <p>{publicJob.employmentType}</p>
+          <p>{publicJob.qualification}</p>
+          <p>{publicJob.disqualification}</p>
+          <p>{publicJob.education}</p>
+          <p>{publicJob.preference}</p>
+          <p>{publicJob.preferenceDetail}</p>
+          <p>{publicJob.hiringProcess}</p>
+          <p>{publicJob.postedAt}</p>
+          <Link href={publicJob.url ?? ''} target='_blank' className='absolute inset-0 grow'>
+            <span className='sr-only'>공고 링크</span>
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -49,3 +49,5 @@ export default function PublicJobsPage() {
 // const response = await fetch('http://localhost:3000/api/public-jobs?offset=20&limit=20');
 // const publicJobs: PublicJobsResponse = await response.json();
 // console.log('publicJobs: ', publicJobs);
+
+// 유주님 버전

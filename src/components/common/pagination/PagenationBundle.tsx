@@ -13,11 +13,13 @@ export default async function PagenationBundle({
   totalCount,
   url,
   pageSize = 10,
+  mobile = false,
 }: {
   currentPage: number;
   totalCount: number;
   url: string;
   pageSize: number;
+  mobile?: boolean;
 }) {
   const totalPages = Math.ceil(totalCount / pageSize);
 
@@ -41,12 +43,17 @@ export default async function PagenationBundle({
           </PaginationItem>
         )}
 
-        {currentPage > 3 && (
+        {currentPage > (mobile ? 3 : 4) && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
         )}
 
+        {!mobile && currentPage > 3 && (
+          <PaginationItem>
+            <PaginationLink href={`${url}${currentPage - 2}`}>{currentPage - 2}</PaginationLink>
+          </PaginationItem>
+        )}
         {currentPage > 1 && (
           <PaginationItem>
             <PaginationLink href={`${url}${currentPage - 1}`}>{currentPage - 1}</PaginationLink>
@@ -62,8 +69,13 @@ export default async function PagenationBundle({
             <PaginationLink href={`${url}${currentPage + 1}`}>{currentPage + 1}</PaginationLink>
           </PaginationItem>
         )}
+        {!mobile && currentPage < totalPages - 2 && (
+          <PaginationItem>
+            <PaginationLink href={`${url}${currentPage + 2}`}>{currentPage + 2}</PaginationLink>
+          </PaginationItem>
+        )}
 
-        {currentPage < totalPages - 2 && (
+        {currentPage < totalPages - (mobile ? 2 : 3) && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>

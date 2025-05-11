@@ -11,11 +11,12 @@ export default async function Page({
   searchParams: Promise<{ [page: string]: string }>;
 }) {
   const { page } = await searchParams;
+  const pageSize = 10;
   console.log('page: ', page);
-  const offset = (parseInt(page) - 1) * 20;
+  const offset = (parseInt(page) - 1) * pageSize;
 
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/public-jobs?offset=${offset}&limit=20`,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/public-jobs?offset=${offset}&limit=${pageSize}`,
   );
   const publicJobs: PublicJobsResponse = await response.json();
   console.log('publicJobs: ', publicJobs);
@@ -38,7 +39,7 @@ export default async function Page({
             currentPage={parseInt(page)}
             totalCount={publicJobs.total}
             url='/public-jobs?page='
-            pageSize={20}
+            pageSize={pageSize}
           />
         </div>
       </div>

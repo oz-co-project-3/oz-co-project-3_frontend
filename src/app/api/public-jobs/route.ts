@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const offsetParam = searchParams.get('offset');
   const limitParam = searchParams.get('limit');
-
+  const idParam = searchParams.get('id');
   const offset = offsetParam ? parseInt(offsetParam, 10) : 0;
   const limit = limitParam ? parseInt(limitParam, 10) : 10;
 
@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
     const publicJobsPackages = await Promise.all(
       OPTIONS.map(async (option) => {
         const params = new URLSearchParams({
+          // 어차피 무료 오픈 API니까, 환경변수로 빼지 않음 (그래도 넣어야하나?)
           serviceKey:
             'wegLdJbuHNke8Bf+CCJQxf1x9B6yBofoEc9wFxjGxT+NcGEg1F/JgmGCQbWrVwHBneeGzdYVutBWxRcZx5jaAg==',
           numOfRows: '100',
@@ -62,7 +63,9 @@ export async function GET(request: NextRequest) {
       (pkg) => pkg.result ?? [],
     );
 
-    const publicJobs: PublicJobPosting[] = mergedResults.map((result) => ({
+    // 공고 목록 데이터 다듬기
+    const publicJobs: PublicJobPosting[] = mergedResults.map((result, index) => ({
+      id: index,
       title: result.recrutPbancTtl,
       company: result.instNm,
       job: result.ncsCdNmLst,
@@ -83,6 +86,18 @@ export async function GET(request: NextRequest) {
     const paginatedPublicJobs = publicJobs.slice(offset, offset + limit);
     const totalItems = publicJobs.length;
 
+    // 공고 상세 조회
+    if (idParam) {
+      const job = publicJobs.find((job) => job.id === parseInt(idParam));
+      if (!job) {
+        return NextResponse.json({ error: '존재하지 않는 공고입니다.' }, { status: 404 });
+      }
+      return NextResponse.json({
+        data: job,
+      });
+    }
+
+    // 공고 목록 조회
     return NextResponse.json(
       {
         total: totalItems,
@@ -112,3 +127,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: '내부 서버 오류' }, { status: 500 });
   }
 }
+
+// 에러 클래스 정의해서 처리하는 방식으로 리팩토링
