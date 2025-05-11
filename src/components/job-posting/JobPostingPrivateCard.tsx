@@ -51,3 +51,5 @@ export default async function JobPostingPrivateCard({
     </section>
   );
 }
+
+// 폐기 예정
