@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 // import { useEffect } from 'react';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ResumeListResponse } from '@/types/Schema/resumeSchema';
 import useSWR from 'swr';
 import { fetchOnClient } from '@/api/clientFetcher';
@@ -26,7 +26,7 @@ export function ResumeListModal({
   onClose: () => void;
   action: TriggerWithArgs<unknown, unknown, string, number>;
 }) {
-  // const router = useRouter();
+  const router = useRouter();
   const {
     data: resumes,
     // error,
@@ -49,7 +49,7 @@ export function ResumeListModal({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className='max-w-md'>
         <DialogHeader>
-          <DialogTitle>이력서 목록</DialogTitle>
+          <DialogTitle>지원하실 이력서를 선택하세요.</DialogTitle>
         </DialogHeader>
 
         <div className='space-y-2'>
@@ -76,9 +76,15 @@ export function ResumeListModal({
           <Button
             className='bg-main-light hover:bg-main-dark cursor-pointer'
             disabled={!selectedResumeId}
-            onClick={() => {
-              console.log(selectedResumeId);
-              action(selectedResumeId!);
+            onClick={async () => {
+              try {
+                // console.log(selectedResumeId);
+                await action(selectedResumeId!);
+                router.push('/dashboard/job-seeker/job-postings/favorite');
+              } catch (error) {
+                // TODO: 토스트?
+                console.log('지원 실패:', error);
+              }
             }}
           >
             지원
