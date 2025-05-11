@@ -11,8 +11,6 @@ import { logoutUser } from '@/api/user';
 const userNavItems = [
   { name: '공공 공고', href: '/public-jobs?page=1' },
   { name: '일반 공고', href: '/private-jobs' },
-  { name: '커뮤니티', href: '/community' },
-  { name: 'ADMIN', href: '/admin' }, // 임시
 ];
 
 // 관리자용
@@ -20,7 +18,6 @@ const adminNavItems = [
   { name: '회원 관리', href: '/admin/user' },
   { name: '공고 관리', href: '/admin/jobs' },
   { name: '챗봇 관리', href: '/admin/chatbot' },
-  { name: '커뮤니티 관리', href: '/admin/community' },
 ];
 
 export default function Header() {
@@ -42,10 +39,22 @@ export default function Header() {
     }
   };
 
-  const isAdminPage = pathname.startsWith('/admin');
-  const navItems = isAdminPage ? adminNavItems : userNavItems;
+  // user_type 배열로 처리
+  const userTypes = user?.user_type?.split(',') || [];
+  const isAdmin = userTypes.includes('admin'); // admin 포함 여부 확인
 
-  //클라이언트에서 렌더링 완료 후 보여주기 (SSR 조건부 렌더링 차이 해결)
+  // 관리자인 경우 '/admin/user' 페이지로
+  // useEffect(() => {
+  //   if (isAdmin && pathname === '/admin') {
+  //     // 만약 /admin으로만 접근한 경우에만 /admin/user로 리디렉션
+  //     router.push('/admin/user');
+  //   }
+  // }, [isAdmin, pathname, router]);
+
+  // 로그인 시 adminNavItems로 변경
+  const navItems = isAdmin ? adminNavItems : userNavItems;
+
+  // 클라이언트에서 렌더링 완료 후 보여주기
   if (!mounted) return null;
 
   return (

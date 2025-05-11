@@ -1,8 +1,8 @@
-import AdminLayout from '@/components/layout/AdminLayout';
 import DeleteResumeButton from '@/components/admin/resume/DeleteResumeButton';
 import fetchOnServer from '@/api/serverFetcher';
 import { ResumeResponse } from '@/types/Schema/resumeSchema';
 import Resume from '@/components/resume/Resume';
+import AdminLayout from '@/components/common/layout/AdminLayout';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   try {
@@ -16,10 +16,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     return (
       <AdminLayout>
+        <Resume resume={resume} />
         <div className='mb-4 flex justify-end'>
           <DeleteResumeButton id={id} />
         </div>
-        <Resume resume={resume} />
       </AdminLayout>
     );
   } catch (error) {

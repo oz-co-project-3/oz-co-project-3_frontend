@@ -1,8 +1,8 @@
-import AdminLayout from '@/components/layout/AdminLayout';
 import fetchOnServer from '@/api/serverFetcher';
 import { UserProfileResponse } from '@/types/user';
 import SeekerProfile from '@/components/profile/SeekerProfile';
 import CompanyProfile from '@/components/profile/CompanyProfile';
+import AdminLayout from '@/components/common/layout/AdminLayout';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
