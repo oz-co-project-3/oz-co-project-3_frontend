@@ -27,8 +27,6 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const { user } = useAuthStore();
   const router = useRouter();
 
-  console.log(pathname);
-
   const { data: profile } = useSWR<UserProfileResponse | null>(
     user ? '/api/user/profile/' : null,
     fetchOnClient,
