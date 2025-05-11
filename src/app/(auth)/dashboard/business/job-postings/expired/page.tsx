@@ -1,5 +1,5 @@
 import fetchOnServer from '@/api/serverFetcher';
-import ExpiredJobPostingCardTemp from '@/components/job-posting/ExpiredJobPostingCardTemp';
+import JobPostingBusinessCard from '@/components/job-posting/JobPostingBusinessCard';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import Link from 'next/link';
 
@@ -37,7 +37,7 @@ export default async function PreviousJobPostingsPage() {
           </div>
         ) : (
           expiredJobPostings.map((jobPosting) => (
-            <ExpiredJobPostingCardTemp key={jobPosting.id} jobPosting={jobPosting} />
+            <JobPostingBusinessCard key={jobPosting.id} jobPosting={jobPosting} type='expired' />
           ))
         )}
       </section>

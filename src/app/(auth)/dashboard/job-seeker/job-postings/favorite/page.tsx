@@ -1,5 +1,5 @@
 import fetchOnServer from '@/api/serverFetcher';
-import JobPostingPublicCard from '@/components/job-posting/JobPostingPublicCard';
+import JobPostingSeekerCard from '@/components/job-posting/JobPostingSeekerCard';
 import { FavoriteJobPosting } from '@/types/Schema/jobPostingSchema';
 
 export default async function FavoriteJobPostingsPage() {
@@ -17,7 +17,7 @@ export default async function FavoriteJobPostingsPage() {
             </div>
           ) : (
             jobPostings.map((jobPosting) => (
-              <JobPostingPublicCard key={jobPosting.id} jobPosting={jobPosting} path='favorite' />
+              <JobPostingSeekerCard key={jobPosting.id} jobPosting={jobPosting} path='favorite' />
             ))
           )}
         </div>
