@@ -24,3 +24,16 @@ export const getBriefLocation = (location: string): string => {
   const [province, city] = location.split(' ');
   return `${province} ${city ?? ''}`;
 };
+
+/**
+ * 날짜 포맷팅
+ * @param date 날짜
+ * @param format 포맷
+ * @returns 포맷팅된 날짜
+ */
+export const formatPublicJobDate = (date: string): string => {
+  if (!date) return '';
+  const formattedDate =
+    date.slice(0, 4) + '년 ' + date.slice(4, 6) + '월 ' + date.slice(6, 8) + '일';
+  return formattedDate;
+};

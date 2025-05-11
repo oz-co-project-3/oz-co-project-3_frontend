@@ -9,7 +9,7 @@ import { useAuthStore } from '@/store/useAuthStore';
 import { logoutUser } from '@/api/user';
 
 const userNavItems = [
-  { name: '공공 공고', href: '/public-jobs' },
+  { name: '공공 공고', href: '/public-jobs?page=1' },
   { name: '일반 공고', href: '/private-jobs' },
 ];
 

@@ -1,5 +1,3 @@
-'use client';
-
 import ScrollShowSearchBar from '@/components/common/searchbar/ScrollShowSearchbar';
 import SearchBarSuspense from '@/components/common/searchbar/Searchbar';
 import Link from 'next/link';
@@ -11,18 +9,24 @@ import KeywordRecommand from '@/components/common/searchbar/KeywordRecommand';
 import {
   Carousel,
   CarouselContent,
+  CarouselItem,
   // CarouselItem,
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { Suspense } from 'react';
-import Loading from './loading';
+import Loading from './(main)/loading';
+import RecentPostingsCard from '@/components/job-posting/RecentPostingsCard';
+import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
+import fetchOnServer from '@/api/serverFetcher';
 // import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 // import JobPostingCard from '@/components/job-posting/JobPostingCard';
 
-export default function Home() {
-  // { jobPostings }: { jobPostings: JobPostingResponse[] }
-  // const displayPostings = jobPostings.slice(0, 10);
+export default async function Home() {
+  const jobPostings = await fetchOnServer<JobPostingListResponse>('/api/postings/');
+  const recentJobPostings = jobPostings.data.slice(0, 5);
+  console.log(jobPostings);
+
   return (
     <>
       <ScrollShowSearchBar />
@@ -69,9 +73,9 @@ export default function Home() {
               </div>
             </Link>
           </nav>
-          <h1 className='text-2xl font-bold'>최근에 등록된 공고(임시로 형태만 넣어둠)</h1>
+          <h1 className='text-2xl font-bold'>최근에 등록된 공고</h1>
           {/* 로그인되면 추천 공고 뜨게 해야함 */}
-          {/* 상태관리로 가져오기  */}
+
           <Carousel
             opts={{
               align: 'center',
@@ -79,12 +83,11 @@ export default function Home() {
             className='mx-auto flex w-full max-w-2xl'
           >
             <CarouselContent>
-              {/* {displayPostings.map((jobPosting) => (
+              {recentJobPostings.map((jobPosting) => (
                 <CarouselItem key={jobPosting.id} className='md:basis-1/2 lg:basis-1/3'>
-                  <JobPostingCard jobPosting={jobPosting} />
+                  <RecentPostingsCard jobPosting={jobPosting} />
                 </CarouselItem>
-              ))} */}
-              {/* 패치 붙히고 살리기 */}
+              ))}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />

@@ -1,12 +1,22 @@
 'use client';
+export const dynamic = 'force-dynamic';
 
 import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { fetchOnClient } from '@/api/clientFetcher'; 
+import { fetchOnClient } from '@/api/clientFetcher';
 import { useAuthStore } from '@/store/useAuthStore';
 import { LoginResponseData } from '@/types/user';
+import { Suspense } from 'react';
 
 export default function KakaoCallbackPage() {
+  return (
+    <Suspense fallback={<div>로그인 처리 중...</div>}>
+      <KakaoCallbackContent />
+    </Suspense>
+  );
+}
+
+function KakaoCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const login = useAuthStore((state) => state.login);

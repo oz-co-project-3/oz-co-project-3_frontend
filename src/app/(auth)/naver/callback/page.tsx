@@ -5,8 +5,17 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { fetchOnClient } from '@/api/clientFetcher';
 import { LoginResponseData } from '@/types/user';
+import { Suspense } from 'react';
 
 export default function NaverCallbackPage() {
+  return (
+    <Suspense fallback={<div>로그인 처리 중...</div>}>
+      <NaverCallbackContent />
+    </Suspense>
+  );
+}
+
+function NaverCallbackContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const login = useAuthStore((state) => state.login);
