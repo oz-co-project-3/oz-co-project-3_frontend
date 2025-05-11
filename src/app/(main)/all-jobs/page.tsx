@@ -1,7 +1,7 @@
 import { Suspense } from 'react';
 import AllJobList from './AllJobList';
 import Image from 'next/image';
-import Loading from '@/app/loading';
+import Loading from '@/app/(main)/loading';
 
 export const dynamic = 'force-dynamic';
 

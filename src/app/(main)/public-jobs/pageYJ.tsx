@@ -5,7 +5,7 @@ import FilterList from '@/components/common/filter/FilterList';
 import PublicJobList from './PublicJobList';
 import { useFilterJobs } from '@/hooks/useFilterJobs';
 import Image from 'next/image';
-import Loading from '@/app/loading';
+import Loading from '../loading';
 
 export default function PublicJobsPage() {
   // props 제거

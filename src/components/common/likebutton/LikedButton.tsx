@@ -38,6 +38,7 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    e.preventDefault();
     // 북마크 상태 변경
     const newBookmarkState = !isBookmarked;
     setIsBookmarked(newBookmarkState);
