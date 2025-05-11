@@ -2,13 +2,13 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className='mt-auto bg-gray-100 p-6'>
+    <footer className='mt-auto bg-zinc-100 p-6'>
       <div className='container mx-auto'>
         <div className='mb-4 flex items-center justify-between border-b pb-4'>
-          <h2 className='text-lg font-bold text-gray-800'>시니어내일</h2>
+          <h2 className='text-lg font-bold text-zinc-800'>시니어내일</h2>
         </div>
 
-        <div className='grid grid-cols-1 gap-4 text-sm text-gray-600 md:grid-cols-2'>
+        <div className='grid grid-cols-1 gap-4 text-sm text-zinc-600 md:grid-cols-2'>
           <div>
             <p className='mb-1'>대표: 홍길동</p>
             <p className='mb-1'>사업자등록번호: 123-45-67890</p>
@@ -25,7 +25,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className='mt-6 text-center text-xs text-gray-500'>
+        <div className='mt-6 text-center text-xs text-zinc-500'>
           <p>© 2025 시니어내일 All rights reserved.</p>
         </div>
       </div>
