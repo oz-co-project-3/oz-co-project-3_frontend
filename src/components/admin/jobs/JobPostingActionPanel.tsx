@@ -62,9 +62,14 @@ export default function JobPostingActionPanel({ id, status }: Props) {
 
   return (
     <div className='mb-4 flex justify-end gap-2'>
-      <Button onClick={approve} disabled={loading}>
-        {loading ? '승인 중...' : '승인하기'}
-      </Button>
+      <Button
+  onClick={approve}
+  disabled={loading}
+  className='bg-main-light hover:bg-main-dark text-white'
+>
+  {loading ? '승인 중...' : '승인하기'}
+</Button>
+
       <Dialog open={rejectOpen} onOpenChange={setRejectOpen}>
         <DialogTrigger asChild>
           <Button variant='destructive'>반려하기</Button>

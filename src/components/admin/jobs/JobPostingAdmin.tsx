@@ -30,8 +30,6 @@ export default function JobPostingAdmin({ id }: Props) {
 
   return (
     <article className='flex flex-col gap-4'>
-      {/* 승인/반려 */}
-      <JobPostingActionPanel id={id} status={jobPosting.status} />
 
       {/* 공고 제목 */}
       <div className='flex items-center justify-between border-b pb-4'>
@@ -150,6 +148,8 @@ export default function JobPostingAdmin({ id }: Props) {
         </h3>
         <JobPostingViewer content={jobPosting.description} />
       </div>
+            {/* 승인/반려 */}
+            <JobPostingActionPanel id={id} status={jobPosting.status} />
     </article>
   );
 }

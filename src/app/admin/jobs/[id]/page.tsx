@@ -1,5 +1,5 @@
 import JobPostingAdmin from '@/components/admin/jobs/JobPostingAdmin';
-import AdminLayout from '@/components/layout/AdminLayout';
+import AdminLayout from '@/components/common/adminlayout/AdminLayout';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

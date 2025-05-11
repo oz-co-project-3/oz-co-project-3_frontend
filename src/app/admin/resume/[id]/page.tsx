@@ -1,4 +1,4 @@
-import AdminLayout from '@/components/layout/AdminLayout';
+import AdminLayout from '@/components/common/adminlayout/AdminLayout';
 import DeleteResumeButton from '@/components/admin/resume/DeleteResumeButton';
 import fetchOnServer from '@/api/serverFetcher';
 import { ResumeResponse } from '@/types/Schema/resumeSchema';
