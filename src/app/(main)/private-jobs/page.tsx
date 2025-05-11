@@ -3,7 +3,7 @@
 import FilterList from '@/components/common/filter/FilterList';
 import PrivateJobList from './PrivateJobList';
 import Image from 'next/image';
-import Loading from '@/app/loading';
+import Loading from '@/app/(main)/loading';
 import { useSearchParams } from 'next/navigation';
 import { useFilterJobs } from '@/hooks/useFilterJobs';
 

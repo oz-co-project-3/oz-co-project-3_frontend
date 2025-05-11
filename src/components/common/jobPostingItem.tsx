@@ -35,7 +35,7 @@ export default function JobPostingItem({ post, detailPagePath }: JobPostingItemP
           </div>
         </div>
       </Link>
-      {/* 북마크 버튼을 Link 밖으로 분리 */}
+  
       <div className='absolute top-8 right-2'>
         <LikedButton id={post.id} is_bookmarked={post.is_bookmarked} />
       </div>
