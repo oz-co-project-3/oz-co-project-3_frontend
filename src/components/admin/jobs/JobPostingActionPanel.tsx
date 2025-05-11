@@ -71,7 +71,7 @@ export default function JobPostingActionPanel({ id, status }: Props) {
     <div className='mb-4 flex justify-end gap-2'>
       {/* 승인하기 - ConfirmButton 사용 */}
       <ConfirmButton
-        title={loading ? '승인 중...' : '승인하기'}
+        title={loading ? '승인 중...' : '승인'}
         contentText='해당 공고를 승인 처리하시겠습니까?'
         actionType='emphasis'
         handleAction={approve}
