@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import LikedButton from './likebutton/LikedButton';
+import LoginGuard from '@/components/common/guards/LoginGuard';
 
 type JobPostingItemProps = {
   post: JobPostingResponse;
@@ -35,9 +38,11 @@ export default function JobPostingItem({ post, detailPagePath }: JobPostingItemP
           </div>
         </div>
       </Link>
-  
+
       <div className='absolute top-8 right-2'>
-        <LikedButton id={post.id} is_bookmarked={post.is_bookmarked} />
+        <LoginGuard>
+          <LikedButton id={post.id} is_bookmarked={post.is_bookmarked} />
+        </LoginGuard>
       </div>
     </div>
   );

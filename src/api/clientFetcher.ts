@@ -22,14 +22,14 @@ export async function fetchOnClient<T>(
   });
 
   const contentType = response.headers.get('Content-Type');
-
   const isJson = contentType?.includes('application/json');
+
   const rawData = isJson
     ? await response.json().catch(() => ({}))
     : await response.text().catch(() => '');
 
   if (!response.ok) {
-    // 예외적으로 유저 정보 요청은 401일 때 guest 처리
+    // 401이면 게스트 처리
     if (response.status === 401 && url === '/api/user/profile/') {
       return {
         id: 0,
@@ -40,15 +40,15 @@ export async function fetchOnClient<T>(
       } as T;
     }
 
-    const errorMessage =
-      typeof rawData === 'string'
-        ? rawData
-        : typeof rawData === 'object' && 'message' in rawData
-        ? String(rawData.message)
-        : 'API 요청 실패';
-
     console.error('fetch error body:', rawData);
-    throw new Error(errorMessage);
+
+    throw {
+      status: response.status,
+      message:
+        typeof rawData === 'object' && rawData !== null
+          ? rawData
+          : { code: 'unknown', error: '알 수 없는 오류입니다.' },
+    };
   }
 
   console.log('[요청 성공]', rawData);

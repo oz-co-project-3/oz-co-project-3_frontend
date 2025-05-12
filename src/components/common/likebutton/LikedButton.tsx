@@ -6,6 +6,8 @@ import { AiFillStar } from 'react-icons/ai';
 import useSWRMutation from 'swr/mutation';
 import { useState } from 'react';
 import LikePlusModal from './LikePlusModal';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useLoginModalStore } from '@/store/useLoginModalStore';
 
 interface BookmarkButtonProps {
   id: string;
@@ -13,8 +15,11 @@ interface BookmarkButtonProps {
 }
 
 function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButtonProps) {
-  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
+
+  const { user } = useAuthStore();
+  const { open: openLoginModal, setRedirectPath } = useLoginModalStore();
 
   // useSWRMutation 사용
   const { trigger, isMutating } = useSWRMutation(
@@ -39,14 +44,23 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    // 북마크 상태 변경
-    const newBookmarkState = !isBookmarked;
-    setIsBookmarked(newBookmarkState);
+
+
+    if (!user) {
+      // 로그인 안 한 경우 → 로그인 모달 띄우기
+      setRedirectPath('/user/login');
+      openLoginModal();
+      return;
+    }
 
     // 북마크 상태가 true로 변경될 때만 모달 열기
     // if (newBookmarkState) {
     //   setIsModalOpen(true);
     // }
+
+    // 북마크 상태 변경
+    const newBookmarkState = !isBookmarked;
+    setIsBookmarked(newBookmarkState);
 
     // API 요청 실행
     trigger().catch(() => {
