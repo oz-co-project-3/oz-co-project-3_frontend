@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { MdOutlineWorkOutline } from 'react-icons/md';
 import { AiOutlineFileSearch } from 'react-icons/ai';
 import { VscAccount } from 'react-icons/vsc';
-import { FaRegComments } from 'react-icons/fa';
+// import { FaRegComments } from 'react-icons/fa';
 import KeywordRecommand from '@/components/common/searchbar/KeywordRecommand';
 import {
   Carousel,
@@ -79,12 +79,12 @@ export default async function Home() {
                 <span className='text-xl'>이력서</span>
               </div>
             </Link>
-            <Link href='/community'>
+            {/* <Link href='/community'>
               <div className='flex h-[120px] w-[120px] flex-col gap-5 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100'>
                 <FaRegComments className='text-[#FFBA0D]' />
                 <span className='text-xl'>커뮤니티</span>
               </div>
-            </Link>
+            </Link> */}
           </nav>
 
           {/* 로그인시 보일수 있도록 조건 걸기 */}

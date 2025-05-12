@@ -8,6 +8,7 @@ import { EMPLOYMENT_TYPES } from '@/constants/employmentType';
 import { CAREER } from '@/constants/career';
 import { EDUCATION } from '@/constants/education';
 import { useFilterStore } from '@/store/filterStore';
+import SearchBarSuspense from '../searchbar/Searchbar';
 
 interface DropDownFilterProps {
   isRegionOpen: boolean;
@@ -61,7 +62,7 @@ export default function DropDownFilter({
         {/* 지역 드롭다운 */}
         {isRegionOpen && (
           <div
-            className='flex w-[1400px] rounded-t-2xl border bg-white'
+            className='flex w-[1136px] rounded-2xl border bg-white'
             onClick={(e) => e.stopPropagation()}
           >
             {/* 시/도 리스트 */}
@@ -130,7 +131,7 @@ export default function DropDownFilter({
         {/* 직업 드롭다운 */}
         {isJobOpen && (
           <div
-            className='flex w-[1400px] rounded-t-2xl border bg-white'
+            className='flex w-[1136px] rounded-2xl border bg-white'
             onClick={(e) => e.stopPropagation()}
           >
             <div className='w-1/3 border-r'>
@@ -178,7 +179,7 @@ export default function DropDownFilter({
         {/* 상세조건 드롭다운 */}
         {isDetailOpen && (
           <div
-            className='w-[1400px] rounded-t-2xl border bg-white'
+            className='w-[1136px] rounded-2xl border bg-white'
             onClick={(e) => e.stopPropagation()}
           >
             <div className='px-4 py-2'>
@@ -230,7 +231,7 @@ export default function DropDownFilter({
         )}
       </div>
       {/* 선택 뜨는 곳 */}
-      <div className='mt-4 flex flex-wrap gap-2 p-4'>
+      <div className='flex flex-wrap gap-2 p-4'>
         {/* 지역 */}
         {selectedDistricts.map((district) => (
           <span
@@ -311,13 +312,14 @@ export default function DropDownFilter({
         ))}
       </div>
       <div className='flex'>
+        <SearchBarSuspense />
         <button
           onClick={resetAll}
-          className='ml-auto flex cursor-pointer rounded-md border bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100'
+          className='group ml-auto flex cursor-pointer rounded-md border bg-white px-1 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100'
         >
-          <span>초기화</span>
+          <span className='w-15'>초기화</span>
           <div className='flex items-center'>
-            <RiResetLeftFill />
+            <RiResetLeftFill className='transition-transform duration-500 ease-in-out group-hover:rotate-180' />
           </div>
         </button>
       </div>
