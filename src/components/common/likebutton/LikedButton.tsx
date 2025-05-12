@@ -15,8 +15,8 @@ interface BookmarkButtonProps {
 }
 
 function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButtonProps) {
-  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked); 
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   const { user } = useAuthStore();
   const { open: openLoginModal, setRedirectPath } = useLoginModalStore();
