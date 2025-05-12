@@ -311,7 +311,7 @@ export default function DropDownFilter({
           </span>
         ))}
       </div>
-      <div className='flex'>
+      <div className='flex flex-col sm:flex-row'>
         <SearchBarSuspense />
         <button
           onClick={resetAll}
