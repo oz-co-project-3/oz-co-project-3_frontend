@@ -15,8 +15,9 @@ interface BookmarkButtonProps {
 }
 
 function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButtonProps) {
-  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked); 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddingBookmark, setIsAddingBookmark] = useState(false);
 
   const { user } = useAuthStore();
   const { open: openLoginModal, setRedirectPath } = useLoginModalStore();
@@ -29,7 +30,9 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
       onSuccess: () => {
         // 요청 성공 시 상태 유지
         console.log('북마크 상태 변경 성공');
-        setIsModalOpen(true);
+        if (!isAddingBookmark) {
+          setIsModalOpen(true);
+        }
       },
       onError: () => {
         // 요청 실패 시 상태 원복
@@ -45,7 +48,6 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
     e.stopPropagation();
     e.preventDefault();
 
-
     if (!user) {
       // 로그인 안 한 경우 → 로그인 모달 띄우기
       setRedirectPath('/user/login');
@@ -53,20 +55,13 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
       return;
     }
 
-    // 북마크 상태가 true로 변경될 때만 모달 열기
-    // if (newBookmarkState) {
-    //   setIsModalOpen(true);
-    // }
-
-    // 북마크 상태 변경
-    const newBookmarkState = !isBookmarked;
-    setIsBookmarked(newBookmarkState);
+    setIsAddingBookmark(!isBookmarked);
+    setIsBookmarked(!isBookmarked);
 
     // API 요청 실행
     trigger().catch(() => {
       // 에러 발생 시 상태 원복
       setIsBookmarked(initialIsBookmarked);
-      // 모달 닫기
       setIsModalOpen(false);
     });
   };
