@@ -29,6 +29,7 @@ type ConvertibleFields = {
 
 export function convertArrayFieldsToString<T extends ConvertibleFields>(data: T): T {
   const result = { ...data };
+  console.log('🔥 result:', result);
 
   FIELDS_TO_CONVERT.forEach((key) => {
     const value = result[key];
