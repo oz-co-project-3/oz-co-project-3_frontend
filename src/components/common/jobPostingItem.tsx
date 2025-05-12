@@ -12,9 +12,9 @@ type JobPostingItemProps = {
 
 export default function JobPostingItem({ post, detailPagePath }: JobPostingItemProps) {
   return (
-    <div className='relative'>
+    <div className='relative flex flex-col gap-4 rounded-md border px-8 py-6 transition-all duration-200 hover:bg-zinc-100 sm:justify-between'>
       <Link className='block' href={`${detailPagePath}/${post.id}`}>
-        <div className='flex flex-row justify-between border-b-2 bg-white py-2 hover:shadow-lg'>
+        <div className='flex flex-row justify-between py-2'>
           {/* 근무지 */}
           <div className='flex h-[80px] w-[150px] flex-col items-center justify-center pl-2 text-center'>
             <span>{post.location}</span>
@@ -39,7 +39,9 @@ export default function JobPostingItem({ post, detailPagePath }: JobPostingItemP
         </div>
       </Link>
 
-      <div className='absolute top-8 right-2'>
+
+      <div className='absolute top-14 right-2'>
+
         <LoginGuard>
           <LikedButton id={post.id} is_bookmarked={post.is_bookmarked} />
         </LoginGuard>
