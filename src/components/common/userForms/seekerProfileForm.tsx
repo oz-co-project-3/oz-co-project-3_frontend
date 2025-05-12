@@ -146,13 +146,7 @@ export default function SeekerProfileForm({
               <FormItem>
                 <FormLabel>이름</FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
-                    readOnly={type === 'edit'}
-                    className={
-                      type === 'edit' ? 'cursor-not-allowed bg-gray-300 text-gray-700' : 'bg-white'
-                    }
-                  />
+                  <Input {...field} className='bg-white' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -202,14 +196,7 @@ export default function SeekerProfileForm({
               <FormItem>
                 <FormLabel>생년월일</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder='예: 1960-01-01'
-                    {...field}
-                    readOnly={type === 'edit'}
-                    className={
-                      type === 'edit' ? 'cursor-not-allowed bg-gray-300 text-gray-700' : 'bg-white'
-                    }
-                  />
+                  <Input placeholder='예: 1960-01-01' {...field} className='bg-white' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -271,7 +258,7 @@ export default function SeekerProfileForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>성별</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder='성별선택' />
@@ -314,9 +301,11 @@ export default function SeekerProfileForm({
           ) : (
             <div className='space-y-4'>
               <div className='flex gap-2'>
-                <Button type='submit' 
-                onClick={() => updateSeekerProfile(form.getValues())}
-                className='bg-main-light hover:bg-main-dark w-1/2 text-white'>
+                <Button
+                  type='submit'
+                  onClick={() => updateSeekerProfile(form.getValues())}
+                  className='bg-main-light hover:bg-main-dark w-1/2 text-white'
+                >
                   회원 정보 수정
                 </Button>
                 <Button
