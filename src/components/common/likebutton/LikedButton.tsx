@@ -44,9 +44,7 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    // 북마크 상태 변경
-    const newBookmarkState = !isBookmarked;
-    setIsBookmarked(newBookmarkState);
+
 
     if (!user) {
       // 로그인 안 한 경우 → 로그인 모달 띄우기
@@ -59,6 +57,10 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
     // if (newBookmarkState) {
     //   setIsModalOpen(true);
     // }
+
+    // 북마크 상태 변경
+    const newBookmarkState = !isBookmarked;
+    setIsBookmarked(newBookmarkState);
 
     // API 요청 실행
     trigger().catch(() => {
