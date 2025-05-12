@@ -1,11 +1,11 @@
 import { create } from 'zustand';
-import { User } from '@/types/user';
+import { User, UserProfileResponse } from '@/types/user';
 import { fetchOnClient } from '@/api/clientFetcher';
-import { UserProfileResponse } from '@/types/user';
 
 interface AuthState {
   user: User | null;
   accessToken: string | null;
+  isInitialized: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
   restoreUser: () => Promise<void>;
@@ -17,10 +17,21 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   accessToken: null,
+  isInitialized: false,
 
-  login: (user, token) => set({ user, accessToken: token }),
+  login: (user, token) =>
+    set({
+      user,
+      accessToken: token,
+      isInitialized: true,
+    }),
 
-  logout: () => set({ user: null, accessToken: null }),
+  logout: () =>
+    set({
+      user: null,
+      accessToken: null,
+      isInitialized: true,
+    }),
 
   setUser: (user: User) => set({ user }),
 
@@ -28,13 +39,10 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   restoreUser: async () => {
     try {
-      const tokenRes = await fetch(
-        `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/refresh-token/`,
-        {
-          method: 'POST',
-          credentials: 'include',
-        },
-      );
+      const tokenRes = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/refresh-token/`, {
+        method: 'POST',
+        credentials: 'include',
+      });
 
       if (!tokenRes.ok) throw new Error('refresh-token 요청 실패');
 
@@ -43,6 +51,9 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       const data = await fetchOnClient<UserProfileResponse>('/api/user/profile/', {
         method: 'GET',
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
       });
 
       const user: User = {
@@ -53,11 +64,20 @@ export const useAuthStore = create<AuthState>((set) => ({
         signinMethod: data.base.signinMethod as 'email' | 'naver' | 'kakao',
       };
 
-      set({ user, accessToken: access_token });
+      set({
+        user,
+        accessToken: access_token,
+        isInitialized: true,
+      });
+
       console.log('✅ 사용자 상태 복원 완료:', user);
     } catch (err) {
       console.warn('⚠️ 사용자 상태 복원 실패:', err);
-      set({ user: null, accessToken: null });
+      set({
+        user: null,
+        accessToken: null,
+        isInitialized: true,
+      });
     }
   },
 

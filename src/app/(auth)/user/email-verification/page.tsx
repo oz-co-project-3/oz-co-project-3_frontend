@@ -13,8 +13,9 @@ import {
 } from '@/components/ui/form';
 import { useState, useEffect, useCallback } from 'react';
 import { verifyEmailCode } from '@/api/user';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { resendEmailCode } from '@/api/resendEmailCode';
+
 interface VerificationFormValues {
   verification_code: string;
 }
@@ -28,9 +29,19 @@ export default function EmailVerificationPage() {
 
   const [timeLeft, setTimeLeft] = useState(600);
   const [error, setError] = useState('');
-  const router = useRouter();
   const [resendCount, setResendCount] = useState(0);
 
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const email = searchParams.get('email') || '';
+  const type = searchParams.get('type') || 'signup';
+
+  useEffect(() => {
+    if (!email) {
+      setError('잘못된 접근입니다. 이메일 정보가 없습니다.');
+    }
+  }, [email]);
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -47,55 +58,52 @@ export default function EmailVerificationPage() {
 
   const handleSubmit = useCallback(
     async (data: VerificationFormValues) => {
+      if (!email) {
+        setError('이메일 정보가 없습니다.');
+        return;
+      }
+
       try {
-        const savedFormData = JSON.parse(localStorage.getItem('registerFormData') || '{}');
-  
-        if (!savedFormData.email) {
-          setError('잘못된 접근입니다. 다시 회원가입을 진행해주세요.');
-          return;
-        }
-  
         await verifyEmailCode({
-          email: savedFormData.email,
+          email,
           verification_code: data.verification_code.trim(),
         });
-  
-        alert('이메일 인증이 완료되었습니다. 로그인 후 이용해 주세요.');
-        router.push('/user/login'); //로그인 페이지로 이동
+
+        if (type === 'change-password') {
+          router.push(`/user/change-password?email=${encodeURIComponent(email)}`);
+        } else {
+          alert('이메일 인증이 완료되었습니다. 로그인 후 이용해 주세요.');
+          router.push('/user/login');
+        }
       } catch (err) {
         console.error('인증 실패:', err);
-        setError('인증 실패 또는 회원가입 실패했습니다.');
+        setError('인증에 실패했습니다. 인증코드를 다시 확인해주세요.');
       }
     },
-    [router],
+    [email, type, router],
   );
 
   const handleResendCode = useCallback(async () => {
+    if (!email) {
+      setError('이메일 정보가 없습니다.');
+      return;
+    }
+
     if (resendCount >= 5) {
       alert('인증번호 재전송은 최대 5회까지만 가능합니다.');
       return;
     }
 
     try {
-      const savedFormData = JSON.parse(localStorage.getItem('registerFormData') || '{}');
-
-      if (!savedFormData.email) {
-        setError('잘못된 접근입니다. 다시 회원가입을 진행해주세요.');
-        return;
-      }
-
-      await resendEmailCode(savedFormData.email);
-
+      await resendEmailCode(email);
       alert('인증번호가 다시 발송되었습니다.');
-
       setTimeLeft(600);
-
       setResendCount((prev) => prev + 1);
     } catch (err) {
       console.error('재전송 에러:', err);
       setError('인증번호 재전송에 실패했습니다.');
     }
-  }, [resendCount]);
+  }, [email, resendCount]);
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-gray-100 px-4'>
@@ -110,7 +118,7 @@ export default function EmailVerificationPage() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className='mb-4 justify-center'>
-                    등록된 이메일로 전송 된 인증번호를 입력해 주세요
+                    등록된 이메일로 전송된 인증번호를 입력해 주세요
                   </FormLabel>
                   <FormControl>
                     <div className='flex justify-center space-y-6'>

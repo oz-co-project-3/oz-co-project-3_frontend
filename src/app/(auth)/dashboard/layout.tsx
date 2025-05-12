@@ -7,6 +7,9 @@ import useSWR from 'swr';
 import { useAuthStore } from '@/store/useAuthStore';
 import { UserProfileResponse } from '@/types/user';
 import { Button } from '@/components/ui/button';
+import { useLoginModalStore } from '@/store/useLoginModalStore';// 이거까지 포함 해야함~
+import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
+import { useEffect } from 'react';
 
 const seekerNavItems = [
   { name: '프로필', href: '/dashboard/job-seeker/profile' },
@@ -26,6 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const { user } = useAuthStore();
   const router = useRouter();
+  const { open } = useLoginModalStore();
 
   const { data: profile } = useSWR<UserProfileResponse | null>(
     user ? '/api/user/profile/' : null,
@@ -33,8 +37,15 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   );
   const isBusiness = profile?.base.user_type?.includes('business');
 
+  useEffect(() => {
+    if (!user) {
+      open();
+    }
+  }, [user, open]);
+
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto'>
+      <LoginRequiredModal />
       <div className='flex w-full flex-1'>
         <div className='mx-auto flex w-full max-w-[1200px] gap-4 py-6'>
           <nav className='flex flex-col justify-between rounded bg-white px-4 py-8 sm:w-40 md:w-60'>

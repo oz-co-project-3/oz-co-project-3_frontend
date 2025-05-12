@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 import { CompanyProfileFormSchema, companyProfileSchema } from '@/types/Schema/companySchema';
 import { CompanyFormData } from '@/types/user';
 import { verifyBusinessNumber } from '@/api/businessVerify';
-
+import { updateBusinessProfile } from '@/api/user';
 interface CompanyProfileFormProps {
   type: 'register' | 'edit';
   defaultValues?: Partial<CompanyFormData>;
@@ -166,9 +166,19 @@ export default function CompanyProfileForm({
             )}
           />
 
-          <Button type='submit' className='bg-main-light hover:bg-main-dark w-full text-white'>
-            기업회원 저장하기
-          </Button>
+          {type === 'edit' ? (
+            <Button
+              type='button'
+              className='bg-main-light hover:bg-main-dark w-full text-white'
+              onClick={() => updateBusinessProfile(form.getValues())}
+            >
+              기업 정보 수정
+            </Button>
+          ) : (
+            <Button type='submit' className='bg-main-light hover:bg-main-dark w-full text-white'>
+              기업회원 저장하기
+            </Button>
+          )}
         </form>
       </Form>
     </div>

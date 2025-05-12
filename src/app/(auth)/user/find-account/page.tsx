@@ -12,8 +12,10 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import { findEmail, findPassword } from '@/api/findAccount';
+import { useRouter } from 'next/navigation';
 
 export default function FindAccountTab() {
+  const router = useRouter();
   const [emailForm, setEmailForm] = useState({ name: '', phone_number: '' });
   const [pwForm, setPwForm] = useState({ name: '', phone_number: '', email: '' });
   const [showPwSuccessModal, setShowPwSuccessModal] = useState(false);
@@ -49,6 +51,7 @@ export default function FindAccountTab() {
       }
 
       await findPassword(pwForm);
+      router.push(`/user/email-verification?email=${encodeURIComponent(pwForm.email)}&type=change-password`);
 
       setShowPwSuccessModal(true);
     } catch (error: unknown) {
@@ -161,10 +164,10 @@ export default function FindAccountTab() {
         <Dialog open={showPwSuccessModal} onOpenChange={setShowPwSuccessModal}>
           <DialogContent className='max-w-sm'>
             <DialogHeader>
-              <DialogTitle>비밀번호 재설정 메일 발송</DialogTitle>
+              <DialogTitle>비밀번호 변경 인증코드 전송</DialogTitle>
             </DialogHeader>
             <p className='mt-4 text-center text-lg font-semibold'>
-              입력하신 이메일로 비밀번호 재설정 링크를 발송했습니다.
+              입력하신 이메일로 비밀번호 변경을 위한 인증코드를 발송했습니다.
             </p>
             <DialogFooter className='mt-6'>
               <Button

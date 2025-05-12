@@ -69,16 +69,22 @@ export default function UserEditPage() {
 
   const handleSeekerSubmit = async (data: { [key: string]: unknown }) => {
     console.log('🔥 Seeker 제출됨:', data);
-    const cleaned = convertArrayFieldsToString(data);
+    const cleaned = {
+      ...convertArrayFieldsToString(data),
+      gender: data.gender !== 'none' ? data.gender : undefined,
+    };
     console.log('🔥 Seeker 제출됨:', cleaned);
     try {
       await updateSeekerProfile(cleaned);
+  
+      setShowSuccessDialog(true);
+  
       await mutate();
-
       const profile = await fetchUserProfile();
       if (!profile) return;
+  
       const { base, seeker, corp } = profile;
-
+  
       setUser({
         id: Number(base.id),
         email: base.email,
@@ -86,8 +92,6 @@ export default function UserEditPage() {
         user_type: base.user_type,
         signinMethod: base.signinMethod as 'email' | 'naver' | 'kakao',
       });
-
-      setShowSuccessDialog(true);
     } catch (err) {
       console.error('Seeker 수정 실패:', err);
       alert('회원정보 수정 중 오류가 발생했습니다.');
