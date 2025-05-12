@@ -8,12 +8,14 @@ import { getColumns } from './columns';
 import { ResumeModal } from '../resume/ResumeModal';
 import { fetchOnClient } from '@/api/clientFetcher';
 import { UserProfileResponse } from '@/types/user';
+import SkeletonPlaceholder from '@/components/common/SkeletonPlaceholder';
 
 interface UserTableProps {
   userType: 'seeker' | 'business';
+  fallback?: React.ReactNode;
 }
 
-export function UserTable({ userType }: UserTableProps) {
+export function UserTable({ userType, fallback }: UserTableProps) {
   const router = useRouter();
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
@@ -30,11 +32,7 @@ export function UserTable({ userType }: UserTableProps) {
   }, [data, userType]);
 
   if (isLoading) {
-    return (
-      <div className='flex h-64 items-center justify-center'>
-        <p className='text-gray-400'>로딩 중...</p>
-      </div>
-    );
+    return fallback ?? <SkeletonPlaceholder rows={6} columns={4} />;
   }
 
   return (
