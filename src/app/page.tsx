@@ -18,13 +18,26 @@ import Loading from './(main)/loading';
 import RecentPostingsCard from '@/components/job-posting/RecentPostingsCard';
 import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 import fetchOnServer from '@/api/serverFetcher';
-// import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
-// import JobPostingCard from '@/components/job-posting/JobPostingCard';
+import { UserProfileResponse } from '@/types/user';
+import RecommendedJobCard from '@/components/job-posting/RecommendedJobCard';
+import { PublicJobsResponse } from '@/types/publicJob';
 
 export default async function Home() {
-  const jobPostings = await fetchOnServer<JobPostingListResponse>('/api/postings/');
-  const recentJobPostings = jobPostings.data.slice(0, 10);
-  console.log(jobPostings);
+  //일반
+  const jobPosting = await fetchOnServer<JobPostingListResponse>('/api/postings/');
+  const privateJobs = jobPosting.data.slice(0, 10);
+  console.log('일반', privateJobs);
+
+  //공공
+  const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/public-jobs/`);
+  const publicJobs: PublicJobsResponse = await response.json();
+  console.log('공공: ', publicJobs);
+
+  const userData = await fetchOnServer<UserProfileResponse>('/api/user/profile/');
+  console.log(userData);
+  const IsLoggedIn = !!userData.seeker?.name;
+
+  const isSeoulPublic = userData.seeker?.interests.includes('서울시 공공 일자리');
 
   return (
     <>
@@ -74,28 +87,57 @@ export default async function Home() {
           </Link>
         </nav>
 
-        {/* 로그인되면 추천 공고 뜨게 해야함 */}
-        <h3 className='pb-8 text-2xl font-bold'>최근에 등록된 공고</h3>
-        <Carousel
-          opts={{
-            align: 'center',
-          }}
-          className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
-        >
-          <CarouselContent className='w-full'>
-            {recentJobPostings.map((jobPosting) => (
-              <CarouselItem
-                key={jobPosting.id}
-                className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
-              >
-                <RecentPostingsCard jobPosting={jobPosting} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
-      </main>
+          {/* 로그인시 보일수 있도록 조건 걸기 */}
+          {IsLoggedIn ? (
+            <>
+              <h3 className='pb-8 text-2xl font-bold'>추천 공고</h3>
+              <Carousel opts={{ align: 'center' }} className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'>
+                <CarouselContent>
+                  {isSeoulPublic
+                    ? publicJobs.data.map((job) => (
+                        <CarouselItem key={job.id} className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
+                          <RecommendedJobCard
+                            jobPosting={job} // 공공공고 타입에 맞게 전달
+                            userData={userData}
+                          />
+                        </CarouselItem>
+                      ))
+                    : privateJobs.map((job) => (
+                        <CarouselItem key={job.id} className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
+                          <RecommendedJobCard
+                            jobPosting={job} // 일반공고 타입에 맞게 전달
+                            userData={userData}
+                          />
+                        </CarouselItem>
+                      ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </>
+          ) : null}
+
+          <div>
+            <h3 className='pb-8 text-2xl font-bold'>최근에 등록된 공고</h3>
+            <Carousel
+              opts={{
+                align: 'center',
+              }}
+              className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
+            >
+              <CarouselContent>
+                {privateJobs.map((jobPosting) => (
+                  <CarouselItem key={jobPosting.id} className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
+                    <RecentPostingsCard jobPosting={jobPosting} />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </div>
+        </main>
+      </div>
     </>
   );
 }

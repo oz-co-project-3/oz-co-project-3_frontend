@@ -10,10 +10,12 @@ interface ChatMessage {
 // 챗봇 전역 상태 타입 정의
 interface ChatbotState {
   open: boolean;
+  isNotFoundPage: boolean;
   chatData: ChatbotResponse | null;
   chatLog: ChatMessage[];
   selectionPath: string[];
   setOpen: (value: boolean) => void; // 챗봇 열림 상태 설정
+  setIsNotFoundPage: (value: boolean) => void; // not-found 추가
   appendUserMessage: (message: string) => void; // 사용자 메시지 추가
   appendBotMessage: (message: string) => void; // 봇 메시지 추가
   setChatData: (data: ChatbotResponse) => void; // 서버 응답 설정
@@ -47,6 +49,11 @@ export const useChatbotStore = create<ChatbotState>()((set) => {
     set({ open: value });
   };
 
+  // NotFound 페이지 진입 여부 상태 설정
+  const setIsNotFoundPage = (value: boolean) => {
+    set({ isNotFoundPage: value });
+  };
+
   // 챗봇 상태 전체 초기화 (채팅 로그, 응답 데이터, 선택 경로 초기화)
   const reset = () => {
     set({
@@ -59,10 +66,12 @@ export const useChatbotStore = create<ChatbotState>()((set) => {
   // 초기 상태 반환
   return {
     open: false,
+    isNotFoundPage: false,
     chatData: null,
     chatLog: [],
     selectionPath: [],
     setOpen,
+    setIsNotFoundPage,
     appendUserMessage,
     appendBotMessage,
     setChatData,
