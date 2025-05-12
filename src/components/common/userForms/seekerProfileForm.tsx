@@ -28,7 +28,7 @@ import PasswordConfirmModal from '@/components/common/modals/PasswordConfirmModa
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { SeekerFormData } from '@/types/user';
-
+import { updateSeekerProfile } from '@/api/user';
 interface SeekerProfileFormProps {
   type: 'register' | 'edit';
   defaultValues?: Partial<SeekerFormData>;
@@ -314,7 +314,9 @@ export default function SeekerProfileForm({
           ) : (
             <div className='space-y-4'>
               <div className='flex gap-2'>
-                <Button type='submit' className='bg-main-light hover:bg-main-dark w-1/2 text-white'>
+                <Button type='submit' 
+                onClick={() => updateSeekerProfile(form.getValues())}
+                className='bg-main-light hover:bg-main-dark w-1/2 text-white'>
                   회원 정보 수정
                 </Button>
                 <Button

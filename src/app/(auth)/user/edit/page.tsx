@@ -47,9 +47,9 @@ export default function UserEditPage() {
             ...seeker,
             email: base.email,
             gender: base.gender,
-            interests: seeker.interests,
-            purposes: seeker.purposes,
-            sources: seeker.sources,
+            interests: seeker.interests.split(','),
+            purposes: seeker.purposes.split(','),
+            sources: seeker.sources.split(','),
             password: '',
             password_check: '',
             user_type: 'normal',
@@ -70,6 +70,7 @@ export default function UserEditPage() {
   const handleSeekerSubmit = async (data: { [key: string]: unknown }) => {
     console.log('🔥 Seeker 제출됨:', data);
     const cleaned = convertArrayFieldsToString(data);
+    console.log('🔥 Seeker 제출됨:', cleaned);
     try {
       await updateSeekerProfile(cleaned);
       await mutate();
@@ -177,7 +178,8 @@ export default function UserEditPage() {
           <p className='mt-4 text-center'>
             기업 회원 수정을 위해서는 기업 인증이 필요합니다. 인증 페이지로 이동하시겠습니까?
           </p>
-          <DialogFooter className='mt-6 flex flex-col gap-2'>
+          <DialogFooter className='mt-6 flex flex-col gap-2'
+          style={{ flexDirection: 'column', alignItems: 'stretch' }}>
             <Button
               className='bg-main-light w-full text-white'
               onClick={() => router.push('/user/register-company')}

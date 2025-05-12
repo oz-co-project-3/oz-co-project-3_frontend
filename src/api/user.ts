@@ -93,6 +93,7 @@ export const deleteUser = async (data: DeleteUserRequest) => {
 
 // 일반 회원 정보 수정
 export async function updateSeekerProfile(data: Record<string, unknown>) {
+  console.log('🔥 data:', data);
   
   return fetchOnClient('/api/user/profile/update/?target_type=normal', {
     method: 'PATCH',
