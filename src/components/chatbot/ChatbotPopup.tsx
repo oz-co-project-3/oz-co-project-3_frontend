@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { useChatbotStore } from '@/store/chatbotStore';
+import { useChatbotStore } from '@/store/usechatbotStore';
 import { ChatbotResponse } from '@/types/chatbot';
 
 export default function ChatbotPopup() {
