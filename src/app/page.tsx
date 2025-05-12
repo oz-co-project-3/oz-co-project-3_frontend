@@ -87,57 +87,66 @@ export default async function Home() {
           </Link>
         </nav>
 
-          {/* 로그인시 보일수 있도록 조건 걸기 */}
-          {IsLoggedIn ? (
-            <>
-              <h3 className='pb-8 text-2xl font-bold'>추천 공고</h3>
-              <Carousel opts={{ align: 'center' }} className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'>
-                <CarouselContent>
-                  {isSeoulPublic
-                    ? publicJobs.data.map((job) => (
-                        <CarouselItem key={job.id} className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
-                          <RecommendedJobCard
-                            jobPosting={job} // 공공공고 타입에 맞게 전달
-                            userData={userData}
-                          />
-                        </CarouselItem>
-                      ))
-                    : privateJobs.map((job) => (
-                        <CarouselItem key={job.id} className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
-                          <RecommendedJobCard
-                            jobPosting={job} // 일반공고 타입에 맞게 전달
-                            userData={userData}
-                          />
-                        </CarouselItem>
-                      ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
-            </>
-          ) : null}
-
-          <div>
-            <h3 className='pb-8 text-2xl font-bold'>최근에 등록된 공고</h3>
+        {/* 로그인시 보일수 있도록 조건 걸기 */}
+        {IsLoggedIn ? (
+          <>
+            <h3 className='pb-8 text-2xl font-bold'>추천 공고</h3>
             <Carousel
-              opts={{
-                align: 'center',
-              }}
+              opts={{ align: 'center' }}
               className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
             >
               <CarouselContent>
-                {privateJobs.map((jobPosting) => (
-                  <CarouselItem key={jobPosting.id} className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'>
-                    <RecentPostingsCard jobPosting={jobPosting} />
-                  </CarouselItem>
-                ))}
+                {isSeoulPublic
+                  ? publicJobs.data.map((job) => (
+                      <CarouselItem
+                        key={job.id}
+                        className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+                      >
+                        <RecommendedJobCard
+                          jobPosting={job} // 공공공고 타입에 맞게 전달
+                          userData={userData}
+                        />
+                      </CarouselItem>
+                    ))
+                  : privateJobs.map((job) => (
+                      <CarouselItem
+                        key={job.id}
+                        className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+                      >
+                        <RecommendedJobCard
+                          jobPosting={job} // 일반공고 타입에 맞게 전달
+                          userData={userData}
+                        />
+                      </CarouselItem>
+                    ))}
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
             </Carousel>
-          </div>
-        </main>
-      </div>
+          </>
+        ) : null}
+
+        <h3 className='mt-28 pb-8 text-2xl font-bold'>최근에 등록된 공고</h3>
+        <Carousel
+          opts={{
+            align: 'center',
+          }}
+          className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
+        >
+          <CarouselContent>
+            {privateJobs.map((jobPosting) => (
+              <CarouselItem
+                key={jobPosting.id}
+                className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+              >
+                <RecentPostingsCard jobPosting={jobPosting} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
+      </main>
     </>
   );
 }
