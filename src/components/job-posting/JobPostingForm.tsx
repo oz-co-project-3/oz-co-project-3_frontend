@@ -508,6 +508,7 @@ export default function JobPostingForm({
             contentText='채용 공고를 저장하시겠습니까?'
             actionType='emphasis'
             formId='jobPostingForm'
+            extraClass='grow'
           />
         </div>
       </form>
