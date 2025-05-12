@@ -25,6 +25,7 @@ export default function ApplyFlow({ id }: { id: string }) {
         }),
       });
       setSendResult('success');
+      console.log('지원성공');
     } catch (e) {
       setSendResult('fail');
       console.error('지원실패', e);

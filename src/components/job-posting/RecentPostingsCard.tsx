@@ -9,10 +9,7 @@ import LikedButton from '../common/likebutton/LikedButton';
 export default function RecentPostingsCard({ jobPosting }: { jobPosting: JobPostingResponse }) {
   return (
     <div className='relative flex w-full cursor-pointer flex-col overflow-hidden rounded-md border transition-all duration-150 hover:scale-105'>
-      <Link
-        href={`/private-jobs/${jobPosting.id}`}
-        className='pointer-events-none absolute inset-0 z-10 grow'
-      >
+      <Link href={`/private-jobs/${jobPosting.id}`} className='absolute inset-0 z-10 grow'>
         <span className='sr-only'>공고 상세보기</span>
       </Link>
 
