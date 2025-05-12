@@ -42,6 +42,13 @@ export interface DeleteUserRequest {
   reason: string;
 }
 
+export interface DeleteUserResponse {
+  user_id: number;
+  email: string;
+  reason: string;
+  deleted_at: string;
+}
+
 export interface User {
   id: number;
   email: string;

@@ -33,8 +33,11 @@ export default function DeleteAccountFlow() {
 
   return (
     <>
-      <Button variant='link' className='text-sm text-gray-500 underline' onClick={() => setStep(1)}>
-        탈퇴하기
+      <Button
+        className='bg-danger grow text-white transition-all duration-200 hover:bg-amber-700'
+        onClick={() => setStep(1)}
+      >
+        회원 탈퇴하기
       </Button>
 
       {/* STEP 1 - 비밀번호 입력 */}

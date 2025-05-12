@@ -42,6 +42,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           title='삭제'
           contentText='삭제한 이력서는 복구할 수 없습니다.'
           actionType='warning'
+          extraClass='grow h-10'
         />
       </div>
     </section>
