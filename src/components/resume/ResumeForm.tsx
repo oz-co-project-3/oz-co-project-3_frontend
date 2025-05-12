@@ -503,6 +503,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
             contentText='이력서를 저장하시겠습니까?'
             actionType='emphasis'
             formId='resumeForm'
+            extraClass='grow'
           />
         </div>
       </form>

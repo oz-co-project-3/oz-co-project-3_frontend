@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { UserTable } from './UserTable';
+import SkeletonPlaceholder from '@/components/common/SkeletonPlaceholder';
 
 export function UserTabs() {
   const [tab, setTab] = useState('seeker');
@@ -17,11 +18,11 @@ export function UserTabs() {
         </TabsList>
 
         <TabsContent value='seeker'>
-          <UserTable userType='seeker' />
+          <UserTable userType='seeker' fallback={<SkeletonPlaceholder rows={6} columns={4} />} />
         </TabsContent>
 
         <TabsContent value='business'>
-          <UserTable userType='business' />
+          <UserTable userType='business' fallback={<SkeletonPlaceholder rows={6} columns={4} />} />
         </TabsContent>
       </Tabs>
     </div>

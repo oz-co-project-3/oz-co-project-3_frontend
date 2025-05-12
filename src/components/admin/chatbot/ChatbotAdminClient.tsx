@@ -8,6 +8,7 @@ import ChatbotModal from './ChatbotModal';
 import DataTable from '@/components/admin/table/DataTable';
 import { getColumns } from './columns';
 import { fetchOnClient } from '@/api/clientFetcher';
+import SkeletonPlaceholder from '@/components/common/SkeletonPlaceholder';
 
 export default function ChatbotAdminClient() {
   const [openModal, setOpenModal] = useState(false);
@@ -102,7 +103,7 @@ export default function ChatbotAdminClient() {
       {/* 에러 및 로딩 처리 */}
       {error && <p className='text-red-500'>에러 발생: {error.message}</p>}
       {isLoading ? (
-        <p className='text-gray-500'>로딩 중...</p>
+        <SkeletonPlaceholder rows={6} columns={5} />
       ) : (
         <DataTable
           columns={getColumns({ onEdit: handleEdit, onDelete: handleDelete })}

@@ -17,25 +17,27 @@ export default function ConfirmButton({
   contentText,
   actionType,
   formId,
+  extraClass,
 }: {
   handleAction?: () => void;
   title: string;
   contentText: string;
   actionType: 'normal' | 'warning' | 'emphasis';
   formId?: string;
+  extraClass?: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  let extraClass = '';
+  let conditionalClass = '';
   switch (actionType) {
     case 'normal':
-      extraClass = 'bg-trnasparent text-black hover:bg-zinc-200 bg-zinc-100';
+      conditionalClass = 'bg-trnasparent text-black hover:bg-zinc-200 bg-zinc-100';
       break;
     case 'warning':
-      extraClass = 'bg-danger hover:bg-amber-700 text-white';
+      conditionalClass = 'bg-danger hover:bg-amber-700 text-white';
       break;
     case 'emphasis':
-      extraClass = 'bg-main-light hover:bg-main-dark text-white';
+      conditionalClass = 'bg-main-light hover:bg-main-dark text-white';
       break;
   }
 
@@ -44,7 +46,7 @@ export default function ConfirmButton({
       <Button
         onClick={() => setIsOpen(true)}
         type='button'
-        className={`${extraClass} grow cursor-pointer rounded-md px-2.5 py-5`}
+        className={`${conditionalClass} ${extraClass} cursor-pointer rounded-md px-4 py-2 text-base`}
       >
         {title}
       </Button>

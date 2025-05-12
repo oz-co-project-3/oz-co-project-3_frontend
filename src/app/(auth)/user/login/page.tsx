@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/store/useAuthStore';
-import { resendEmailCode } from '@/api/resendEmailCode';
-import { LoginResponseData, User } from '@/types/user';
+import { LoginResponseData } from '@/types/user';
 
 interface LoginFormData {
   email: string;
@@ -34,58 +33,24 @@ export default function LoginPage() {
         throw new Error('로그인 응답이 없습니다.');
       }
 
-      const user: User = {
-        id: res.user_id,
-        email: res.email,
-        user_type: res.user_type,
-        name: res.name,
-        signinMethod: 'email',
+      const { email, user_id, user_type, name } = res;
+
+      const user = {
+        id: user_id,
+        email,
+        user_type: user_type,
+        name: name,
+        signinMethod: 'email' as 'email' | 'naver' | 'kakao',
       };
 
       login(user, res.access_token);
       console.log('로그인 완료:', user);
-      router.push('/');
-    } catch (error: unknown) {
-      const err = error as {
-        status: number;
-        message?: {
-          code?: string;
-          error?: string;
-        };
-      };
-
-      const code = err?.message?.code;
-      const msg = err?.message?.error || '알 수 없는 오류입니다.';
-
-      switch (code) {
-        case 'unverified_or_inactive_account':
-          try {
-            await resendEmailCode(data.email);
-            localStorage.setItem('registerFormData', JSON.stringify({ email: data.email }));
-            alert('이메일 인증이 필요합니다. 인증코드를 재전송했습니다.');
-            router.push('/user/email-verification');
-          } catch {
-            alert('인증코드 재전송에 실패했습니다.');
-          }
-          break;
-
-        case 'invalid_credentials':
-          alert('이메일 또는 비밀번호가 일치하지 않습니다.');
-          break;
-
-        case 'user_not_found':
-          alert('존재하지 않는 계정입니다.');
-          break;
-
-        case 'invalid_password':
-          alert('비밀번호 조건이 맞지 않습니다. (8자 이상 + 특수문자 포함)');
-          break;
-
-        default:
-          alert(msg);
-          break;
+      if (user.user_type.includes('admin')) {
+        router.push('/admin/user'); // 관리자는 /admin/user로
+      } else {
+        router.push('/');
       }
-
+    } catch (err) {
       console.error('로그인 실패:', err);
     }
   };

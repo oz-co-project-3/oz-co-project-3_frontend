@@ -1,5 +1,5 @@
 import fetchOnServer from '@/api/serverFetcher';
-import JobPostingPrivateCard from '@/components/job-posting/JobPostingPrivateCard';
+import JobPostingBusinessCard from '@/components/job-posting/JobPostingBusinessCard';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import Link from 'next/link';
 
@@ -37,7 +37,7 @@ export default async function CurrentJobPostingsPage() {
           </div>
         ) : (
           currentJobPostings.map((jobPosting) => (
-            <JobPostingPrivateCard key={jobPosting.id} jobPosting={jobPosting} />
+            <JobPostingBusinessCard key={jobPosting.id} jobPosting={jobPosting} type='current' />
           ))
         )}
       </section>

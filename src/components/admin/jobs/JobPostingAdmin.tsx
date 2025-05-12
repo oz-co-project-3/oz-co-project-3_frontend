@@ -17,6 +17,7 @@ import {
 import JobPostingViewer from '@/components/common/text-editor/JobPostingViewer';
 import useJobPosting from '@/hooks/useJobPosting';
 import JobPostingActionPanel from './JobPostingActionPanel';
+import SkeletonPlaceholder from '@/components/common/SkeletonPlaceholder';
 
 interface Props {
   id: string;
@@ -26,13 +27,17 @@ export default function JobPostingAdmin({ id }: Props) {
   const { jobPosting, loading, error } = useJobPosting(id);
 
   if (error) return null;
-  if (loading || !jobPosting) return <p className='text-gray-400'>로딩 중...</p>;
+
+  if (loading || !jobPosting) {
+    return (
+      <div className='p-10'>
+        <SkeletonPlaceholder rows={8} columns={1} />
+      </div>
+    );
+  }
 
   return (
     <article className='flex flex-col gap-4'>
-      {/* 승인/반려 */}
-      <JobPostingActionPanel id={id} status={jobPosting.status} />
-
       {/* 공고 제목 */}
       <div className='flex items-center justify-between border-b pb-4'>
         <h2 className='text-2xl font-bold'>{jobPosting.title}</h2>
@@ -57,21 +62,7 @@ export default function JobPostingAdmin({ id }: Props) {
             </span>
           </div>
         </div>
-        <div className='flex flex-col gap-5'>
-          {/* <span className='text-zinc-800'>
-            작성일:{' '}
-            {jobPosting.created_at && isValid(parseISO(jobPosting.created_at))
-              ? format(parseISO(jobPosting.created_at), 'yyyy-MM-dd')
-              : '날짜 없음'}
-          </span>
-
-          <span className='text-zinc-800'>
-            수정일:{' '}
-            {isValid(parseISO(jobPosting.updated_at))
-              ? format(parseISO(jobPosting.updated_at), 'yyyy-MM-dd')
-              : '날짜 없음'}
-          </span> */}
-        </div>
+        <div className='flex flex-col gap-5'>{/* 작성일/수정일 등 필요 시 */}</div>
       </div>
 
       {/* 모집 조건 */}
@@ -96,7 +87,6 @@ export default function JobPostingAdmin({ id }: Props) {
               <span>모집 인원: {jobPosting.recruitment_count}명</span>
             </div>
           </div>
-
           <div className='flex flex-col gap-4 lg:w-1/2'>
             <div className='flex items-center gap-4'>
               <BookCheck className='size-4' />
@@ -150,6 +140,9 @@ export default function JobPostingAdmin({ id }: Props) {
         </h3>
         <JobPostingViewer content={jobPosting.description} />
       </div>
+
+      {/* 승인/반려 */}
+      <JobPostingActionPanel id={id} status={jobPosting.status} />
     </article>
   );
 }
