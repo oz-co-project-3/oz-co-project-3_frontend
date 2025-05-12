@@ -29,7 +29,7 @@ export default async function Home() {
   return (
     <>
       <ScrollShowSearchBar />
-      <main className='mx-auto max-w-[1200px] flex-row py-48 text-center'>
+      <main className='mx-auto max-w-[1200px] flex-row py-44 text-center'>
         <div className='flex flex-col gap-6'>
           <h2 className='text-xl font-bold max-md:font-extrabold sm:text-2xl md:text-3xl lg:text-4xl'>
             &quot;내일 뭐하지? 시니어내일에서 찾아봐요!&quot;
@@ -41,11 +41,11 @@ export default async function Home() {
           </p>
         </div>
 
-        <div className='flex flex-col gap-2 pt-34'>
+        <div className='flex flex-col gap-2 pt-28'>
           <SearchBarSuspense />
           <div className='mt-1 mb-12 flex flex-row justify-center'>
             <p className='mr-5 text-gray-500 max-md:text-sm'>검색 키워드 추천</p>
-            <div className='mb-4 flex justify-center'>
+            <div className='mb-6 flex justify-center'>
               <Suspense fallback={<Loading />}>
                 <KeywordRecommand />
               </Suspense>
@@ -54,7 +54,7 @@ export default async function Home() {
         </div>
 
         <nav className='mb-44 flex flex-row justify-center space-x-4'>
-          <Link href='/public-jobs'>
+          <Link href='/public-jobs?page=1'>
             <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
               <AiOutlineFileSearch className='text-[#2B90D9]' />
               <span className='text-sm sm:text-base md:text-lg lg:text-xl'>공공 공고</span>
