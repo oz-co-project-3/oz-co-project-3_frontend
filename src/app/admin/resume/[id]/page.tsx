@@ -3,6 +3,8 @@ import fetchOnServer from '@/api/serverFetcher';
 import { ResumeResponse } from '@/types/Schema/resumeSchema';
 import Resume from '@/components/resume/Resume';
 import AdminLayout from '@/components/common/layout/AdminLayout';
+import { X } from 'lucide-react';
+import Link from 'next/link';
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   try {
@@ -16,9 +18,22 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     return (
       <AdminLayout>
-        <Resume resume={resume} />
-        <div className='mb-4 flex justify-end'>
-          <DeleteResumeButton id={id} />
+        <div className='relative'>
+          <div className='mt-10'>
+            <Link
+              href='/admin/user'
+              className='absolute top-0 right-0 z-10 rounded-full p-2 text-zinc-400 transition hover:text-zinc-600'
+              aria-label='닫기'
+            >
+              <X className='h-6 w-6' />
+            </Link>
+          </div>
+
+          <Resume resume={resume} />
+
+          <div className='mb-4 flex justify-end'>
+            <DeleteResumeButton id={id} />
+          </div>
         </div>
       </AdminLayout>
     );

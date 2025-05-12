@@ -11,7 +11,7 @@ export default function useJobPostingList() {
   return {
     postings: data ?? [],
     error,
-    loading: isLoading,
+    isLoading,
     mutate,
   };
 }
