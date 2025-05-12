@@ -61,40 +61,44 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </li>
               ))}
 
-              {isBusiness && (
-                <>
-                  {/* hr 대신 쓸거 없나 */}
-                  <hr className='my-4' />
-                  {businessNavItems.map((item) => (
-                    <li key={item.name} className='w-full'>
-                      <Link
-                        href={item.href}
-                        className={`${pathname.includes(item.href) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
-                      >
-                        {item.name}
-                      </Link>
-                    </li>
-                  ))}
-                </>
+                {isBusiness && (
+                  <>
+                    {/* hr 대신 쓸거 없나 */}
+                    <hr className='my-4' />
+                    {businessNavItems.map((item) => (
+                      <li key={item.name} className='w-full'>
+                        <Link
+                          href={item.href}
+                          className={`${pathname.includes(item.href) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
+                        >
+                          {item.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </>
+                )}
+              </ul>
+
+              {/* 기업 회원 업그레이드 버튼 */}
+              {/* 임시 주소로 보냄 (기업회원 업그레이드 페이지 미구현) */}
+              {/* 일단 보이게 해놨음, 밑에줄 앞에 ! 붙이기 */}
+              {!isBusiness && (
+                <Button
+                  onClick={() => router.push('/user/register-company')}
+                  className='bg-main-light hover:bg-main-dark cursor-pointer text-white'
+                >
+                  기업 회원 업그레이드
+                </Button>
               )}
-            </ul>
+            </nav>
 
-            {/* 기업 회원 업그레이드 버튼 */}
-            {/* 임시 주소로 보냄 (기업회원 업그레이드 페이지 미구현) */}
-            {/* 일단 보이게 해놨음, 밑에줄 앞에 ! 붙이기 */}
-            {!isBusiness && (
-              <Button
-                onClick={() => router.push('/user/register-company')}
-                className='bg-main-light hover:bg-main-dark cursor-pointer text-white'
-              >
-                기업 회원 업그레이드
-              </Button>
-            )}
-          </nav>
-
-          <div className='flex flex-1 flex-col gap-4'>{children}</div>
+            <div className='flex flex-1 flex-col gap-4 rounded-md bg-white shadow shadow-zinc-200 lg:min-h-[850px]'>
+              {children}
+            </div>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+      {/* <LoginRequiredModal /> */}
+    </>
   );
 }

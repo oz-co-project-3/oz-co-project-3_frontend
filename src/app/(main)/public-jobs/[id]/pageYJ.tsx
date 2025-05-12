@@ -2,7 +2,7 @@ import fetchOnServer from '@/api/serverFetcher';
 import JobPosting from '@/components/job-posting/JobPosting';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import LikedButton from '@/components/common/likebutton/LikedButton';
-import ApplyFlow from '../../ApplyFlow';
+import ApplyFlow from '../../../../components/common/modals/ApplyFlow';
 
 //공공 상세페이지
 export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {

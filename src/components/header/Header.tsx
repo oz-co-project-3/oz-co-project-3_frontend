@@ -58,7 +58,7 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between border-b bg-white px-2'>
+    <header className='fixed top-0 right-0 left-0 z-1000 flex items-center justify-between bg-white px-2 shadow shadow-zinc-100'>
       <h1 className='h-[70px] w-[150px]'>
         <Link href='/' className='relative block h-full w-full'>
           <Image
@@ -73,13 +73,13 @@ export default function Header() {
         </Link>
       </h1>
 
-      <nav className='grow px-12'>
-        <ul className='flex items-center gap-4'>
+      <nav className='grow px-10'>
+        <ul className='flex items-center gap-1'>
           {navItems.map((item) => (
             <li key={item.name}>
               <Link
                 href={item.href}
-                className={`${pathname === item.href ? 'text-main-light font-bold' : ''}`}
+                className={`${pathname.includes(item.href.slice(0, 10)) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory rounded-md px-4 py-2 text-lg`}
               >
                 {item.name}
               </Link>

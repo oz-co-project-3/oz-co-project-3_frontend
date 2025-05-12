@@ -37,6 +37,7 @@ export function ApplicantsListModal({
   console.log(applicants);
 
   const [selectedApplicantId, setSelectedApplicantId] = useState<number | null>(null);
+  const [selectedApplicantResumeId, setSelectedApplicantResumeId] = useState<number | null>(null);
 
   // 매번 열릴 때마다 mutate (삭제 등 반영 하기 위해서), 꼭 필요함?
   // useEffect(() => {
@@ -63,7 +64,10 @@ export function ApplicantsListModal({
                   className={`flex cursor-pointer items-center justify-between rounded-md border px-4 py-3 hover:bg-zinc-100 ${
                     selectedApplicantId === applicant.id ? 'bg-zinc-100' : ''
                   }`}
-                  onClick={() => setSelectedApplicantId(applicant.id)}
+                  onClick={() => {
+                    setSelectedApplicantId(applicant.id);
+                    setSelectedApplicantResumeId(applicant.resume.id);
+                  }}
                 >
                   {/* 이력서 이름, 지원자 이름, 등등으로 바꿔주기 (현재 데이터 이상함) */}
                   {/* 유저: {applicant.user_id} / 이력서: {applicant.resume.id} */}
@@ -90,7 +94,7 @@ export function ApplicantsListModal({
               try {
                 // console.log(selectedResumeId);
                 router.push(
-                  `/dashboard/business/job-postings/current/${jobPostingId}/applicants?id=${selectedApplicantId}`,
+                  `/dashboard/business/job-postings/current/${jobPostingId}/applicants?id=${selectedApplicantResumeId}`,
                 );
               } catch (error) {
                 // TODO: 토스트?

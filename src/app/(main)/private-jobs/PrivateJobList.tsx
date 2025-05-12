@@ -26,9 +26,8 @@ export default function PrivateJobList({
 
   return (
     <div>
-      <h2 className='text-2xl font-bold'>채용정보</h2>
       <section>
-        <header className='flex flex-row justify-between border-b-2 bg-white py-2'>
+        <header className='flex flex-row justify-between rounded-md border border-b-2 bg-white py-2'>
           <span className='w-[150px] text-center'>근무지</span>
           <span className='w-[300px] text-center'>모집제목/기업명</span>
           <span className='w-[300px] text-center'>근무요약</span>

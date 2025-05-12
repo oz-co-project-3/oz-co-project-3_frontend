@@ -17,7 +17,7 @@ export default function KeywordRecommand() {
         <button
           key={keyword}
           onClick={() => handleClick(keyword)}
-          className='cursor-pointer border-none bg-transparent text-inherit hover:underline'
+          className='cursor-pointer border-none bg-transparent text-inherit hover:underline max-md:text-sm'
           type='button'
         >
           {keyword}
