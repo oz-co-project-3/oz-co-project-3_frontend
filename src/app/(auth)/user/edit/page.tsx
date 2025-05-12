@@ -19,6 +19,7 @@ import { convertArrayFieldsToString } from '@/lib/stringArrayConverter';
 import { useRouter } from 'next/navigation';
 import { CorpProfile, CompanyFormData, SeekerFormData } from '@/types/user';
 import useSWR from 'swr';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export default function UserEditPage() {
   const [userType, setUserType] = useState<string[]>([]);
@@ -26,8 +27,9 @@ export default function UserEditPage() {
   const [defaultCompany, setDefaultCompany] = useState<CorpProfile | null>(null);
   const [tab, setTab] = useState<'seeker' | 'company'>('seeker');
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { mutate } = useSWR('/api/user/profile/', fetchUserProfile);
-
+  const setUser = useAuthStore((state) => state.setUser);
   const router = useRouter();
 
   useEffect(() => {
@@ -45,9 +47,9 @@ export default function UserEditPage() {
             ...seeker,
             email: base.email,
             gender: base.gender,
-            interests: seeker.interests,
-            purposes: seeker.purposes,
-            sources: seeker.sources,
+            interests: seeker.interests.split(','),
+            purposes: seeker.purposes.split(','),
+            sources: seeker.sources.split(','),
             password: '',
             password_check: '',
             user_type: 'normal',
@@ -55,9 +57,7 @@ export default function UserEditPage() {
         }
 
         if (corp) {
-          setDefaultCompany({
-            ...corp,
-          });
+          setDefaultCompany({ ...corp });
         }
       } catch (err) {
         console.error('프로필 불러오기 실패:', err);
@@ -68,24 +68,53 @@ export default function UserEditPage() {
   }, []);
 
   const handleSeekerSubmit = async (data: { [key: string]: unknown }) => {
+    console.log('🔥 Seeker 제출됨:', data);
     const cleaned = convertArrayFieldsToString(data);
+    console.log('🔥 Seeker 제출됨:', cleaned);
     try {
-      await updateSeekerProfile(cleaned); // PATCH API 호출
-      await mutate(); // SWR로 상태 갱신
-      alert('회원정보가 수정되었습니다!');
+      await updateSeekerProfile(cleaned);
+      await mutate();
+
+      const profile = await fetchUserProfile();
+      if (!profile) return;
+      const { base, seeker, corp } = profile;
+
+      setUser({
+        id: Number(base.id),
+        email: base.email,
+        name: seeker?.name ?? corp?.manager_name ?? '',
+        user_type: base.user_type,
+        signinMethod: base.signinMethod as 'email' | 'naver' | 'kakao',
+      });
+
+      setShowSuccessDialog(true);
     } catch (err) {
-      console.error('수정 실패:', err);
+      console.error('Seeker 수정 실패:', err);
       alert('회원정보 수정 중 오류가 발생했습니다.');
     }
   };
 
   const handleCompanySubmit = async (data: CompanyFormData) => {
+    console.log('🔥 Company 제출됨:', data);
     try {
       await updateBusinessProfile(data as unknown as Record<string, unknown>);
       await mutate();
-      alert('회원정보가 수정되었습니다!');
+
+      const profile = await fetchUserProfile();
+      if (!profile) return;
+      const { base, seeker, corp } = profile;
+
+      setUser({
+        id: Number(base.id),
+        email: base.email,
+        name: seeker?.name ?? corp?.manager_name ?? '',
+        user_type: base.user_type,
+        signinMethod: base.signinMethod as 'email' | 'naver' | 'kakao',
+      });
+
+      setShowSuccessDialog(true);
     } catch (err) {
-      console.error('수정 실패:', err);
+      console.error('Company 수정 실패:', err);
       alert('회원정보 수정 중 오류가 발생했습니다.');
     }
   };
@@ -149,10 +178,8 @@ export default function UserEditPage() {
           <p className='mt-4 text-center'>
             기업 회원 수정을 위해서는 기업 인증이 필요합니다. 인증 페이지로 이동하시겠습니까?
           </p>
-          <DialogFooter
-            className='mt-6 flex flex-col gap-2'
-            style={{ flexDirection: 'column', alignItems: 'stretch' }}
-          >
+          <DialogFooter className='mt-6 flex flex-col gap-2'
+          style={{ flexDirection: 'column', alignItems: 'stretch' }}>
             <Button
               className='bg-main-light w-full text-white'
               onClick={() => router.push('/user/register-company')}
@@ -169,6 +196,19 @@ export default function UserEditPage() {
             >
               아니요, 일반 회원 정보만 수정할게요
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* 회원정보 수정 완료 모달 */}
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent className='max-w-sm'>
+          <DialogHeader>
+            <DialogTitle>회원정보 수정 완료</DialogTitle>
+          </DialogHeader>
+          <p className='mt-4 text-center'>회원정보가 성공적으로 수정되었어요 🎉</p>
+          <DialogFooter className='mt-6 flex justify-center'>
+            <Button onClick={() => setShowSuccessDialog(false)}>확인</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

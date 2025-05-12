@@ -42,7 +42,7 @@ export default function WithdrawModal({ open, onOpenChange }: WithdrawModalProps
 
     try {
       setLoading(true);
-      await deleteUser({ password, leave_reason: reason, is_active: false });
+      await deleteUser({ password, reason, is_active: false });
       alert('탈퇴가 완료되었습니다.');
       logout();
       router.push('/');

@@ -8,8 +8,11 @@ import LikedButton from '../common/likebutton/LikedButton';
 
 export default function RecentPostingsCard({ jobPosting }: { jobPosting: JobPostingResponse }) {
   return (
-    <div className='relative flex w-full cursor-pointer flex-col overflow-hidden rounded-md border transition-all duration-150 hover:scale-105'>
-      <Link href={`/private-jobs/${jobPosting.id}`} className='absolute inset-0 z-10 grow'>
+    <div className='relative flex w-full cursor-pointer flex-col overflow-hidden rounded-md border'>
+      <Link
+        href={`/private-jobs/${jobPosting.id}`}
+        className='pointer-events-none absolute inset-0 z-10 grow'
+      >
         <span className='sr-only'>공고 상세보기</span>
       </Link>
 
@@ -25,12 +28,14 @@ export default function RecentPostingsCard({ jobPosting }: { jobPosting: JobPost
         />
       </div>
       <div className='flex flex-col gap-1 px-4 py-2'>
-        <h3 className='h-16 text-lg font-bold'>{jobPosting?.title ?? '제목 없음'}</h3>
-        <span className='text-sm text-gray-500'>{jobPosting?.company ?? '회사명'}</span>
-        <span className='text-sm text-gray-500'>
+        <h4 className='h-16 text-lg font-bold'>{jobPosting?.title ?? '제목 없음'}</h4>
+        <span className='text-left text-sm text-gray-500'>{jobPosting?.company ?? '회사명'}</span>
+        <span className='text-left text-sm text-gray-500'>
           {getBriefLocation(jobPosting?.location ?? '')}
         </span>
-        <span className='text-sm text-gray-500'>마감일: {jobPosting.deadline ?? '상시모집'}</span>
+        <span className='text-left text-sm text-gray-500'>
+          마감일: {jobPosting.deadline ?? '상시모집'}
+        </span>
       </div>
       <div className='absolute right-2 bottom-1 z-20 items-end justify-end'>
         <LikedButton id={jobPosting.id} is_bookmarked={jobPosting.is_bookmarked} />

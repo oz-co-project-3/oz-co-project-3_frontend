@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import LikedButton from './likebutton/LikedButton';

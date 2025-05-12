@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/store/useAuthStore';
+import { LoginResponseData } from '@/types/user';
 
 interface LoginFormData {
   email: string;
@@ -26,7 +27,8 @@ export default function LoginPage() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const res = await loginUser(data);
+      const res: LoginResponseData | null = await loginUser(data);
+
       if (!res) {
         throw new Error('로그인 응답이 없습니다.');
       }
@@ -40,8 +42,8 @@ export default function LoginPage() {
         name: name,
         signinMethod: 'email' as 'email' | 'naver' | 'kakao',
       };
-      login(user, res.access_token);
 
+      login(user, res.access_token);
       console.log('로그인 완료:', user);
       if (user.user_type.includes('admin')) {
         router.push('/admin/user'); // 관리자는 /admin/user로
@@ -50,40 +52,33 @@ export default function LoginPage() {
       }
     } catch (err) {
       console.error('로그인 실패:', err);
-      alert('이메일 또는 비밀번호가 잘못되었습니다.');
     }
   };
 
-  const handleNaverLogin = async () => {
-    try {
-      const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
-      console.log('네이버 CLIENT_ID:', process.env.NEXT_PUBLIC_NAVER_CLIENT_ID);
-      const REDIRECT_URI = process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI; // 사용자가 돌아올 URI
-      const STATE = 'naver_login_test_2025';
+  const handleNaverLogin = () => {
+    const NAVER_CLIENT_ID = process.env.NEXT_PUBLIC_NAVER_CLIENT_ID;
+    const REDIRECT_URI = process.env.NEXT_PUBLIC_NAVER_REDIRECT_URI;
+    const STATE = 'naver_login_test_2025';
 
-      const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-        REDIRECT_URI!,
-      )}&state=${STATE}`;
+    const url = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${NAVER_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+      REDIRECT_URI!,
+    )}&state=${STATE}`;
 
-      window.location.href = url;
-    } catch (err) {
-      console.error('네이버 로그인 요청 실패:', err);
-      alert('네이버 로그인 요청에 실패했습니다.');
-    }
+    window.location.href = url;
   };
 
   const handleKakaoLogin = () => {
     const KAKAO_CLIENT_ID = process.env.NEXT_PUBLIC_KAKAO_CLIENT_ID;
     const REDIRECT_URI = process.env.NEXT_PUBLIC_KAKAO_REDIRECT_URI;
 
-    const STATE = crypto.randomUUID(); // 랜덤 state 생성
-    localStorage.setItem('kakao_login_state', STATE); // localStorage에 저장
+    const STATE = crypto.randomUUID();
+    localStorage.setItem('kakao_login_state', STATE);
 
-    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+    const url = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=${encodeURIComponent(
       REDIRECT_URI!,
-    )}&state=${STATE}`; //state 포함
+    )}&state=${STATE}`;
 
-    window.location.href = kakaoAuthUrl;
+    window.location.href = url;
   };
 
   return (
@@ -95,8 +90,8 @@ export default function LoginPage() {
           <div>
             <label className='mb-1 block text-sm font-semibold'>이메일</label>
             <Input
-              className='bg-white'
               type='email'
+              className='bg-white'
               {...register('email', { required: '이메일을 입력해주세요.' })}
             />
             {errors.email && <p className='text-sm text-red-500'>{errors.email.message}</p>}
@@ -105,8 +100,8 @@ export default function LoginPage() {
           <div>
             <label className='mb-1 block text-sm font-semibold'>비밀번호</label>
             <Input
-              className='bg-white'
               type='password'
+              className='bg-white'
               {...register('password', { required: '비밀번호를 입력해주세요.' })}
             />
             {errors.password && <p className='text-sm text-red-500'>{errors.password.message}</p>}
