@@ -9,7 +9,9 @@ import { revalidatePath } from 'next/cache';
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/postings/${id}/`);
+  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/postings/${id}/`, {
+    cache: 'force-cache',
+  });
   console.log(jobPosting);
 
   const cancelLike = async () => {
@@ -20,6 +22,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     });
     console.log(response);
     revalidatePath('/dashboard/job-seeker/job-postings/favorite');
+    revalidatePath(`/dashboard/job-seeker/job-postings/favorite/${id}`);
     redirect('/dashboard/job-seeker/job-postings/favorite');
   };
 

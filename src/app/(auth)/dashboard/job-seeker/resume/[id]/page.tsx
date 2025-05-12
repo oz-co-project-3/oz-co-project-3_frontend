@@ -10,7 +10,9 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   const { id } = await params;
   console.log(id);
 
-  const resume = await fetchOnServer<ResumeResponse>(`/api/resume/${id}/`);
+  const resume = await fetchOnServer<ResumeResponse>(`/api/resume/${id}/`, {
+    cache: 'force-cache',
+  });
 
   const deleteResume = async () => {
     'use server';
@@ -22,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     console.log(response);
     // 관련 경로 캐시 무효화
     revalidatePath('/dashboard/job-seeker/resume');
+    revalidatePath(`/dashboard/job-seeker/resume/${id}`);
     redirect('/dashboard/job-seeker/resume');
   };
 

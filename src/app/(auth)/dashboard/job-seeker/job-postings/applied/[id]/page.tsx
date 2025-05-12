@@ -40,6 +40,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     );
     console.log('지원 취소 응답: ', response);
     revalidatePath('/dashboard/job-seeker/job-postings/applied');
+    revalidatePath(`/dashboard/job-seeker/job-postings/applied/${id}`);
     redirect('/dashboard/job-seeker/job-postings/applied');
   };
 

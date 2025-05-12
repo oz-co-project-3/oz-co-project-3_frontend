@@ -4,7 +4,9 @@ import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import Link from 'next/link';
 
 export default async function PreviousJobPostingsPage() {
-  const jobPostings = await fetchOnServer<JobPostingResponse[]>('/api/job_posting/');
+  const jobPostings = await fetchOnServer<JobPostingResponse[]>('/api/job_posting/', {
+    cache: 'force-cache',
+  });
   console.log(jobPostings);
 
   const today = new Date();

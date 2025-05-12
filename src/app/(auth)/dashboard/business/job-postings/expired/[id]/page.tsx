@@ -10,7 +10,9 @@ import { redirect } from 'next/navigation';
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
 
-  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`);
+  const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/job_posting/${id}/`, {
+    cache: 'force-cache',
+  });
   console.log(jobPosting);
 
   const deleteJobPosting = async () => {
@@ -22,6 +24,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     });
     console.log(response);
     revalidatePath('/dashboard/business/job-postings/expired');
+    revalidatePath(`/dashboard/business/job-postings/expired/${id}`);
     redirect('/dashboard/business/job-postings/expired');
   };
 

@@ -14,7 +14,9 @@ export default async function CompanyProfile({ id }: { id?: string }) {
     user = await fetchOnServer<UserProfileResponse>(`/api/admin/user/${userId}`);
     console.log(user);
   } else {
-    user = await fetchOnServer<UserProfileResponse>('/api/user/profile/');
+    user = await fetchOnServer<UserProfileResponse>('/api/user/profile/', {
+      cache: 'force-cache',
+    });
     console.log(user);
   }
 

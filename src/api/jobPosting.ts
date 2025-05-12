@@ -11,5 +11,6 @@ export const deleteJobPosting = async (id: string) => {
   });
   console.log(response);
   revalidatePath('/dashboard/business/job-postings/current');
+  revalidatePath(`/dashboard/business/job-postings/current/${id}`);
   redirect('/dashboard/business/job-postings/current');
 };
