@@ -1,4 +1,3 @@
-// store/useAuthStore.ts
 import { create } from 'zustand';
 import { User } from '@/types/user';
 import { fetchOnClient } from '@/api/clientFetcher';
@@ -11,7 +10,8 @@ interface AuthState {
   logout: () => void;
   restoreUser: () => Promise<void>;
   setAccessToken: (token: string) => void;
-  setUser: (user: User) => void; 
+  setUser: (user: User) => void;
+  refreshProfile: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -24,7 +24,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
   setUser: (user: User) => set({ user }),
 
-  setAccessToken: (token) => set({ accessToken: token }),
+  setAccessToken: (token: string) => set({ accessToken: token }),
 
   restoreUser: async () => {
     try {
@@ -45,21 +45,40 @@ export const useAuthStore = create<AuthState>((set) => ({
         method: 'GET',
       });
 
-      const { base } = data;
-
       const user: User = {
-        id: base.id,
-        email: base.email,
+        id: Number(data.base.id),
+        email: data.base.email,
         name: data.seeker?.name ?? data.corp?.manager_name ?? '',
-        user_type: base.user_type,
-        signinMethod: base.signinMethod,
+        user_type: data.base.user_type as 'normal' | 'business' | 'admin',
+        signinMethod: data.base.signinMethod as 'email' | 'naver' | 'kakao',
       };
 
       set({ user, accessToken: access_token });
-      console.log('복원 완료:', user);
+      console.log('✅ 사용자 상태 복원 완료:', user);
     } catch (err) {
-      console.warn('복원 실패:', err);
+      console.warn('⚠️ 사용자 상태 복원 실패:', err);
       set({ user: null, accessToken: null });
+    }
+  },
+
+  refreshProfile: async () => {
+    try {
+      const data = await fetchOnClient<UserProfileResponse>('/api/user/profile/', {
+        method: 'GET',
+      });
+
+      const user: User = {
+        id: Number(data.base.id),
+        email: data.base.email,
+        name: data.seeker?.name ?? data.corp?.manager_name ?? '',
+        user_type: data.base.user_type as 'normal' | 'business' | 'admin',
+        signinMethod: data.base.signinMethod as 'email' | 'naver' | 'kakao',
+      };
+
+      set({ user });
+      console.log('🔄 사용자 프로필 갱신:', user);
+    } catch (err) {
+      console.warn('⚠️ 사용자 프로필 갱신 실패:', err);
     }
   },
 }));

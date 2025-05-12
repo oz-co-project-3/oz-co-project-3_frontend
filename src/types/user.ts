@@ -94,8 +94,52 @@ export interface CorpProfile {
   profile_url: string;
 }
 
+export type SeekerProfileUpdate = {
+  name: string;
+  phone_number: string;
+  birth: string; 
+  interests: string;
+  purposes: string;
+  sources: string;
+  status: 'seeking' | 'not_seeking';
+  profile_url: string;
+};
+
+export type CorpProfileUpdate = {
+  company_name: string;
+  business_number: string;
+  business_start_date: string; 
+  company_description: string;
+  manager_name: string;
+  manager_phone_number: string;
+  manager_email: string;
+  profile_url: string;
+};
+
+// src/types/user.ts
 export interface UserProfileResponse {
-  base: UserBaseProfile;
-  seeker: SeekerProfile | null;
-  corp: CorpProfile | null;
+  base: {
+    id: string;
+    email: string;
+    user_type: string;
+    signinMethod: string;
+    gender?: 'male' | 'female' | 'none'; // 추가
+  };
+  seeker?: {
+    name: string;
+    birth?: string; // 추가
+    phone_number?: string; // 추가
+    status?: string; // 추가
+    interests?: string; // 추가
+    purposes?: string; // 추가
+    sources?: string; // 추가
+  };
+  corp?: {
+    manager_name: string;
+    business_number?: string; // 추가
+    company_name?: string; // 추가
+    manager_phone_number?: string; // 추가
+    business_start_date?: string; // 추가
+    manager_email?: string; // 추가
+  };
 }

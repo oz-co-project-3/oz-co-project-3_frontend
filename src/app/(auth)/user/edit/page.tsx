@@ -79,11 +79,11 @@ export default function UserEditPage() {
       const { base, seeker, corp } = profile;
 
       setUser({
-        id: base.id,
+        id: Number(base.id),
         email: base.email,
         name: seeker?.name ?? corp?.manager_name ?? '',
         user_type: base.user_type,
-        signinMethod: base.signinMethod,
+        signinMethod: base.signinMethod as 'email' | 'naver' | 'kakao',
       });
 
       setShowSuccessDialog(true);
@@ -104,11 +104,11 @@ export default function UserEditPage() {
       const { base, seeker, corp } = profile;
 
       setUser({
-        id: base.id,
+        id: Number(base.id),
         email: base.email,
         name: seeker?.name ?? corp?.manager_name ?? '',
         user_type: base.user_type,
-        signinMethod: base.signinMethod,
+        signinMethod: base.signinMethod as 'email' | 'naver' | 'kakao',
       });
 
       setShowSuccessDialog(true);

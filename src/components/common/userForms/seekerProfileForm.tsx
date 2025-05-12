@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/select';
 import { interestOptions, purposeOptions, sourceOptions } from '@/constants/userOptions';
 import WithdrawModal from '@/components/common/modals/WithdrawModal';
+import PasswordConfirmModal from '@/components/common/modals/PasswordConfirmModal';
 import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { SeekerFormData } from '@/types/user';
@@ -61,6 +62,7 @@ export default function SeekerProfileForm({
   const [image, setImage] = useState<string | null>(null);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [showWithdraw, setShowWithdraw] = useState(false);
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -109,7 +111,7 @@ export default function SeekerProfileForm({
           )}
           className='space-y-5'
         >
-          {/* 프로필 이미지 (수정일 때만) */}
+          {/* 프로필 이미지 */}
           {type === 'edit' && (
             <div className='mb-6 flex justify-center'>
               <div
@@ -214,7 +216,7 @@ export default function SeekerProfileForm({
             )}
           />
 
-          {/* 비밀번호 (회원가입일 때만) */}
+          {/* 비밀번호 */}
           {type === 'register' && (
             <>
               <FormField
@@ -304,7 +306,7 @@ export default function SeekerProfileForm({
             <CheckboxGroup form={form} name='sources' options={sourceOptions} />
           </div>
 
-          {/* 타입에 따라 바뀌는 버튼들 */}
+          {/* 버튼들 */}
           {type === 'register' ? (
             <Button type='submit' className='bg-main-light hover:bg-main-dark w-full'>
               회원가입
@@ -317,25 +319,26 @@ export default function SeekerProfileForm({
                 </Button>
                 <Button
                   type='button'
-                  onClick={() => alert('비밀번호 변경 클릭')}
+                  onClick={() => setShowPasswordConfirm(true)}
                   className='bg-main-light hover:bg-main-dark w-1/2 text-white'
                 >
                   비밀번호 변경
                 </Button>
               </div>
               <div className='text-center'>
-                <>
-                  <button
-                    type='button'
-                    onClick={() => setShowWithdraw(true)}
-                    className='text-sm text-gray-500 underline'
-                  >
-                    탈퇴하기
-                  </button>
-
-                  <WithdrawModal open={showWithdraw} onOpenChange={setShowWithdraw} />
-                </>
+                <button
+                  type='button'
+                  onClick={() => setShowWithdraw(true)}
+                  className='text-sm text-gray-500 underline'
+                >
+                  탈퇴하기
+                </button>
+                <WithdrawModal open={showWithdraw} onOpenChange={setShowWithdraw} />
               </div>
+              <PasswordConfirmModal
+                open={showPasswordConfirm}
+                onOpenChange={setShowPasswordConfirm}
+              />
             </div>
           )}
         </form>

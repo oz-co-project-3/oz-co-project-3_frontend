@@ -93,6 +93,7 @@ export const deleteUser = async (data: DeleteUserRequest) => {
 
 // 일반 회원 정보 수정
 export async function updateSeekerProfile(data: Record<string, unknown>) {
+  
   return fetchOnClient('/api/user/profile/update/?target_type=normal', {
     method: 'PATCH',
     body: JSON.stringify(data),
@@ -135,3 +136,26 @@ export const getKakaoLoginUrl = async (): Promise<string> => {
   return res?.auth_url ?? '';
 };
 
+// 현재 비밀번호 확인
+export async function verifyPassword(password: string) {
+  return fetchOnClient('/api/user/verify-password/', {
+    method: 'POST',
+    body: JSON.stringify({ password }),
+  });
+}
+
+// 새 비밀번호 설정
+export async function resetPassword(
+  email: string,
+  new_password: string,
+  new_password_check: string,
+) {
+  return fetchOnClient('/api/user/reset-password/', {
+    method: 'POST',
+    body: JSON.stringify({
+      email,
+      new_password,
+      new_password_check,
+    }),
+  });
+}
