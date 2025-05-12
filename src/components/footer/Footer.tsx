@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className='bg-zinc-100 px-20 py-12'>
       <div className='mx-auto flex max-w-[1200px] flex-col items-center justify-center gap-16 max-md:items-start max-md:gap-8 md:flex-row'>
-        <div className='flex grow flex-col justify-start gap-1'>
+        <div className='flex grow flex-col justify-start gap-1 pb-8'>
           <h4 className='mb-4font-bold text-zinc-500'>시니어내일</h4>
           <span className='w-auto text-xs text-zinc-400'>
             © 2025 시니어내일 All rights reserved.
