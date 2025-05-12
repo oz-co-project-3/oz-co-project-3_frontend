@@ -60,13 +60,20 @@ export function ApplicantsListModal({
               {applicants?.map((applicant) => (
                 <li
                   key={applicant.id}
-                  className={`flex cursor-pointer justify-between rounded-md border px-4 py-3 hover:bg-zinc-100 ${
+                  className={`flex cursor-pointer items-center justify-between rounded-md border px-4 py-3 hover:bg-zinc-100 ${
                     selectedApplicantId === applicant.id ? 'bg-zinc-100' : ''
                   }`}
                   onClick={() => setSelectedApplicantId(applicant.id)}
                 >
                   {/* 이력서 이름, 지원자 이름, 등등으로 바꿔주기 (현재 데이터 이상함) */}
-                  유저: {applicant.user_id} / 이력서: {applicant.resume_id}
+                  {/* 유저: {applicant.user_id} / 이력서: {applicant.resume.id} */}
+                  <div className='flex grow flex-col gap-1'>
+                    <span className='text-sm'>{applicant.resume.title}</span>
+                    <div className='flex gap-1'>
+                      <span className='text-sm'>{applicant.resume.name}</span>
+                      <span className='text-sm text-zinc-500'>({applicant.resume.email})</span>
+                    </div>
+                  </div>
                   {selectedApplicantId === applicant.id && (
                     <Check className='text-main-light h-4 w-4' />
                   )}
@@ -82,7 +89,6 @@ export function ApplicantsListModal({
             onClick={async () => {
               try {
                 // console.log(selectedResumeId);
-                // await action(selectedApplicantId!);
                 router.push(
                   `/dashboard/business/job-postings/current/${jobPostingId}/applicants?id=${selectedApplicantId}`,
                 );

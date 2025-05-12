@@ -55,6 +55,8 @@ jobs:
             NEXT_PUBLIC_NAVER_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_NAVER_REDIRECT_URI }}
             NEXT_PUBLIC_NAVER_STATE=${{ secrets.NEXT_PUBLIC_NAVER_STATE }}
             NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
+            NEXT_PUBLIC_CLIENT_ID=${{ secrets.NEXT_PUBLIC_CLIENT_ID }}
+            NEXT_PUBLIC_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_CLIENT_SECRET }}
 
       # 캐시 최적화 (선택사항)
       - name: Move cache
@@ -75,7 +77,6 @@ jobs:
             # .env 파일 생성
             cat > .env << EOL
             INTERNAL_BASE_URL=${{ secrets.INTERNAL_BASE_URL }}
-            # NEXT_PUBLIC_NAVER_MAP_KEY=${{ secrets.NEXT_PUBLIC_NAVER_MAP_KEY }}
             EOL
 
             sudo docker pull nagi2/oz-co-front-dev:latest

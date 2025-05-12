@@ -12,6 +12,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
   // 이 지원 (사건) - 여기에 들어있는 공고는 최소한의 정보만 가지고있음 (리스트용)
   const appliedJobPosting = await fetchOnServer<AppliedJobPosting>(`/api/applicants/seeker/${id}/`);
+  console.log('이 지원 (사건) 의 정보: ', appliedJobPosting);
 
   // 이 지원 (사건) 에 연결되어 있는 공고 정보 (상세)
   const jobPosting = await fetchOnServer<JobPostingResponse>(
@@ -19,7 +20,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   );
   console.log(jobPosting);
   console.log('이 지원 (사건) 의 유저 id: ', appliedJobPosting.user_id);
-  console.log('이 지원 (사건) 의 이력서 id: ', appliedJobPosting.resume_id);
+  console.log('이 지원 (사건) 의 이력서 id: ', appliedJobPosting.resume.id);
 
   // 지원 취소
   const withdrawApplication = async () => {
@@ -27,11 +28,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
     // TODO: 에러 처리 (try, catch)
     const response = await fetchOnServer(
-      `/api/postings/${appliedJobPosting.job_posting_id}/applicant/${appliedJobPosting.user_id}/`,
+      `/api/postings/${appliedJobPosting.job_posting_id}/applicant/${id}/`,
       {
         method: 'PATCH',
         body: JSON.stringify({
-          resume: appliedJobPosting.resume_id,
+          resume: appliedJobPosting.resume.id,
           status: '지원 취소',
           memo: '',
         }),

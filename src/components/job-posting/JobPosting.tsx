@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import JobPostingViewerLoader from './JobPostingViewerLoader';
+import Map from '../map/map';
 
 export default async function JobPosting({ jobPosting }: { jobPosting: JobPostingResponse }) {
   return (
@@ -151,7 +152,8 @@ export default async function JobPosting({ jobPosting }: { jobPosting: JobPostin
           <MapPin className='size-4' />
           <span className='text-main-light'>근무지 정보</span>
         </h3>
-        <div className='flex h-60 items-center justify-center rounded-md border'>지도</div>
+        {/* 지도 */}
+        <Map address={jobPosting.location} />
         <p className='text-zinc-800'>{jobPosting.location}</p>
       </div>
 
