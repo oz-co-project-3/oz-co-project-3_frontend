@@ -12,6 +12,7 @@ export interface SeekerFormData {
   user_type: 'normal' | 'business' | 'admin';
   status: 'seeking' | 'not_seeking' | 'employed';
   signinMethod?: 'email' | 'naver' | 'kakao';
+  profile_url?: string;
 }
 export interface CompanyFormData {
   business_number: string;

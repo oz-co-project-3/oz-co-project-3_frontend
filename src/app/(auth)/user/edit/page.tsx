@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { useSearchParams } from 'next/navigation';
 
 import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import CompanyProfileForm from '@/components/common/userForms/companyProfileForm';
@@ -20,12 +21,16 @@ import { useRouter } from 'next/navigation';
 import { CorpProfile, CompanyFormData, SeekerFormData } from '@/types/user';
 import useSWR from 'swr';
 import { useAuthStore } from '@/store/useAuthStore';
+import dayjs from 'dayjs';
 
 export default function UserEditPage() {
+  const searchParams = useSearchParams();
   const [userType, setUserType] = useState<string[]>([]);
   const [defaultSeeker, setDefaultSeeker] = useState<SeekerFormData | null>(null);
   const [defaultCompany, setDefaultCompany] = useState<CorpProfile | null>(null);
-  const [tab, setTab] = useState<'seeker' | 'company'>('seeker');
+  const [tab, setTab] = useState<'seeker' | 'company'>(
+    searchParams.get('tab') === 'company' ? 'company' : 'seeker',
+  );
   const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const { mutate } = useSWR('/api/user/profile/', fetchUserProfile);
@@ -53,11 +58,19 @@ export default function UserEditPage() {
             password: '',
             password_check: '',
             user_type: 'normal',
+            profile_url: seeker.profile_url,
           });
         }
 
         if (corp) {
-          setDefaultCompany({ ...corp });
+          const formattedDate = corp.business_start_date
+            ? dayjs(corp.business_start_date).format('YYYY-MM-DD')
+            : '';
+
+          setDefaultCompany({
+            ...corp,
+            business_start_date: formattedDate,
+          });
         }
       } catch (err) {
         console.error('프로필 불러오기 실패:', err);
@@ -72,19 +85,20 @@ export default function UserEditPage() {
     const cleaned = {
       ...convertArrayFieldsToString(data),
       gender: data.gender !== 'none' ? data.gender : undefined,
+      profile_url: data.profile_url || undefined,
     };
     console.log('🔥 Seeker 제출됨:', cleaned);
     try {
       await updateSeekerProfile(cleaned);
-  
+
       setShowSuccessDialog(true);
-  
+
       await mutate();
       const profile = await fetchUserProfile();
       if (!profile) return;
-  
+
       const { base, seeker, corp } = profile;
-  
+
       setUser({
         id: Number(base.id),
         email: base.email,
@@ -167,7 +181,10 @@ export default function UserEditPage() {
             <CompanyProfileForm
               type='edit'
               defaultValues={defaultCompany}
-              onSubmit={handleCompanySubmit}
+              onSubmit={(data) => {
+                handleCompanySubmit(data);
+                setShowSuccessDialog(true);
+              }}
             />
           ) : null}
         </TabsContent>
@@ -182,8 +199,10 @@ export default function UserEditPage() {
           <p className='mt-4 text-center'>
             기업 회원 수정을 위해서는 기업 인증이 필요합니다. 인증 페이지로 이동하시겠습니까?
           </p>
-          <DialogFooter className='mt-6 flex flex-col gap-2'
-          style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+          <DialogFooter
+            className='mt-6 flex flex-col gap-2'
+            style={{ flexDirection: 'column', alignItems: 'stretch' }}
+          >
             <Button
               className='bg-main-light w-full text-white'
               onClick={() => router.push('/user/register-company')}

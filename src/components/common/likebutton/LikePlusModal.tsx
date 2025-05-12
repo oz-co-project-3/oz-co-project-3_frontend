@@ -13,6 +13,7 @@ interface LikePlusModalProps {
 }
 
 export default function LikePlusModal({ open, onOpenChange }: LikePlusModalProps) {
+  if (!open) return null;
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent

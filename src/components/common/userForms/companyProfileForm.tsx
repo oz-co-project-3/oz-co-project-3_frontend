@@ -15,7 +15,6 @@ import { Button } from '@/components/ui/button';
 import { CompanyProfileFormSchema, companyProfileSchema } from '@/types/Schema/companySchema';
 import { CompanyFormData } from '@/types/user';
 import { verifyBusinessNumber } from '@/api/businessVerify';
-import { updateBusinessProfile } from '@/api/user';
 interface CompanyProfileFormProps {
   type: 'register' | 'edit';
   defaultValues?: Partial<CompanyFormData>;
@@ -35,6 +34,7 @@ export default function CompanyProfileForm({
       business_start_date: '',
       manager_name: '',
       manager_phone_number: '',
+      manager_email: '',
       ...defaultValues,
     },
   });
@@ -46,7 +46,10 @@ export default function CompanyProfileForm({
       </h2>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+        <form
+          onSubmit={form.handleSubmit(onSubmit, (errors) => console.log('검증 실패:', errors))}
+          className='space-y-4'
+        >
           <h3 className='pt-4 text-sm font-semibold'>기업 정보</h3>
 
           {/* 기업명 */}
@@ -166,12 +169,28 @@ export default function CompanyProfileForm({
             )}
           />
 
+          {/* 이메일 */}
+          <FormField
+            control={form.control}
+            name='manager_email'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>담당자 이메일</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    type='email'
+                    placeholder='example@company.com'
+                    className='bg-white'
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {type === 'edit' ? (
-            <Button
-              type='button'
-              className='bg-main-light hover:bg-main-dark w-full text-white'
-              onClick={() => updateBusinessProfile(form.getValues())}
-            >
+            <Button type='submit' className='bg-main-light hover:bg-main-dark w-full text-white'>
               기업 정보 수정
             </Button>
           ) : (
