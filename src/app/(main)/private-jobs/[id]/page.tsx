@@ -1,5 +1,5 @@
 import LikedButton from '@/components/common/likebutton/LikedButton';
-import ApplyFlow from '../../ApplyFlow';
+import ApplyFlow from '../../../../components/common/modals/ApplyFlow';
 import fetchOnServer from '@/api/serverFetcher';
 import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import JobPosting from '@/components/job-posting/JobPosting';
@@ -23,7 +23,9 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
                 <LikedButton id={jobPosting.id} is_bookmarked={jobPosting.is_bookmarked} />
               </LoginGuard>
             </div>
-            <ApplyFlow id={jobPosting.id} />
+            <LoginGuard>
+              <ApplyFlow id={jobPosting.id} />
+            </LoginGuard>
           </footer>
         </div>
       </div>

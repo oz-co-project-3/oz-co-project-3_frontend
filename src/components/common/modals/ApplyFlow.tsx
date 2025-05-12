@@ -1,15 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { ApplyButton } from './ApplyButton';
-import { ConfirmButton } from './ConfirmButton';
-import SendResumeButton from './SendResumeButton';
+
 import { fetchOnClient } from '@/api/clientFetcher';
+import { ApplyButton } from './ApplyButton';
+import ConfirmButton from './ConfirmButton';
+import SendResumeButton from './SendResumeButton';
+import { useAuthStore } from '@/store/useAuthStore';
+import { useLoginModalStore } from '@/store/useLoginModalStore';
 
 export default function ApplyFlow({ id }: { id: string }) {
   const [openModal, setOpenModal] = useState<'apply' | 'confirm' | 'send' | null>(null);
   const [selectedResumeId, setSelectedResumeId] = useState<string | null>(null);
   const [sendResult, setSendResult] = useState<'success' | 'fail' | null>(null);
+
+  const { user } = useAuthStore();
+  const { open: openLoginModal, setRedirectPath } = useLoginModalStore();
 
   //지원하기
   const handleApply = async () => {
@@ -55,7 +61,14 @@ export default function ApplyFlow({ id }: { id: string }) {
 
       <button
         className='bg-main-light flex h-[50px] w-[500px] cursor-pointer items-center justify-center rounded-2xl text-white'
-        onClick={() => setOpenModal('apply')}
+        onClick={() => {
+          if (!user) {
+            setRedirectPath(`/postings/${id}`);
+            openLoginModal();
+            return;
+          }
+          setOpenModal('apply');
+        }}
       >
         지원하기
       </button>

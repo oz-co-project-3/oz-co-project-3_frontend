@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 
 // 링크 주소 수정필요
 
-export function ConfirmButton({
+export default function ConfirmButton({
   open,
   onClose,
   onApply,
