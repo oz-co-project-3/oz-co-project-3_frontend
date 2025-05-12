@@ -58,7 +58,7 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <header className='fixed top-0 right-0 left-0 z-10 flex items-center justify-between border-b bg-white px-2'>
+    <header className='fixed top-0 right-0 left-0 z-1000 flex items-center justify-between border-b bg-white px-2'>
       <h1 className='h-[70px] w-[150px]'>
         <Link href='/' className='relative block h-full w-full'>
           <Image
