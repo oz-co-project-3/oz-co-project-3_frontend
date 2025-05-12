@@ -45,10 +45,17 @@ export default async function JobPosting({ jobPosting }: { jobPosting: JobPostin
 
         <div className='flex flex-col gap-5'>
           <span className='text-zinc-800'>
-            작성일: {format(jobPosting.created_at, 'yyyy-MM-dd')}
+            작성일:{' '}
+            {jobPosting.created_at
+              ? format(new Date(jobPosting.created_at), 'yyyy-MM-dd')
+              : '등록일 없음'}
           </span>
+
           <span className='text-zinc-800'>
-            수정일: {format(jobPosting.updated_at, 'yyyy-MM-dd')}
+            수정일:{' '}
+            {jobPosting.updated_at
+              ? format(new Date(jobPosting.updated_at), 'yyyy-MM-dd')
+              : '수정일 없음'}
           </span>
         </div>
       </div>
