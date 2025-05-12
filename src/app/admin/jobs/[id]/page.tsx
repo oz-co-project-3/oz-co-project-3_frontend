@@ -6,8 +6,8 @@ import { JobPostingResponse } from '@/types/Schema/jobPostingSchema';
 import { X } from 'lucide-react';
 import Link from 'next/link';
 
-export default async function JobDetailPage({ params }: { params: { id: string } }) {
-  const { id } = params;
+export default async function JobDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
 
   try {
     const jobPosting = await fetchOnServer<JobPostingResponse>(`/api/admin/job-posting/${id}/`);
