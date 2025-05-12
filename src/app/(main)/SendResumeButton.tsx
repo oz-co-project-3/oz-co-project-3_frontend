@@ -23,7 +23,7 @@ export default function SendResumeButton({
           </DialogTitle>
         </DialogHeader>
         <div className='flex flex-row justify-center gap-2 rounded-xl p-4'>
-          <Link href='/dashboard/job-postings/applied'>
+          <Link href='/dashboard/job-seeker/job-postings/applied'>
             <button className='bg-main h-[40px] w-[150px] rounded-sm text-white' onClick={onClose}>
               지원내역 보러가기
             </button>
