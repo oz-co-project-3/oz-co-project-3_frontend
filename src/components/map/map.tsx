@@ -4,6 +4,7 @@ import useMapStore from '@/store/MapStore';
 import Script from 'next/script';
 import { useEffect, useRef } from 'react';
 import { Button } from '../ui/button';
+import { MapPin } from 'lucide-react';
 
 export default function Map({
   address,
@@ -70,9 +71,9 @@ export default function Map({
         {location && (
           <Button
             onClick={() => mapRef.current?.setCenter(location)}
-            className='bg-main-light hover:bg-main-dark absolute bottom-3 left-3 z-10 cursor-pointer'
+            className='bg-main-light hover:bg-main-dark absolute bottom-4 left-4 z-10 cursor-pointer'
           >
-            마커로 이동
+            <MapPin className='size-4' />
           </Button>
         )}
         {children}
