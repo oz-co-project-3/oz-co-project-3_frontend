@@ -1,4 +1,4 @@
-name: Deploy to AWS EC2 with Docker (Main)
+name: Deploy to AWS EC2 with Docker (Prod)
 
 on:
   push:
@@ -47,6 +47,16 @@ jobs:
           build-args: |
             NEXT_PUBLIC_EXTERNAL_BASE_URL=${{ secrets.NEXT_PUBLIC_EXTERNAL_BASE_URL }}
             NEXT_PUBLIC_WS_URL=${{ secrets.NEXT_PUBLIC_WS_URL }}
+            NEXT_PUBLIC_KAKAO_CLIENT_ID=${{ secrets.NEXT_PUBLIC_KAKAO_CLIENT_ID }}
+            NEXT_PUBLIC_KAKAO_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_KAKAO_REDIRECT_URI }}
+            NEXT_PUBLIC_KAKAO_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_KAKAO_CLIENT_SECRET }}
+            NEXT_PUBLIC_NAVER_CLIENT_ID=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_ID }}
+            NEXT_PUBLIC_NAVER_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_NAVER_CLIENT_SECRET }}
+            NEXT_PUBLIC_NAVER_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_NAVER_REDIRECT_URI }}
+            NEXT_PUBLIC_NAVER_STATE=${{ secrets.NEXT_PUBLIC_NAVER_STATE }}
+            NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
+            NEXT_PUBLIC_MAP_CLIENT_ID=${{ secrets.NEXT_PUBLIC_MAP_CLIENT_ID }}
+            NEXT_PUBLIC_MAP_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_MAP_CLIENT_SECRET }}
 
       # 캐시 최적화 (선택사항)
       - name: Move cache
@@ -67,7 +77,6 @@ jobs:
             # .env 파일 생성
             cat > .env << EOL
             INTERNAL_BASE_URL=${{ secrets.INTERNAL_BASE_URL }}
-            # NEXT_PUBLIC_NAVER_MAP_KEY=${{ secrets.NEXT_PUBLIC_NAVER_MAP_KEY }}
             EOL
 
             sudo docker pull nagi2/oz-co-front-prod:latest

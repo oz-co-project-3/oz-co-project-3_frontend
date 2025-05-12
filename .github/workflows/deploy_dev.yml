@@ -55,8 +55,8 @@ jobs:
             NEXT_PUBLIC_NAVER_REDIRECT_URI=${{ secrets.NEXT_PUBLIC_NAVER_REDIRECT_URI }}
             NEXT_PUBLIC_NAVER_STATE=${{ secrets.NEXT_PUBLIC_NAVER_STATE }}
             NEXT_PUBLIC_APP_URL=${{ secrets.NEXT_PUBLIC_APP_URL }}
-            NEXT_PUBLIC_CLIENT_ID=${{ secrets.NEXT_PUBLIC_CLIENT_ID }}
-            NEXT_PUBLIC_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_CLIENT_SECRET }}
+            NEXT_PUBLIC_MAP_CLIENT_ID=${{ secrets.NEXT_PUBLIC_MAP_CLIENT_ID }}
+            NEXT_PUBLIC_MAP_CLIENT_SECRET=${{ secrets.NEXT_PUBLIC_MAP_CLIENT_SECRET }}
 
       # 캐시 최적화 (선택사항)
       - name: Move cache
