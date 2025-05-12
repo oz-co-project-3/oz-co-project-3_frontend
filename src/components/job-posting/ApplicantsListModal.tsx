@@ -82,7 +82,6 @@ export function ApplicantsListModal({
             onClick={async () => {
               try {
                 // console.log(selectedResumeId);
-                // await action(selectedApplicantId!);
                 router.push(
                   `/dashboard/business/job-postings/current/${jobPostingId}/applicants?id=${selectedApplicantId}`,
                 );
