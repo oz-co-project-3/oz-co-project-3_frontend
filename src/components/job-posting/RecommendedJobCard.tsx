@@ -6,20 +6,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import LikedButton from '../common/likebutton/LikedButton';
 import { PublicJobPosting } from '@/types/publicJob';
-import { UserProfileResponse } from '@/types/user';
+// import { UserProfileResponse } from '@/types/user';
 
 interface Props {
-  jobPosting: JobPostingResponse | PublicJobPosting;
-  userData: UserProfileResponse;
+  jobPosting: JobPostingResponse;
+  // userData: UserProfileResponse;
 }
 
 const isPublicJob = (job: JobPostingResponse | PublicJobPosting): job is PublicJobPosting => {
   return 'url' in job;
 };
 
-export default function RecommendedJobCard({ jobPosting, userData }: Props) {
+export default function RecommendedJobCard({ jobPosting }: Props) {
   const isPublic = isPublicJob(jobPosting);
-  console.log(userData);
+  // console.log(userData);
   //추가 필터링 위해 받아놓기
 
   return (
@@ -36,10 +36,7 @@ export default function RecommendedJobCard({ jobPosting, userData }: Props) {
       <div className='relative h-[150px] w-full'>
         <Image
           src={
-            isPublic
-              ? 'https://picsum.photos/300/200?random=1'
-              : ((jobPosting as JobPostingResponse)?.image_url ??
-                'https://picsum.photos/300/200?random=1')
+            jobPosting.image_url ? jobPosting.image_url : 'https://picsum.photos/300/200?random=1'
           }
           alt='job-posting-card'
           fill

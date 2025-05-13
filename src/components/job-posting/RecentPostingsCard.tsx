@@ -16,7 +16,9 @@ export default function RecentPostingsCard({ jobPosting }: { jobPosting: JobPost
       <div className='relative h-[150px] w-full'>
         <Image
           // 일단 임시로 이미지 없을땐, 랜덤 이미지
-          src={jobPosting?.image_url ?? 'https://picsum.photos/300/200?random=1'}
+          src={
+            jobPosting.image_url ? jobPosting.image_url : 'https://picsum.photos/300/200?random=1'
+          }
           alt='job-posting-card'
           fill
           draggable={false}
