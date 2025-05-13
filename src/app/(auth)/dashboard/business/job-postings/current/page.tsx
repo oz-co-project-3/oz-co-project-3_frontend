@@ -12,12 +12,14 @@ export default async function CurrentJobPostingsPage() {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  const currentJobPostings = jobPostings.filter((jobPosting) => {
-    const deadlineString = jobPosting.deadline; // 'yyyy-mm-dd'
-    const [year, month, day] = deadlineString.split('-').map(Number);
-    const deadlineDate = new Date(year, month - 1, day);
-    return deadlineDate >= today;
-  });
+  const currentJobPostings = jobPostings
+    .filter((jobPosting) => {
+      const deadlineString = jobPosting.deadline; // 'yyyy-mm-dd'
+      const [year, month, day] = deadlineString.split('-').map(Number);
+      const deadlineDate = new Date(year, month - 1, day);
+      return deadlineDate >= today;
+    })
+    .filter((jobPosting) => jobPosting.status === '모집중');
   console.log(currentJobPostings);
 
   return (
