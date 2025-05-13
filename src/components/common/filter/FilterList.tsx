@@ -31,10 +31,10 @@ export default function FilterList() {
   }, [dropdownRegion, storeRegion, setStoreRegion]);
 
   return (
-    <div>
-      <div className='relative flex w-[1400px] justify-between gap-5 rounded-2xl bg-white'>
+    <>
+      <div className='flex w-full flex-wrap items-center gap-4 rounded-xl bg-gray-50 p-4 shadow-md'>
         <div
-          className='flex h-[70px] w-[450px] items-center justify-center rounded-2xl border'
+          className='hover:border-main-light flex h-[70px] w-[350px] cursor-pointer items-center justify-center rounded-2xl border bg-white transition'
           onClick={() => {
             setIsRegionOpen(!isRegionOpen);
             setIsJobOpen(false);
@@ -43,11 +43,13 @@ export default function FilterList() {
         >
           <span>지역을 선택해주세요</span>
           <span className='text-xl text-[#0F8C3B]'>
-            <MdOutlineArrowDropDownCircle />
+            <MdOutlineArrowDropDownCircle
+              className={`transition-transform duration-300 ${isRegionOpen ? 'rotate-180' : ''}`}
+            />
           </span>
         </div>
         <div
-          className='relative flex w-[450px] items-center justify-center rounded-2xl border'
+          className='hover:border-main-light flex h-[70px] w-[350px] cursor-pointer items-center justify-center rounded-2xl border bg-white transition'
           onClick={() => {
             setIsJobOpen(!isJobOpen);
             setIsRegionOpen(false);
@@ -56,11 +58,13 @@ export default function FilterList() {
         >
           <span>원하는 직종을 선택해주세요</span>
           <span className='text-xl text-[#0F8C3B]'>
-            <MdOutlineArrowDropDownCircle />
+            <MdOutlineArrowDropDownCircle
+              className={`transition-transform duration-300 ${isJobOpen ? 'rotate-180' : ''}`}
+            />
           </span>
         </div>
         <div
-          className='relative flex w-[450px] items-center justify-center rounded-2xl border'
+          className='hover:border-main-light flex h-[70px] w-[350px] cursor-pointer items-center justify-center rounded-2xl border bg-white transition'
           onClick={() => {
             setIsDetailOpen(!isDetailOpen);
             setIsRegionOpen(false);
@@ -69,7 +73,9 @@ export default function FilterList() {
         >
           <span>상세 조건을 선택해주세요</span>
           <span className='text-xl text-[#0F8C3B]'>
-            <MdOutlineArrowDropDownCircle />
+            <MdOutlineArrowDropDownCircle
+              className={`transition-transform duration-300 ${isDetailOpen ? 'rotate-180' : ''}`}
+            />
           </span>
         </div>
       </div>
@@ -82,6 +88,6 @@ export default function FilterList() {
         selectedJob={selectedJob}
         setSelectedJob={setSelectedJob}
       />
-    </div>
+    </>
   );
 }

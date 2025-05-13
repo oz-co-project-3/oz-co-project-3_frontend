@@ -1,7 +1,12 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import { seekerProfileSchema, SeekerProfileFormValues } from '@/types/Schema/seekerSchema';
+import {
+  seekerProfileSchema,
+  SeekerProfileFormValues,
+  seekerRegisterSchema,
+  SeekerRegisterFormValues,
+} from '@/types/Schema/seekerSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { checkEmailDuplicate } from '@/api/user';
 import { CheckboxGroup } from '@/components/common/userForms/checkboxGroupForm';
@@ -26,9 +31,12 @@ import { interestOptions, purposeOptions, sourceOptions } from '@/constants/user
 import WithdrawModal from '@/components/common/modals/WithdrawModal';
 import PasswordConfirmModal from '@/components/common/modals/PasswordConfirmModal';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import useSWRMutation from 'swr/mutation';
+import { useRef, useState, useEffect } from 'react';
 import { SeekerFormData } from '@/types/user';
-import { updateSeekerProfile } from '@/api/user';
+// import { updateSeekerProfile } from '@/api/user';
+import uploadImage from '@/api/imageUploader';
+
 interface SeekerProfileFormProps {
   type: 'register' | 'edit';
   defaultValues?: Partial<SeekerFormData>;
@@ -40,38 +48,33 @@ export default function SeekerProfileForm({
   defaultValues,
   onSubmit,
 }: SeekerProfileFormProps) {
-  const form = useForm<SeekerProfileFormValues>({
-    resolver: zodResolver(seekerProfileSchema),
+  const form = useForm<SeekerProfileFormValues | SeekerRegisterFormValues>({
+    resolver: zodResolver(type === 'register' ? seekerRegisterSchema : seekerProfileSchema),
     defaultValues: {
       name: '',
       email: '',
       birth: '',
-      password: '',
-      password_check: '',
       phone_number: '',
       gender: 'none',
-      interests: [] as string[],
-      purposes: [] as string[],
-      sources: [] as string[],
+      interests: [],
+      purposes: [],
+      sources: [],
       status: 'seeking',
+      ...(type === 'register' && {
+        password: '',
+        password_check: '',
+      }),
       ...defaultValues,
     },
   });
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [image, setImage] = useState<string | null>(null);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [showWithdraw, setShowWithdraw] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-  };
+  const [tempImage, setTempImage] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(defaultValues?.profile_url ?? null);
+  const { trigger: uploadImageTrigger } = useSWRMutation('/api/upload-image/', uploadImage);
 
   const handleCheckEmail = async () => {
     const email = form.getValues('email');
@@ -97,6 +100,39 @@ export default function SeekerProfileForm({
       setIsEmailVerified(false);
     }
   };
+  useEffect(() => {
+    if (!tempImage) return;
+    const url = URL.createObjectURL(tempImage);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [tempImage]);
+
+  const handleSubmit = async (data: SeekerProfileFormValues) => {
+    let imageUrl = defaultValues?.profile_url;
+    console.log('imageUrl', imageUrl);
+
+    // 이미지 새로 업로드한 경우
+    if (tempImage) {
+      try {
+        imageUrl = await uploadImageTrigger({ file: tempImage });
+      } catch {
+        alert('이미지 업로드에 실패했습니다.');
+        return;
+      }
+    }
+
+    const payload = {
+      ...data,
+      profile_url: imageUrl,
+    };
+    console.log(' profile_url 포함된 payload:', payload);
+
+    if (type === 'register') {
+      onSubmit(payload, isEmailVerified);
+    } else {
+      onSubmit(payload);
+    }
+  };
 
   return (
     <div className='mx-auto w-full max-w-xl rounded-xl bg-gray-100 p-8'>
@@ -106,22 +142,26 @@ export default function SeekerProfileForm({
 
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit((data) =>
-            type === 'register' ? onSubmit(data, isEmailVerified) : onSubmit(data),
-          )}
+          onSubmit={form.handleSubmit(handleSubmit, (errors) => console.log('검증 실패:', errors))}
           className='space-y-5'
         >
           {/* 프로필 이미지 */}
           {type === 'edit' && (
             <div className='mb-6 flex justify-center'>
               <div
-                className='flex h-32 w-32 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-gray-300 bg-white'
+                className='relative h-32 w-32 cursor-pointer overflow-hidden rounded-full border bg-white'
                 onClick={() => fileInputRef.current?.click()}
               >
-                {image ? (
-                  <Image src={image} alt='Profile' className='object-cover' fill />
+                {previewUrl ? (
+                  <Image
+                    src={previewUrl ?? '/default-profile.png'}
+                    alt='프로필'
+                    fill
+                    className='object-cover'
+                    unoptimized
+                  />
                 ) : (
-                  <span className='text-center text-sm text-gray-500'>
+                  <span className='flex h-full w-full items-center justify-center text-sm text-gray-500'>
                     변경하시려면
                     <br />
                     클릭하세요
@@ -130,7 +170,10 @@ export default function SeekerProfileForm({
                 <input
                   type='file'
                   accept='image/*'
-                  onChange={handleImageChange}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) setTempImage(file);
+                  }}
                   ref={fileInputRef}
                   className='hidden'
                 />
@@ -203,39 +246,6 @@ export default function SeekerProfileForm({
             )}
           />
 
-          {/* 비밀번호 */}
-          {type === 'register' && (
-            <>
-              <FormField
-                control={form.control}
-                name='password'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>비밀번호</FormLabel>
-                    <FormControl>
-                      <Input type='password' {...field} className='bg-white' />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name='password_check'
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>비밀번호 확인</FormLabel>
-                    <FormControl>
-                      <Input type='password' {...field} className='bg-white' />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          )}
-
           {/* 전화번호 */}
           <FormField
             control={form.control}
@@ -301,11 +311,7 @@ export default function SeekerProfileForm({
           ) : (
             <div className='space-y-4'>
               <div className='flex gap-2'>
-                <Button
-                  type='submit'
-                  onClick={() => updateSeekerProfile(form.getValues())}
-                  className='bg-main-light hover:bg-main-dark w-1/2 text-white'
-                >
+                <Button type='submit' className='bg-main-light hover:bg-main-dark w-1/2 text-white'>
                   회원 정보 수정
                 </Button>
                 <Button
@@ -316,24 +322,21 @@ export default function SeekerProfileForm({
                   비밀번호 변경
                 </Button>
               </div>
-              <div className='text-center'>
-                <button
-                  type='button'
-                  onClick={() => setShowWithdraw(true)}
-                  className='text-sm text-gray-500 underline'
-                >
-                  탈퇴하기
-                </button>
-                <WithdrawModal open={showWithdraw} onOpenChange={setShowWithdraw} />
-              </div>
-              <PasswordConfirmModal
-                open={showPasswordConfirm}
-                onOpenChange={setShowPasswordConfirm}
-              />
             </div>
           )}
         </form>
       </Form>
+      <div className='text-center'>
+        <button
+          type='button'
+          onClick={() => setShowWithdraw(true)}
+          className='text-sm text-gray-500 underline'
+        >
+          탈퇴하기
+        </button>
+        <WithdrawModal open={showWithdraw} onOpenChange={setShowWithdraw} />
+      </div>
+      <PasswordConfirmModal open={showPasswordConfirm} onOpenChange={setShowPasswordConfirm} />
     </div>
   );
 }

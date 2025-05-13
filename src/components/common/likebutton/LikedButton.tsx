@@ -4,7 +4,7 @@ import { fetchOnClient } from '@/api/clientFetcher';
 import { AiOutlineStar } from 'react-icons/ai';
 import { AiFillStar } from 'react-icons/ai';
 import useSWRMutation from 'swr/mutation';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import LikePlusModal from './LikePlusModal';
 import { useAuthStore } from '@/store/useAuthStore';
 import { useLoginModalStore } from '@/store/useLoginModalStore';
@@ -15,11 +15,13 @@ interface BookmarkButtonProps {
 }
 
 function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButtonProps) {
-  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked); 
-  const [isModalOpen, setIsModalOpen] = useState(false); 
+  const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { user } = useAuthStore();
   const { open: openLoginModal, setRedirectPath } = useLoginModalStore();
+
+  const isFirstClick = useRef(true);
 
   // useSWRMutation 사용
   const { trigger, isMutating } = useSWRMutation(
@@ -29,22 +31,21 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
       onSuccess: () => {
         // 요청 성공 시 상태 유지
         console.log('북마크 상태 변경 성공');
-        setIsModalOpen(true);
       },
       onError: () => {
         // 요청 실패 시 상태 원복
         console.log('북마크 상태 변경 실패, 상태 복구');
-        setIsBookmarked(initialIsBookmarked);
+        setIsBookmarked((prev) => !prev);
+        setIsModalOpen(false);
       },
     },
   );
 
   if (!id) return null;
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-
 
     if (!user) {
       // 로그인 안 한 경우 → 로그인 모달 띄우기
@@ -59,16 +60,23 @@ function BookmarkButton({ id, is_bookmarked: initialIsBookmarked }: BookmarkButt
     // }
 
     // 북마크 상태 변경
-    const newBookmarkState = !isBookmarked;
-    setIsBookmarked(newBookmarkState);
+    const wasBookmarked = isBookmarked;
+    const newState = !wasBookmarked;
 
-    // API 요청 실행
-    trigger().catch(() => {
-      // 에러 발생 시 상태 원복
-      setIsBookmarked(initialIsBookmarked);
-      // 모달 닫기
+    setIsBookmarked(newState);
+
+    // 북마크 추가일 때만 모달 열기
+    if (!wasBookmarked && isFirstClick.current) {
+      setIsModalOpen(true);
+      isFirstClick.current = false;
+    }
+
+    try {
+      await trigger();
+    } catch {
+      setIsBookmarked(wasBookmarked);
       setIsModalOpen(false);
-    });
+    }
   };
 
   return (

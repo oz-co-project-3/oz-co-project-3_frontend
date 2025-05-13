@@ -12,6 +12,7 @@ export interface SeekerFormData {
   user_type: 'normal' | 'business' | 'admin';
   status: 'seeking' | 'not_seeking' | 'employed';
   signinMethod?: 'email' | 'naver' | 'kakao';
+  profile_url?: string;
 }
 export interface CompanyFormData {
   business_number: string;
@@ -61,10 +62,11 @@ export interface EmailCheckResponse {
   is_available: boolean;
   message: string;
 }
-//여기 일단 때려넣겠습니다 나중에 한번에 정리해서 고쳐넣겠습니다..
+
 export interface UserBaseProfile {
   id: number;
   email: string;
+  name: string;
   user_type: 'normal' | 'business' | 'admin';
   signinMethod: 'email' | 'naver' | 'kakao';
   status: 'active' | 'inactive';

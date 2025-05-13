@@ -30,16 +30,18 @@ function SearchBar() {
   };
 
   return (
-    <div className='m-auto flex h-14 w-[350px] rounded-3xl border bg-white px-3 sm:w-[500px] md:w-[600px] lg:w-[750px]'>
-      <input
-        value={search}
-        onChange={handleChange}
-        className='ml-5 h-full flex-1 bg-transparent text-lg outline-none'
-        placeholder='검색어를 입력해주세요'
-      />
-      <button className='hover:text-main-dark ml-5 text-xl text-[#0F8C3B]'>
-        <BsSearchHeart />
-      </button>
+    <div className='flex h-10 w-full items-center justify-center'>
+      <div className='flex h-10 w-[500px] rounded-3xl border bg-white px-3'>
+        <input
+          value={search}
+          onChange={handleChange}
+          className='ml-5 h-full flex-1 bg-transparent outline-none'
+          placeholder='검색어를 입력해주세요'
+        />
+        <button className='hover:text-main-dark ml-5 text-xl text-[#0F8C3B]'>
+          <BsSearchHeart />
+        </button>
+      </div>
     </div>
   );
 }

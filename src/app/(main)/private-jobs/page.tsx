@@ -15,28 +15,33 @@ export default function PrivateJobsPage() {
   // console.log('데이터 확인', data);
 
   return (
-    <div className='flex h-full justify-center pt-30'>
-      <main className='w-full max-w-[1400px] flex-row'>
-        <h1 className='text-center text-3xl font-bold'>일반채용 정보</h1>
-        <hr />
-        <div className='bg-white'>
-          <h2 className='text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
-          <div className='mb-10 flex space-x-2'>
+    <div className='mt-3 flex h-full w-full flex-col overflow-y-auto'>
+      <div className='flex w-full flex-1'>
+        <div className='mx-auto flex w-full max-w-[1200px] flex-col gap-4 rounded-md bg-white py-8'>
+          <section className='flex flex-col gap-4 rounded-md px-8'>
+            <h1 className='border-b pb-4 text-2xl font-bold'>일반채용 정보</h1>
+
+            <div className='bg-white'>
+              <h2 className='text-center text-2xl font-bold'>맞춤 조건을 클릭하세요</h2>
+            </div>
+
             <FilterList />
-          </div>
+            <div className='flex flex-col gap-4 rounded-md py-4'>
+              {loading ? (
+                <Loading />
+              ) : data && data.data.length > 0 ? (
+                <PrivateJobList data={data} />
+              ) : (
+                <div className='flex flex-col items-center justify-center'>
+                  <Image src='/SadCharacter1.png' alt='검색 결과 없음' width={200} height={200} />
+                  <div>검색 결과가 없습니다.</div>
+                  <div>검색 조건을 변경하면 더 많은 결과를 찾을수 있어요!</div>
+                </div>
+              )}
+            </div>
+          </section>
         </div>
-        {loading ? (
-          <Loading />
-        ) : data && data.data.length > 0 ? (
-          <PrivateJobList data={data} />
-        ) : (
-          <div className='flex flex-col items-center justify-center'>
-            <Image src='/SadCharacter1.png' alt='검색 결과 없음' width={200} height={200} />
-            <div>검색 결과가 없습니다.</div>
-            <div>검색 조건을 변경하면 더 많은 결과를 찾을수 있어요!</div>
-          </div>
-        )}
-      </main>
+      </div>
     </div>
   );
 }

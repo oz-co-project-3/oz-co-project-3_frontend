@@ -1,4 +1,4 @@
-import AdminOnlyModalGuard from '@/components/common/modals/AdminOnlyModalGuard';
+import AdminOnlyModalGuard from '@/components/common/modals/AdminGaurd';
 
 export default function AdminTestPage() {
   return (

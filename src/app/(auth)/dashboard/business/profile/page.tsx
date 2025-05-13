@@ -1,5 +1,4 @@
 import CompanyProfile from '@/components/profile/CompanyProfile';
-
 import Link from 'next/link';
 
 export default async function CompanyProfilePage() {
