@@ -107,7 +107,7 @@ export default function JobPostingForm({
           salary: '협의 후 결정',
           summary: undefined,
           description: '',
-          status: '모집중',
+          status: '대기중',
           career: '경력무관',
           image_url: undefined,
         },
