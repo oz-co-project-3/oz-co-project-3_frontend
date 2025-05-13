@@ -46,31 +46,33 @@ export default function ChangePasswordPage() {
   };
 
   return (
-    <div className='mx-auto mt-10 w-full max-w-md rounded-lg bg-white p-6 shadow'>
-      <h2 className='mb-4 text-xl font-bold'>비밀번호 변경</h2>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
-          <div>
-            <Input {...form.register('email')} placeholder='이메일' />
-            <FormMessage>{form.formState.errors.email?.message}</FormMessage>
-          </div>
-          <div>
-            <Input type='password' {...form.register('new_password')} placeholder='새 비밀번호' />
-            <FormMessage>{form.formState.errors.new_password?.message}</FormMessage>
-          </div>
-          <div>
-            <Input
-              type='password'
-              {...form.register('new_password_check')}
-              placeholder='비밀번호 확인'
-            />
-            <FormMessage>{form.formState.errors.new_password_check?.message}</FormMessage>
-          </div>
-          <Button type='submit' className='bg-main-light w-full text-white'>
-            비밀번호 변경
-          </Button>
-        </form>
-      </Form>
+    <div className='flex min-h-screen items-center justify-center'>
+      <div className='mx-auto w-full max-w-md rounded-lg bg-white p-6 shadow'>
+        <h2 className='mb-4 text-xl font-bold'>비밀번호 변경</h2>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
+            <div>
+              <Input {...form.register('email')} placeholder='이메일' />
+              <FormMessage>{form.formState.errors.email?.message}</FormMessage>
+            </div>
+            <div>
+              <Input type='password' {...form.register('new_password')} placeholder='새 비밀번호' />
+              <FormMessage>{form.formState.errors.new_password?.message}</FormMessage>
+            </div>
+            <div>
+              <Input
+                type='password'
+                {...form.register('new_password_check')}
+                placeholder='비밀번호 확인'
+              />
+              <FormMessage>{form.formState.errors.new_password_check?.message}</FormMessage>
+            </div>
+            <Button type='submit' className='bg-main-light w-full text-white'>
+              비밀번호 변경
+            </Button>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }

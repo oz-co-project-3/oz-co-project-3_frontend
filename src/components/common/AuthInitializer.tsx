@@ -2,14 +2,11 @@
 
 import { useEffect } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
+import { fetchOnClient } from '@/api/clientFetcher';
+import { UserBaseProfile } from '@/types/user';
 
 interface RefreshTokenResponse {
   access_token: string;
-  user_id: number;
-  email: string;
-  name: string;
-  user_type: string;
-  signinMethod: 'email' | 'kakao' | 'naver';
 }
 
 function hasRefreshToken(): boolean {
@@ -27,24 +24,31 @@ export default function AuthInitializer() {
 
     const restoreUser = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/refresh-token/`, {
+        // 1. access_token 재발급 요청
+        const tokenRes = await fetchOnClient<RefreshTokenResponse>('/api/user/refresh-token/', {
           method: 'POST',
-          credentials: 'include',
+          skipContentType: true,
         });
 
-        if (!res.ok) throw new Error('토큰 재발급 실패');
+        const accessToken = tokenRes.access_token;
 
-        const data: RefreshTokenResponse = await res.json();
+        // 2. access_token으로 유저 정보 조회
+        const profile = await fetchOnClient<UserBaseProfile>('/api/user/profile/', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
 
         login(
           {
-            id: data.user_id,
-            email: data.email,
-            name: data.name,
-            user_type: data.user_type,
-            signinMethod: data.signinMethod,
+            id: profile.id,
+            email: profile.email,
+            name: profile.name,
+            user_type: profile.user_type,
+            signinMethod: profile.signinMethod,
           },
-          data.access_token,
+          accessToken,
         );
 
         console.log('✅ 로그인 상태 복원 완료');

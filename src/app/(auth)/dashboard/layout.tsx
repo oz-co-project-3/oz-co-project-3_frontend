@@ -7,8 +7,9 @@ import useSWR from 'swr';
 import { useAuthStore } from '@/store/useAuthStore';
 import { UserProfileResponse } from '@/types/user';
 import { Button } from '@/components/ui/button';
-// import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
-// import { useLoginModalStore } from '@/store/useLoginModalStore';
+import { useLoginModalStore } from '@/store/useLoginModalStore';// 이거까지 포함 해야함~
+import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
+import { useEffect } from 'react';
 
 const seekerNavItems = [
   { name: '프로필', href: '/dashboard/job-seeker/profile' },
@@ -28,7 +29,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const pathname = usePathname();
   const { user } = useAuthStore();
   const router = useRouter();
-  // const { open } = useLoginModalStore();
+  const { open } = useLoginModalStore();
 
   const { data: profile } = useSWR<UserProfileResponse | null>(
     user ? '/api/user/profile/' : null,
@@ -36,28 +37,29 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   );
   const isBusiness = profile?.base.user_type?.includes('business');
 
-  // if (!user) {
-  //   open();
-  //   return;
-  // }
+  useEffect(() => {
+    if (!user) {
+      open();
+    }
+  }, [user, open]);
 
   return (
-    <>
-      <main className='flex h-full w-full flex-col overflow-y-auto'>
-        <div className='flex w-full flex-1'>
-          <div className='mx-auto flex w-full max-w-[1200px] gap-4 py-6'>
-            <nav className='flex flex-col justify-between rounded-md bg-white px-4 py-8 shadow shadow-zinc-200 sm:w-40 md:w-60 lg:min-h-[850px]'>
-              <ul className='flex flex-col gap-2'>
-                {seekerNavItems.map((item) => (
-                  <li key={item.name} className='w-full'>
-                    <Link
-                      href={item.href}
-                      className={`${pathname.includes(item.href) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
+    <main className='flex h-full w-full flex-col overflow-y-auto'>
+      <LoginRequiredModal />
+      <div className='flex w-full flex-1'>
+        <div className='mx-auto flex w-full max-w-[1200px] gap-4 py-6'>
+          <nav className='flex flex-col justify-between rounded bg-white px-4 py-8 sm:w-40 md:w-60'>
+            <ul className='flex flex-col gap-2'>
+              {seekerNavItems.map((item) => (
+                <li key={item.name} className='w-full'>
+                  <Link
+                    href={item.href}
+                    className={`${pathname.includes(item.href) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory block w-full rounded-md px-4 py-4 text-xl`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
 
                 {isBusiness && (
                   <>
@@ -96,7 +98,5 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
         </div>
       </main>
-      {/* <LoginRequiredModal /> */}
-    </>
   );
 }
