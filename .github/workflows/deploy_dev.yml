@@ -65,23 +65,23 @@ jobs:
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache || true
 
       # EC2 서버로 이미지 받아와서 프론트엔드 컨테이너만 빌드 후 재시작
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd app
+      # - name: Deploy to EC2 via SSH
+      #   uses: appleboy/ssh-action@v1
+      #   with:
+      #     host: ${{ secrets.EC2_HOST }}
+      #     username: ubuntu
+      #     key: ${{ secrets.EC2_SSH_KEY }}
+      #     script: |
+      #       cd app
 
-            # .env 파일 생성
-            cat > .env << EOL
-            INTERNAL_BASE_URL=${{ secrets.INTERNAL_BASE_URL }}
-            EOL
+      #       # .env 파일 생성
+      #       cat > .env << EOL
+      #       INTERNAL_BASE_URL=${{ secrets.INTERNAL_BASE_URL }}
+      #       EOL
 
-            sudo docker pull nagi2/oz-co-front-dev:latest
-            sudo docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
-            sudo docker image rm nagi2/oz-co-front-dev:latest
-            sudo docker compose -f docker-compose.dev.yml down
-            sudo docker compose -f docker-compose.dev.yml up -d
-            sudo docker system prune -f
+      #       sudo docker pull nagi2/oz-co-front-dev:latest
+      #       sudo docker tag nagi2/oz-co-front-dev:latest next-app-dev:latest
+      #       sudo docker image rm nagi2/oz-co-front-dev:latest
+      #       sudo docker compose -f docker-compose.dev.yml down
+      #       sudo docker compose -f docker-compose.dev.yml up -d
+      #       sudo docker system prune -f

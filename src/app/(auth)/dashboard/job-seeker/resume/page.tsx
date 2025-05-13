@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default async function ResumePage() {
   const { data: resumes } = await fetchOnServer<ResumeListResponse>('/api/resume/', {
-    cache: 'force-cache',
+    // cache: 'force-cache',
   });
   console.log(resumes);
 

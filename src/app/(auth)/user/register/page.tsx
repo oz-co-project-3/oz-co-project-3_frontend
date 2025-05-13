@@ -31,7 +31,8 @@ export default function SeekerRegisterPage() {
         }),
       );
 
-      router.push('/user/email-verification');
+      router.push(`/user/email-verification?email=${encodeURIComponent(formattedData.email)}&type=signup`
+);
     } catch (err) {
       console.error('이메일 인증 요청 실패:', err);
       alert('이메일 인증 요청 중 오류가 발생했습니다.');
