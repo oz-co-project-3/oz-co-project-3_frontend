@@ -135,8 +135,7 @@ export default function JobPostingForm({
       const response = await trigger(data);
       console.log('성공:', response);
       // 성공 처리 로직 (예: 알림, 리디렉션 등)
-      // TODO: 주석 해제!!!
-      // router.push('/dashboard/business/job-postings/current');
+      router.push('/dashboard/business/job-postings/current');
     } catch (error) {
       console.error('에러:', error);
       // 에러 처리 로직
