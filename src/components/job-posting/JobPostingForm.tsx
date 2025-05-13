@@ -137,7 +137,11 @@ export default function JobPostingForm({
       // 성공 처리 로직 (예: 알림, 리디렉션 등)
       router.push('/dashboard/business/job-postings/current');
     } catch (error) {
-      console.error('에러:', error);
+      console.log('에러:', error);
+      if (error instanceof Error) {
+        console.log('에러 메시지:', error);
+        alert('같은 제목의 공고가 이미 존재합니다!');
+      }
       // 에러 처리 로직
     }
   };

@@ -37,7 +37,7 @@ export default async function Home() {
   console.log(userData);
   const IsLoggedIn = !!userData.seeker?.name;
 
-  const isSeoulPublic = userData.seeker?.interests.includes('서울시 공공 일자리');
+  // const isSeoulPublic = userData.seeker?.interests.includes('서울시 공공 일자리');
 
   return (
     <>
@@ -96,29 +96,17 @@ export default async function Home() {
               className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
             >
               <CarouselContent>
-                {isSeoulPublic
-                  ? publicJobs.data.map((job) => (
-                      <CarouselItem
-                        key={job.id}
-                        className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
-                      >
-                        <RecommendedJobCard
-                          jobPosting={job} // 공공공고 타입에 맞게 전달
-                          userData={userData}
-                        />
-                      </CarouselItem>
-                    ))
-                  : privateJobs.map((job) => (
-                      <CarouselItem
-                        key={job.id}
-                        className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
-                      >
-                        <RecommendedJobCard
-                          jobPosting={job} // 일반공고 타입에 맞게 전달
-                          userData={userData}
-                        />
-                      </CarouselItem>
-                    ))}
+                {privateJobs.map((job) => (
+                  <CarouselItem
+                    key={job.id}
+                    className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+                  >
+                    <RecommendedJobCard
+                      jobPosting={job} // 일반공고 타입에 맞게 전달
+                      // userData={userData}
+                    />
+                  </CarouselItem>
+                ))}
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
