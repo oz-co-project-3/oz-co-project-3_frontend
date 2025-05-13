@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export default async function CurrentJobPostingsPage() {
   const jobPostings = await fetchOnServer<JobPostingResponse[]>('/api/job_posting/', {
-    cache: 'force-cache',
+    // cache: 'force-cache',
   });
   // console.log(jobPostings);
 
