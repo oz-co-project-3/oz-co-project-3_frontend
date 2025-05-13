@@ -3,7 +3,9 @@ import JobPostingSeekerCard from '@/components/job-posting/JobPostingSeekerCard'
 import { AppliedJobPosting } from '@/types/Schema/jobPostingSchema';
 
 export default async function AppliedJobPostingsPage() {
-  const jobPostings = await fetchOnServer<AppliedJobPosting[]>('/api/applicants/seeker/');
+  const jobPostings = await fetchOnServer<AppliedJobPosting[]>('/api/applicants/seeker/', {
+    cache: 'force-cache',
+  });
   console.log(jobPostings);
 
   // 지원 된거만? 아니면 탭으로 나눠서 취소한 공고까지 다 보여주기?

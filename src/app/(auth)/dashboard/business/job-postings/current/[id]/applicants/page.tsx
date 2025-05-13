@@ -6,7 +6,9 @@ export default async function Page({ searchParams }: { searchParams: Promise<{ i
   const { id } = await searchParams;
   console.log(id);
 
-  const resume = await fetchOnServer<ResumeResponse>(`/api/resume/${id}/`);
+  const resume = await fetchOnServer<ResumeResponse>(`/api/resume/${id}/`, {
+    cache: 'force-cache',
+  });
   console.log(resume);
 
   return (
