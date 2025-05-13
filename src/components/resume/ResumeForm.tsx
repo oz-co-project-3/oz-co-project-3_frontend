@@ -15,7 +15,7 @@ import uploadImage from '@/api/imageUploader';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import ConfirmButton from '../common/ConfirmButton';
-import { revalidatePath } from 'next/cache';
+// import { revalidatePath } from 'next/cache';
 
 export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeResponse }) {
   const [temporaryImage, setTemporaryImage] = useState<File | null>(null);
@@ -31,7 +31,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
         body: JSON.stringify(arg),
         cache: 'no-store',
       });
-      revalidatePath(`/dashboard/job-seeker/resume`);
+      // revalidatePath(`/dashboard/job-seeker/resume`);
       return res;
     },
   );
