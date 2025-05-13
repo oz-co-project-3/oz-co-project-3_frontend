@@ -28,6 +28,7 @@ import Image from 'next/image';
 import { Label } from '../ui/label';
 import { useRouter } from 'next/navigation';
 import ConfirmButton from '../common/ConfirmButton';
+import { revalidatePath } from 'next/cache';
 
 // page.tsx 또는 에디터를 사용하는 상위 컴포넌트에서
 // 클라이언트 전용으로 렌더링하고 싶을때
@@ -51,10 +52,14 @@ export default function JobPostingForm({
   const { trigger } = useSWRMutation(
     defaultJobPosting ? `/api/job_posting/${defaultJobPosting.id}` : '/api/job_posting/',
     async (url: string, { arg }: { arg: JobPostingRequest }) => {
-      return fetchOnClient(url, {
+      const res = await fetchOnClient(url, {
         method: defaultJobPosting ? 'PATCH' : 'POST',
         body: JSON.stringify(arg),
+        cache: 'no-store',
       });
+      revalidatePath(`/dashboard/business/job-postings/current`);
+      revalidatePath(`/dashboard/business/job-postings/expired`);
+      return res;
     },
   );
 
@@ -130,7 +135,8 @@ export default function JobPostingForm({
       const response = await trigger(data);
       console.log('성공:', response);
       // 성공 처리 로직 (예: 알림, 리디렉션 등)
-      router.push('/dashboard/business/job-postings/current');
+      // TODO: 주석 해제!!!
+      // router.push('/dashboard/business/job-postings/current');
     } catch (error) {
       console.error('에러:', error);
       // 에러 처리 로직
