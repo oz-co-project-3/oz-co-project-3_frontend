@@ -36,6 +36,8 @@ export default function EmailVerificationClient() {
   const email = searchParams.get('email') || '';
   const type = searchParams.get('type') || 'signup';
 
+  console.log('이메일', searchParams.get('email'));
+
   useEffect(() => {
     if (!email) {
       setError('잘못된 접근입니다. 이메일 정보가 없습니다.');

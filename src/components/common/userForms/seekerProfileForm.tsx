@@ -230,6 +230,39 @@ export default function SeekerProfileForm({
               </FormItem>
             )}
           />
+          {type === 'register' && (
+            <>
+              {/* 비밀번호 */}
+              <FormField
+                control={form.control}
+                name='password'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호</FormLabel>
+                    <FormControl>
+                      <Input type='password' {...field} className='bg-white' />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* 비밀번호 확인 */}
+              <FormField
+                control={form.control}
+                name='password_check'
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>비밀번호 확인</FormLabel>
+                    <FormControl>
+                      <Input type='password' {...field} className='bg-white' />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
           {/* 생년월일 */}
           <FormField
@@ -327,13 +360,15 @@ export default function SeekerProfileForm({
         </form>
       </Form>
       <div className='text-center'>
-        <button
-          type='button'
-          onClick={() => setShowWithdraw(true)}
-          className='text-sm text-gray-500 underline'
-        >
-          탈퇴하기
-        </button>
+        {type === 'edit' && (
+          <button
+            type='button'
+            onClick={() => setShowWithdraw(true)}
+            className='text-sm text-gray-500 underline'
+          >
+            탈퇴하기
+          </button>
+        )}
         <WithdrawModal open={showWithdraw} onOpenChange={setShowWithdraw} />
       </div>
       <PasswordConfirmModal open={showPasswordConfirm} onOpenChange={setShowPasswordConfirm} />
