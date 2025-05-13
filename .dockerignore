@@ -1,0 +1,21 @@
+# 개발 환경 파일
+
+node_modules
+.env
+.github
+.git
+
+# 빌드
+
+.next
+
+# 기타 문서
+
+README.md
+Dockerfile
+.dockerignore
+
+# 백엔드
+
+docker-compose.dev.yml
+nginx

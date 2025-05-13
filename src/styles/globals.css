@@ -1,6 +1,25 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
+main {
+  scrollbar-gutter: stable;
+}
+
+@theme {
+  /* 주어진 색 */
+  --color-main: #059f38;
+  /* 진한 초록 */
+  --color-main-dark: #03602b;
+  /* 연한 초록 */
+  --color-main-light: #57ac5e;
+  /* 주황 */
+  --color-danger: #e56522;
+  /* 배경 (팔레트) */
+  /* --color-background-ivory: #fefae0; */
+  /* 배경 (예시 슬라이드) */
+  --color-background-ivory: #fafaf5;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -119,4 +138,22 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Tiptap */
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* 자동 완성 스타일 초기화 - 라이트/다크 모드 대응 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0px 1000px var(--background) inset !important;
+  -webkit-text-fill-color: var(--foreground) !important;
+  transition: background-color 5000s ease-in-out 0s;
 }

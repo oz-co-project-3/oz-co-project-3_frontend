@@ -14,6 +14,10 @@ jobs:
       - name: GitHub Repository 파일 불러오기
         uses: actions/checkout@v4
 
+      # - name: Set environment variables
+      #   run: |
+      #     echo "NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}" >> $GITHUB_ENV
+
       - name: 의존성 설치
         run: npm install
 

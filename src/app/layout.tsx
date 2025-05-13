@@ -1,16 +1,19 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
 import '../styles/globals.css';
-import Header from '@/components/main/Header';
+import localFont from 'next/font/local';
+import type { Metadata } from 'next';
+import Header from '@/components/header/Header';
+import Footer from '@/components/footer/Footer';
+import SwrProvider from '@/store/SwrProvider';
+import AutoTokenRefresher from '@/components/common/AutoTokenRefresher';
+import AuthInitializer from '@/components/common/AuthInitializer';
+import { ChatbotButtonWrapper } from '@/components/chatbot/ChatbotButtonWrapper';
+import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+const pretendard = localFont({
+  src: '../../public/fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-pretendard',
 });
 
 export const metadata: Metadata = {
@@ -27,12 +30,17 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ko' className='h-full'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} h-full min-h-screen bg-[#fafaf5] antialiased`}
-      >
-        <Header />
-        <main className='h-full pt-[70px]'>{children}</main>
+    <html lang='ko' className={`${pretendard.variable} h-full`}>
+      <body className={`${pretendard.className} bg-background-ivory antialiased`}>
+        <SwrProvider>
+          <AuthInitializer />
+          <AutoTokenRefresher />
+          <LoginRequiredModal />
+          <Header />
+          <div className='min-h-[calc(100vh)] pt-[70px] pb-4'>{children}</div>
+          <ChatbotButtonWrapper />
+          <Footer />
+        </SwrProvider>
       </body>
     </html>
   );
