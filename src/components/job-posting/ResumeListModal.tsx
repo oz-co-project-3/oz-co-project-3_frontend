@@ -16,6 +16,7 @@ import { fetchOnClient } from '@/api/clientFetcher';
 import { Check } from 'lucide-react';
 import { useState } from 'react';
 import { TriggerWithArgs } from 'swr/mutation';
+import Loading from '../common/Loading';
 
 export function ResumeListModal({
   open,
@@ -29,9 +30,9 @@ export function ResumeListModal({
   const router = useRouter();
   const {
     data: resumes,
-    // error,
-    // mutate,
-    // isLoading,
+    error,
+    mutate,
+    isLoading,
   } = useSWR<ResumeListResponse>(`/api/resume/`, fetchOnClient);
 
   // console.log(resumes);
@@ -53,7 +54,9 @@ export function ResumeListModal({
         </DialogHeader>
 
         <div className='space-y-2'>
-          {resumes?.data.length === 0 ? (
+          {isLoading ? (
+            <Loading text='이력서 목록을 불러오는 중입니다...' />
+          ) : resumes?.data.length === 0 ? (
             <p className='text-muted-foreground text-sm'>등록된 이력서가 없습니다.</p>
           ) : (
             <ul className='space-y-1'>
@@ -69,26 +72,40 @@ export function ResumeListModal({
                   {selectedResumeId === resume.id && <Check className='text-main-light h-4 w-4' />}
                 </li>
               ))}
+              {error && (
+                <p className='text-muted-foreground text-sm'>
+                  이력서 목록을 불러오는 중에 오류가 발생했습니다.
+                </p>
+              )}
             </ul>
           )}
         </div>
         <DialogFooter>
-          <Button
-            className='bg-main-light hover:bg-main-dark cursor-pointer'
-            disabled={!selectedResumeId}
-            onClick={async () => {
-              try {
-                // console.log(selectedResumeId);
-                await action(selectedResumeId!);
-                router.push('/dashboard/job-seeker/job-postings/favorite');
-              } catch (error) {
-                // TODO: 토스트?
-                console.log('지원 실패:', error);
-              }
-            }}
-          >
-            지원
-          </Button>
+          {error ? (
+            <Button
+              className='bg-main-light hover:bg-main-dark cursor-pointer'
+              onClick={() => mutate()}
+            >
+              재시도
+            </Button>
+          ) : (
+            <Button
+              className='bg-main-light hover:bg-main-dark cursor-pointer'
+              disabled={!selectedResumeId}
+              onClick={async () => {
+                try {
+                  // console.log(selectedResumeId);
+                  await action(selectedResumeId!);
+                  router.push('/dashboard/job-seeker/job-postings/favorite');
+                } catch (error) {
+                  // TODO: 토스트?
+                  console.log('지원 실패:', error);
+                }
+              }}
+            >
+              지원
+            </Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>
