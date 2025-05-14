@@ -2,8 +2,8 @@ export interface SeekerFormData {
   name: string;
   email: string;
   birth: string;
-  password: string;
-  password_check: string;
+  password?: string;
+  password_check?: string;
   phone_number: string;
   gender?: 'male' | 'female' | 'none';
   interests?: string[];
