@@ -1,4 +1,3 @@
-import ScrollShowSearchBar from '@/components/common/searchbar/ScrollShowSearchbar';
 import SearchBarSuspense from '@/components/common/searchbar/Searchbar';
 import Link from 'next/link';
 import { MdOutlineWorkOutline } from 'react-icons/md';
@@ -42,7 +41,6 @@ export default async function Home() {
 
   return (
     <>
-      <ScrollShowSearchBar />
       <main className='relative mx-auto max-w-[1200px] text-center'>
         {/* Hero 섹션 컨테이너 */}
         <div className='relative h-[750px]'>

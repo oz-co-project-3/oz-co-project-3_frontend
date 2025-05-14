@@ -7,6 +7,8 @@ import { Button } from '../ui/button';
 import { usePathname, useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { logoutUser } from '@/api/user';
+import MobileBottomHeader from './MobileBottomHeader';
+import MobileTopBar from './MobileTopBar';
 
 const userNavItems = [
   { name: '공공 공고', href: '/public-jobs?page=1' },
@@ -30,12 +32,11 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      await logoutUser();
       logout(); // Zustand 상태 초기화
+      await logoutUser();
       router.push('/');
     } catch (err) {
       console.error('로그아웃 실패:', err);
-      alert('로그아웃에 실패했습니다.');
     }
   };
 
@@ -124,7 +125,8 @@ export default function Header() {
         </div>
       </header>
 
-      <header></header>
+      <MobileTopBar />
+      <MobileBottomHeader />
     </>
   );
 }
