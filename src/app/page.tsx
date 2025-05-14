@@ -85,8 +85,8 @@ export default async function Home() {
           </div>
         </div>
 
-        <div className='bg-white pt-28 pb-48'>
-          <div className='pb-6 text-2xl font-bold'>주요 서비스</div>
+        <div className='bg-white pt-32 pb-48'>
+          <div className='pb-6 text-lg font-bold md:text-xl lg:text-2xl'>주요 서비스</div>
           <nav className='mb-44 flex flex-row justify-center space-x-4'>
             <Link href='/public-jobs?page=1'>
               <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
@@ -111,7 +111,7 @@ export default async function Home() {
           {/* 추천 공고 (로그인 시) */}
           {IsLoggedIn ? (
             <>
-              <h3 className='pb-8 text-2xl font-bold'>추천 공고</h3>
+              <h3 className='pb-8 text-lg font-bold md:text-xl lg:text-2xl'>추천 공고</h3>
               <Carousel
                 opts={{ align: 'center' }}
                 className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
@@ -135,7 +135,9 @@ export default async function Home() {
             </>
           ) : null}
 
-          <h3 className='mt-28 pb-8 text-2xl font-bold'>최근에 등록된 공고</h3>
+          <h3 className='mt-28 pb-8 text-lg font-bold md:text-xl lg:text-2xl'>
+            최근에 등록된 공고
+          </h3>
           <Carousel
             opts={{
               align: 'center',
