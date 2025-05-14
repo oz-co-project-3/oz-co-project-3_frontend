@@ -8,7 +8,7 @@ export default async function CompanyProfilePage() {
         <div className='flex justify-between border-b pb-2'>
           <h2 className='text-2xl font-bold'>기업 프로필</h2>
           <Link
-            href='/company-dashboard/profile/edit'
+            href='/user/edit?tab=company'
             className='bg-main-light hover:bg-main-dark cursor-pointer rounded-md px-5 py-1.5 text-white'
           >
             회사 정보 수정
