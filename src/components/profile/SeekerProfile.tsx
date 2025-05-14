@@ -15,7 +15,7 @@ export default async function SeekerProfile({ id }: { id?: string }) {
     console.log(user);
   } else {
     user = await fetchOnServer<UserProfileResponse>('/api/user/profile/', {
-      cache: 'force-cache',
+      // cache: 'force-cache',
     });
     console.log(user);
   }

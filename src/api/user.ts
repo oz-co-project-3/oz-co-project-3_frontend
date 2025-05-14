@@ -41,9 +41,7 @@ export const upgradeToBusiness = async (
 };
 
 // 로그인
-export const loginUser = async (
-  formData: LoginFormData,
-): Promise<LoginResponseData | null> => {
+export const loginUser = async (formData: LoginFormData): Promise<LoginResponseData | null> => {
   try {
     return await fetchOnClient<LoginResponseData>('/api/user/login/', {
       method: 'POST',
@@ -92,48 +90,54 @@ export const deleteUser = async (data: DeleteUserRequest) => {
 };
 
 // 일반 회원 정보 수정
-export async function updateSeekerProfile(data: Record<string, unknown>) {
-  console.log('🔥 data:', data);
-  
-  return fetchOnClient('/api/user/profile/update/?target_type=normal', {
-    method: 'PATCH',
-    body: JSON.stringify(data),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-}
+// export async function updateSeekerProfile(data: Record<string, unknown>) {
+//   console.log('🔥 data:', data);
+
+//   return fetchOnClient('/api/user/profile/update/?target_type=normal', {
+//     method: 'PATCH',
+//     body: JSON.stringify(data),
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   });
+// }
 
 // 기업 회원 정보 수정
-export async function updateBusinessProfile(data: Record<string, unknown>) {
-  return fetchOnClient('/api/user/profile/update/?target_type=business', {
+// export async function updateBusinessProfile(data: Record<string, unknown>) {
+//   return fetchOnClient('/api/user/profile/update/?target_type=business', {
+//     method: 'PATCH',
+//     body: JSON.stringify(data),
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   });
+// }
+
+// 통합 회원 정보 수정
+export async function updateProfile(url: string, data: Record<string, unknown>) {
+  return fetchOnClient(url, {
     method: 'PATCH',
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',
     },
+    cache: 'no-store',
   });
 }
 
 // 네이버 로그인 URL 요청
 export const getNaverLoginUrl = async (): Promise<string> => {
-  const res = await fetchOnClient<{ auth_url: string }>(
-    '/api/user/social-login/naver/',
-    {
-      method: 'GET',
-    },
-  );
+  const res = await fetchOnClient<{ auth_url: string }>('/api/user/social-login/naver/', {
+    method: 'GET',
+  });
   return res?.auth_url ?? '';
 };
 
 // 카카오 로그인 URL 요청
 export const getKakaoLoginUrl = async (): Promise<string> => {
-  const res = await fetchOnClient<{ auth_url: string }>(
-    '/api/user/social-login/kakao/',
-    {
-      method: 'GET',
-    },
-  );
+  const res = await fetchOnClient<{ auth_url: string }>('/api/user/social-login/kakao/', {
+    method: 'GET',
+  });
   return res?.auth_url ?? '';
 };
 
