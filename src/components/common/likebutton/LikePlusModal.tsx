@@ -5,7 +5,8 @@ import {
   DialogTitle,
   DialogClose,
 } from '@/components/ui/dialog';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/useAuthStore';
 
 interface LikePlusModalProps {
   open: boolean;
@@ -13,7 +14,23 @@ interface LikePlusModalProps {
 }
 
 export default function LikePlusModal({ open, onOpenChange }: LikePlusModalProps) {
+  const router = useRouter();
+  const { user, isInitialized } = useAuthStore();
+
   if (!open) return null;
+
+  const handleMoveToFavorite = () => {
+    // 상태 복원은 완료됐는데 user가 없다면 로그인 필요
+    if (isInitialized && !user) {
+      alert('로그인이 필요한 서비스입니다.');
+      router.push('/user/login');
+      return;
+    }
+
+    // 로그인 상태면 이동
+    router.push('/dashboard/job-seeker/job-postings/favorite');
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
@@ -29,14 +46,15 @@ export default function LikePlusModal({ open, onOpenChange }: LikePlusModalProps
           </DialogTitle>
         </DialogHeader>
         <div className='flex flex-row justify-center gap-2 rounded-xl p-4'>
-          <Link href='/dashboard/job-seeker/job-postings/favorite'>
-            <button
-              className='bg-main h-[40px] w-[150px] rounded-sm text-white'
-              onClick={(e) => e.stopPropagation()}
-            >
-              관심공고 보러가기
-            </button>
-          </Link>
+          <button
+            className='bg-main h-[40px] w-[150px] rounded-sm text-white'
+            onClick={(e) => {
+              e.stopPropagation();
+              handleMoveToFavorite();
+            }}
+          >
+            관심공고 보러가기
+          </button>
           <DialogClose asChild>
             <button
               className='h-[40px] w-[150px] rounded-sm border'

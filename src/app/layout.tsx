@@ -9,6 +9,7 @@ import AuthInitializer from '@/components/common/AuthInitializer';
 import { ChatbotButtonWrapper } from '@/components/chatbot/ChatbotButtonWrapper';
 import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
 
+
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
   display: 'swap',
