@@ -17,7 +17,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
       <div className='w-[1200px] bg-white p-12'>
         <JobPosting jobPosting={jobPosting} />
         <div className='flex min-h-screen flex-col'>
-          <footer className='fixed bottom-0 left-0 z-50 flex h-[80px] w-full flex-row items-center justify-center gap-1 bg-white'>
+          <div className='fixed bottom-0 left-0 z-50 flex h-[80px] w-full flex-row items-center justify-center gap-1 bg-white max-sm:-translate-y-[80px]'>
             <div className='flex h-[50px] w-[50px] items-center justify-center rounded-2xl border'>
               <LoginGuard>
                 <LikedButton id={jobPosting.id} is_bookmarked={jobPosting.is_bookmarked} />
@@ -26,7 +26,7 @@ export default async function JobDetailPage({ params }: { params: Promise<{ id: 
             <LoginGuard>
               <ApplyFlow id={jobPosting.id} />
             </LoginGuard>
-          </footer>
+          </div>
         </div>
       </div>
     </div>

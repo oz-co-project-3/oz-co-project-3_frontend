@@ -10,20 +10,8 @@ import { Button } from '@/components/ui/button';
 import { useLoginModalStore } from '@/store/useLoginModalStore'; // 이거까지 포함 해야함~
 import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
 import { useEffect } from 'react';
-
-const seekerNavItems = [
-  { name: '프로필', href: '/dashboard/job-seeker/profile' },
-  { name: '이력서', href: '/dashboard/job-seeker/resume' },
-  { name: '지원한 채용공고', href: '/dashboard/job-seeker/job-postings/applied' },
-  { name: '찜한 채용공고', href: '/dashboard/job-seeker/job-postings/favorite' },
-] as const;
-
-const businessNavItems = [
-  { name: '기업 프로필', href: '/dashboard/business/profile' },
-  { name: '현재 채용공고', href: '/dashboard/business/job-postings/current' },
-  { name: '이전 채용공고', href: '/dashboard/business/job-postings/expired' },
-  { name: '채용공고 등록', href: '/dashboard/business/job-postings/post' },
-] as const;
+import { businessNavItems } from '@/constants/nav';
+import { seekerNavItems } from '@/constants/nav';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

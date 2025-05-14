@@ -102,7 +102,7 @@ export default function Header() {
                 <Button
                   variant='outline'
                   onClick={handleLogout}
-                  className='cursor-pointer bg-amber-600 text-white hover:bg-amber-800'
+                  className='bg-danger cursor-pointer text-white hover:bg-amber-700 hover:text-white'
                 >
                   로그아웃
                 </Button>
