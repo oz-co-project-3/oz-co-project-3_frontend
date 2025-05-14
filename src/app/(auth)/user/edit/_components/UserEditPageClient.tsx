@@ -16,7 +16,6 @@ import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import CompanyProfileForm from '@/components/common/userForms/companyProfileForm';
 
 import { fetchUserProfile, updateSeekerProfile, updateBusinessProfile } from '@/api/user';
-import { convertArrayFieldsToString } from '@/lib/stringArrayConverter';
 import { CorpProfile, CompanyFormData, SeekerFormData } from '@/types/user';
 import useSWR from 'swr';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -49,12 +48,10 @@ export default function UserEditPageClient() {
           setDefaultSeeker({
             ...seeker,
             email: base.email,
-            gender: base.gender,
+            gender: base.gender as 'male' | 'female',
             interests: seeker.interests.split(','),
             purposes: seeker.purposes.split(','),
             sources: seeker.sources.split(','),
-            password: '',
-            password_check: '',
             user_type: 'normal',
             profile_url: seeker.profile_url,
           });
@@ -80,14 +77,14 @@ export default function UserEditPageClient() {
 
   const handleSeekerSubmit = async (data: { [key: string]: unknown }) => {
     const cleaned = {
-      ...convertArrayFieldsToString(data),
-      gender: data.gender !== 'none' ? data.gender : undefined,
+      ...data,
+      gender: data.gender,
       profile_url: data.profile_url || undefined,
     };
+    console.log('수정 요청 데이터:', cleaned);
 
     try {
       await updateSeekerProfile(cleaned);
-      setShowSuccessDialog(true);
       await mutate();
 
       const profile = await fetchUserProfile();
@@ -101,6 +98,8 @@ export default function UserEditPageClient() {
         user_type: base.user_type,
         signinMethod: base.signinMethod as 'email' | 'naver' | 'kakao',
       });
+
+      setShowSuccessDialog(true);
     } catch (err) {
       console.error('Seeker 수정 실패:', err);
       alert('회원정보 수정 중 오류가 발생했습니다.');
@@ -137,6 +136,21 @@ export default function UserEditPageClient() {
     } else {
       setTab('company');
     }
+  };
+
+  const handleSuccessConfirm = async () => {
+    setShowSuccessDialog(false);
+    const profile = await fetchUserProfile();
+    if (!profile) return;
+    const { base, seeker, corp } = profile;
+
+    setUser({
+      id: Number(base.id),
+      email: base.email,
+      name: seeker?.name ?? corp?.manager_name ?? '',
+      user_type: base.user_type,
+      signinMethod: base.signinMethod as 'email' | 'naver' | 'kakao',
+    });
   };
 
   return (
@@ -220,7 +234,7 @@ export default function UserEditPageClient() {
           </DialogHeader>
           <p className='mt-4 text-center'>회원정보가 성공적으로 수정되었어요 🎉</p>
           <DialogFooter className='mt-6 flex justify-center'>
-            <Button onClick={() => setShowSuccessDialog(false)}>확인</Button>
+            <Button onClick={handleSuccessConfirm}>확인</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

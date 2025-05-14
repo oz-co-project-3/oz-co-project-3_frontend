@@ -97,13 +97,15 @@ export default function Header() {
                   대시보드
                 </Button>
               </Link>
-              <Button
-                variant='outline'
-                onClick={handleLogout}
-                className='cursor-pointer bg-amber-600 text-white hover:bg-amber-800'
-              >
-                로그아웃
-              </Button>
+              <Link href='/'>
+                <Button
+                  variant='outline'
+                  onClick={handleLogout}
+                  className='cursor-pointer bg-amber-600 text-white hover:bg-amber-800'
+                >
+                  로그아웃
+                </Button>
+              </Link>
             </>
           ) : (
             <>

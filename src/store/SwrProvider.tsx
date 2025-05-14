@@ -9,7 +9,7 @@ import { UserProfileResponse } from '@/types/user';
 export default function SwrProvider({ children }: { children: React.ReactNode }) {
   const login = useAuthStore((state) => state.login);
   const logout = useAuthStore((state) => state.logout);
-  const hasRestored = useRef(false); 
+  const hasRestored = useRef(false);
 
   const fetcher = async (url: string) => {
     return await fetchOnClient(url);
@@ -17,15 +17,20 @@ export default function SwrProvider({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     if (hasRestored.current) return;
-  
+
     const restoreUser = async () => {
+      console.log('복원 시작');
+
       try {
-        // ✅ 쿠키에 refresh_token 있을 때만 실행
         const hasRefreshToken = document.cookie.includes('refresh_token');
+        console.log('🔍 쿠키에 refresh_token 있음?', hasRefreshToken);
+
         if (!hasRefreshToken) {
+          console.warn('⚠️ 쿠키 없음 → 복원 스킵');
           return;
         }
-  
+
+        console.log('📡 refresh-token 요청 시도');
         const tokenRes = await fetch(
           `${process.env.NEXT_PUBLIC_EXTERNAL_BASE_URL}/api/user/refresh-token/`,
           {
@@ -33,23 +38,31 @@ export default function SwrProvider({ children }: { children: React.ReactNode })
             credentials: 'include',
           },
         );
-  
+
         if (!tokenRes.ok) {
-          console.warn('access_token 재발급 실패 (401)');
+          console.warn('refresh-token 응답 실패', tokenRes.status);
           logout();
           return;
         }
-  
+
         const { access_token } = await tokenRes.json();
         if (!access_token) {
-          console.warn('access_token 없음');
+          console.warn('access_token 없음 in 응답');
           logout();
           return;
         }
-  
-        const data = await fetchOnClient<UserProfileResponse>('/api/user/profile/');
+
+        console.log('access_token 재발급 완료:', access_token);
+
+        console.log('프로필 요청 시도');
+        const data = await fetchOnClient<UserProfileResponse>('/api/user/profile/', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
+        });
+
         const { base } = data;
-  
         const user = {
           id: base.id,
           email: base.email,
@@ -57,16 +70,18 @@ export default function SwrProvider({ children }: { children: React.ReactNode })
           user_type: base.user_type,
           signinMethod: base.signinMethod,
         };
-  
+
+        console.log('프로필 응답 성공:', user);
+
         login(user, access_token);
-        console.log('✅ 유저 상태 복원 완료:', user);
         hasRestored.current = true;
+        console.log('유저 상태 복원 완료');
       } catch (error) {
-        console.warn('⛔ 유저 상태 복원 실패:', error);
+        console.error('복원 중 에러 발생:', error);
         logout();
       }
     };
-  
+
     restoreUser();
   }, [login, logout]);
 
@@ -82,5 +97,3 @@ export default function SwrProvider({ children }: { children: React.ReactNode })
     </SWRConfig>
   );
 }
-
-// 차후에 필요한 옵션 추가

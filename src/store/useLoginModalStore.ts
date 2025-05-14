@@ -6,6 +6,7 @@ interface LoginModalState {
   close: () => void;
   redirectPath: string;
   setRedirectPath: (path: string) => void;
+  reset: () => void;
 }
 
 export const useLoginModalStore = create<LoginModalState>((set) => ({
@@ -14,4 +15,5 @@ export const useLoginModalStore = create<LoginModalState>((set) => ({
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
   setRedirectPath: (path) => set({ redirectPath: path }),
+  reset: () => set({ isOpen: false, redirectPath: '' }),
 }));
