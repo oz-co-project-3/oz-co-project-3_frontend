@@ -58,69 +58,73 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <header className='fixed top-0 right-0 left-0 z-1000 flex items-center justify-between bg-white px-2 shadow shadow-zinc-100'>
-      <h1 className='h-[70px] w-[150px]'>
-        <Link href='/' className='relative block h-full w-full'>
-          <Image
-            src='/logo/logo.gif'
-            alt='시니어내일'
-            fill
-            sizes='150px'
-            priority={true}
-            draggable={false}
-            className='object-cover'
-          />
-        </Link>
-      </h1>
+    <>
+      <header className='fixed top-0 right-0 left-0 z-1000 flex items-center justify-between bg-white px-2 shadow shadow-zinc-100 max-sm:hidden'>
+        <h1 className='h-[70px] w-[150px]'>
+          <Link href='/' className='relative block h-full w-full'>
+            <Image
+              src='/logo/logo.gif'
+              alt='시니어내일'
+              fill
+              sizes='150px'
+              priority={true}
+              draggable={false}
+              className='object-cover'
+            />
+          </Link>
+        </h1>
 
-      <nav className='grow px-10'>
-        <ul className='flex items-center gap-1'>
-          {navItems.map((item) => (
-            <li key={item.name}>
-              <Link
-                href={item.href}
-                className={`${pathname.includes(item.href.slice(0, 10)) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory rounded-md px-4 py-2 text-lg`}
-              >
-                {item.name}
+        <nav className='grow px-4 lg:px-10'>
+          <ul className='flex items-center gap-1'>
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  href={item.href}
+                  className={`${pathname.includes(item.href.slice(0, 10)) ? 'text-main-light font-bold' : ''} hover:bg-background-ivory rounded-md px-2 py-2 text-lg lg:px-4`}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className='flex items-center gap-2'>
+          {user ? (
+            <>
+              <Link href='/dashboard/job-seeker/profile'>
+                <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
+                  대시보드
+                </Button>
               </Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
+              <Link href='/'>
+                <Button
+                  variant='outline'
+                  onClick={handleLogout}
+                  className='cursor-pointer bg-amber-600 text-white hover:bg-amber-800'
+                >
+                  로그아웃
+                </Button>
+              </Link>
+            </>
+          ) : (
+            <>
+              <Link href='/user/login'>
+                <Button className='bg-main hover:bg-main-light cursor-pointer text-white'>
+                  로그인
+                </Button>
+              </Link>
+              <Link href='/user/register'>
+                <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
+                  회원가입
+                </Button>
+              </Link>
+            </>
+          )}
+        </div>
+      </header>
 
-      <div className='flex items-center gap-2'>
-        {user ? (
-          <>
-            <Link href='/dashboard/job-seeker/profile'>
-              <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-                대시보드
-              </Button>
-            </Link>
-            <Link href='/'>
-              <Button
-                variant='outline'
-                onClick={handleLogout}
-                className='cursor-pointer bg-amber-600 text-white hover:bg-amber-800'
-              >
-                로그아웃
-              </Button>
-            </Link>
-          </>
-        ) : (
-          <>
-            <Link href='/user/login'>
-              <Button className='bg-main hover:bg-main-light cursor-pointer text-white'>
-                로그인
-              </Button>
-            </Link>
-            <Link href='/user/register'>
-              <Button className='bg-main-light hover:bg-main-dark cursor-pointer text-white'>
-                회원가입
-              </Button>
-            </Link>
-          </>
-        )}
-      </div>
-    </header>
+      <header></header>
+    </>
   );
 }

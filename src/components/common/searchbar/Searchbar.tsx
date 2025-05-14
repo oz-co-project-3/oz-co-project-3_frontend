@@ -31,7 +31,7 @@ function SearchBar() {
 
   return (
     <div className='flex h-10 w-full items-center justify-center'>
-      <div className='flex h-10 w-[500px] rounded-3xl border bg-white px-3'>
+      <div className='flex h-10 rounded-3xl border bg-white px-3 md:w-[350px] lg:w-[500px]'>
         <input
           value={search}
           onChange={handleChange}
