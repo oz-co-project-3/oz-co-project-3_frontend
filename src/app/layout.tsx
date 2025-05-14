@@ -37,7 +37,7 @@ export default async function RootLayout({
           <AutoTokenRefresher />
           <LoginRequiredModal />
           <Header />
-          <div className='min-h-[calc(100vh)] pt-[70px] pb-4'>{children}</div>
+          <div className='min-h-[calc(100vh)] pt-[70px]'>{children}</div>
           <ChatbotButtonWrapper />
           <Footer />
         </SwrProvider>

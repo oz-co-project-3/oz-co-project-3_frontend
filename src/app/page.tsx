@@ -21,6 +21,7 @@ import fetchOnServer from '@/api/serverFetcher';
 import { UserProfileResponse } from '@/types/user';
 import RecommendedJobCard from '@/components/job-posting/RecommendedJobCard';
 import { PublicJobsResponse } from '@/types/publicJob';
+import Image from 'next/image';
 
 export default async function Home() {
   //일반
@@ -42,98 +43,119 @@ export default async function Home() {
   return (
     <>
       <ScrollShowSearchBar />
-      <main className='mx-auto max-w-[1200px] flex-row py-44 text-center'>
-        <div className='flex flex-col gap-6'>
-          <h2 className='text-xl font-bold max-md:font-extrabold sm:text-2xl md:text-3xl lg:text-4xl'>
-            &quot;내일 뭐하지? 시니어내일에서 찾아봐요!&quot;
-          </h2>
-          <p className='text-sm text-zinc-900 md:text-base lg:text-lg'>
-            경험과 가치를 이어가는 새로운 일자리 매칭
-            <br />
-            지금 바로 시작하세요!
-          </p>
-        </div>
+      <main className='relative mx-auto max-w-[1200px] text-center'>
+        {/* Hero 섹션 컨테이너 */}
+        <div className='relative h-[750px]'>
+          <div className='absolute top-0 right-1/2 left-1/2 z-0 -mr-[50vw] -ml-[50vw] h-full w-screen'>
+            <Image
+              src='/senior-bg.jpg'
+              alt='main-image'
+              fill
+              draggable={false}
+              unoptimized
+              className='object-cover brightness-50'
+            />
+          </div>
 
-        <div className='flex flex-col gap-2 pt-28'>
-          <SearchBarSuspense />
-          <div className='mt-1 mb-12 flex flex-row justify-center'>
-            <p className='mr-5 text-gray-500 max-md:text-sm'>검색 키워드 추천</p>
-            <div className='mb-6 flex justify-center'>
-              <Suspense fallback={<Loading />}>
-                <KeywordRecommand />
-              </Suspense>
+          <div className='relative z-10 flex h-full flex-col items-center justify-center px-4 text-center'>
+            <div className='flex flex-col items-center gap-12 md:gap-16'>
+              <div className='flex flex-col gap-6'>
+                <h2 className='text-xl font-bold text-zinc-100 max-md:font-extrabold sm:text-2xl md:text-3xl lg:text-4xl'>
+                  &quot;내일 뭐하지? 시니어내일에서 찾아봐요!&quot;
+                </h2>
+                <p className='text-sm text-zinc-200 md:text-base lg:text-lg'>
+                  경험과 가치를 이어가는 새로운 일자리 매칭
+                  <br />
+                  지금 바로 시작하세요!
+                </p>
+              </div>
+
+              <div className='flex w-full max-w-2xl flex-col gap-2'>
+                <SearchBarSuspense />
+                <div className='mt-1 flex flex-row justify-center'>
+                  <p className='mr-5 text-zinc-400 max-md:text-sm'>검색 키워드 추천</p>
+                  <div className='flex justify-center'>
+                    <Suspense fallback={<Loading />}>
+                      <KeywordRecommand />
+                    </Suspense>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <nav className='mb-44 flex flex-row justify-center space-x-4'>
-          <Link href='/public-jobs?page=1'>
-            <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
-              <AiOutlineFileSearch className='text-[#2B90D9]' />
-              <span className='text-sm sm:text-base md:text-lg lg:text-xl'>공공 공고</span>
-            </div>
-          </Link>
-          <Link href='/private-jobs'>
-            <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
-              <MdOutlineWorkOutline className='text-[#22C55E]' />
-              <span className='text-sm sm:text-base md:text-lg lg:text-xl'>일반 공고</span>
-            </div>
-          </Link>
-          <Link href='/dashboard'>
-            <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
-              <VscAccount className='text-[#A881AF]' />
-              <span className='text-sm sm:text-base md:text-lg lg:text-xl'>이력서</span>
-            </div>
-          </Link>
-        </nav>
+        <div className='bg-white pt-28 pb-48'>
+          <div className='pb-6 text-2xl font-bold'>주요 서비스</div>
+          <nav className='mb-44 flex flex-row justify-center space-x-4'>
+            <Link href='/public-jobs?page=1'>
+              <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
+                <AiOutlineFileSearch className='text-[#2B90D9]' />
+                <span className='text-sm sm:text-base md:text-lg lg:text-xl'>공공 공고</span>
+              </div>
+            </Link>
+            <Link href='/private-jobs'>
+              <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
+                <MdOutlineWorkOutline className='text-[#22C55E]' />
+                <span className='text-sm sm:text-base md:text-lg lg:text-xl'>일반 공고</span>
+              </div>
+            </Link>
+            <Link href='/dashboard'>
+              <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
+                <VscAccount className='text-[#A881AF]' />
+                <span className='text-sm sm:text-base md:text-lg lg:text-xl'>이력서</span>
+              </div>
+            </Link>
+          </nav>
 
-        {/* 로그인시 보일수 있도록 조건 걸기 */}
-        {IsLoggedIn ? (
-          <>
-            <h3 className='pb-8 text-2xl font-bold'>추천 공고</h3>
-            <Carousel
-              opts={{ align: 'center' }}
-              className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
-            >
-              <CarouselContent>
-                {privateJobs.map((job) => (
-                  <CarouselItem
-                    key={job.id}
-                    className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
-                  >
-                    <RecommendedJobCard
-                      jobPosting={job} // 일반공고 타입에 맞게 전달
-                      // userData={userData}
-                    />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </>
-        ) : null}
-
-        <h3 className='mt-28 pb-8 text-2xl font-bold'>최근에 등록된 공고</h3>
-        <Carousel
-          opts={{
-            align: 'center',
-          }}
-          className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
-        >
-          <CarouselContent>
-            {privateJobs.map((jobPosting) => (
-              <CarouselItem
-                key={jobPosting.id}
-                className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+          {/* 추천 공고 (로그인 시) */}
+          {IsLoggedIn ? (
+            <>
+              <h3 className='pb-8 text-2xl font-bold'>추천 공고</h3>
+              <Carousel
+                opts={{ align: 'center' }}
+                className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
               >
-                <RecentPostingsCard jobPosting={jobPosting} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+                <CarouselContent>
+                  {privateJobs.map((job) => (
+                    <CarouselItem
+                      key={job.id}
+                      className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+                    >
+                      <RecommendedJobCard
+                        jobPosting={job} // 일반공고 타입에 맞게 전달
+                        // userData={userData}
+                      />
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </>
+          ) : null}
+
+          <h3 className='mt-28 pb-8 text-2xl font-bold'>최근에 등록된 공고</h3>
+          <Carousel
+            opts={{
+              align: 'center',
+            }}
+            className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
+          >
+            <CarouselContent>
+              {privateJobs.map((jobPosting) => (
+                <CarouselItem
+                  key={jobPosting.id}
+                  className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+                >
+                  <RecentPostingsCard jobPosting={jobPosting} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
       </main>
     </>
   );
