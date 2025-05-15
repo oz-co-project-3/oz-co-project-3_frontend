@@ -70,7 +70,7 @@ export default function ChatbotPopup() {
   return (
     <SheetContent
       side='bottom'
-      className='!right-26 bottom-[170px] !left-auto w-full max-w-[360px] overflow-y-auto rounded-2xl border bg-white p-6 shadow-lg'
+      className='!right-44 bottom-[170px] !left-auto w-full max-w-[360px] overflow-y-auto rounded-2xl border bg-white p-6 shadow-lg max-md:!right-32 max-md:bottom-36 max-sm:!right-15 max-sm:!bottom-39'
     >
       <div className='flex items-center justify-between'>
         <button onClick={handleBack} disabled={selectionPath.length === 0}>

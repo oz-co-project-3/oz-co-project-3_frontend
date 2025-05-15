@@ -32,7 +32,7 @@ export default function MobileBottomHeader() {
       </Link>
 
       <Link
-        href='/dashboard/job-seeker/profile'
+        href='/dashboard'
         className={`flex h-full w-1/3 flex-col items-center justify-center gap-2 ${pathname.includes('/dashboard') ? 'text-main-light' : ''}`}
         draggable={false}
       >
