@@ -17,7 +17,6 @@ import Loading from './(main)/loading';
 import RecentPostingsCard from '@/components/job-posting/RecentPostingsCard';
 import { JobPostingListResponse } from '@/types/Schema/jobPostingSchema';
 import fetchOnServer from '@/api/serverFetcher';
-import { UserProfileResponse } from '@/types/user';
 import RecommendedJobCard from '@/components/job-posting/RecommendedJobCard';
 import { PublicJobsResponse } from '@/types/publicJob';
 import Image from 'next/image';
@@ -32,10 +31,6 @@ export default async function Home() {
   const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/public-jobs/`);
   const publicJobs: PublicJobsResponse = await response.json();
   console.log('공공: ', publicJobs);
-
-  const userData = await fetchOnServer<UserProfileResponse>('/api/user/profile/');
-  console.log(userData);
-  const IsLoggedIn = !!userData.seeker?.name;
 
   // const isSeoulPublic = userData.seeker?.interests.includes('서울시 공공 일자리');
 
@@ -106,32 +101,30 @@ export default async function Home() {
             </Link>
           </nav>
 
-          {/* 추천 공고 (로그인 시) */}
-          {IsLoggedIn ? (
-            <>
-              <h3 className='pb-8 text-lg font-bold md:text-xl lg:text-2xl'>추천 공고</h3>
-              <Carousel
-                opts={{ align: 'center' }}
-                className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
-              >
-                <CarouselContent>
-                  {privateJobs.map((job) => (
-                    <CarouselItem
-                      key={job.id}
-                      className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
-                    >
-                      <RecommendedJobCard
-                        jobPosting={job} // 일반공고 타입에 맞게 전달
-                        // userData={userData}
-                      />
-                    </CarouselItem>
-                  ))}
-                </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
-              </Carousel>
-            </>
-          ) : null}
+          {/* 추천 공고 */}
+          <>
+            <h3 className='pb-8 text-lg font-bold md:text-xl lg:text-2xl'>추천 공고</h3>
+            <Carousel
+              opts={{ align: 'center' }}
+              className='mx-auto flex w-full px-4 sm:px-8 md:px-12 lg:px-16'
+            >
+              <CarouselContent>
+                {privateJobs.map((job) => (
+                  <CarouselItem
+                    key={job.id}
+                    className='basis-full transition-all duration-150 hover:scale-105 sm:basis-1/2 md:basis-1/3 lg:basis-1/4'
+                  >
+                    <RecommendedJobCard
+                      jobPosting={job} // 일반공고 타입에 맞게 전달
+                      // userData={userData}
+                    />
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+          </>
 
           <h3 className='mt-28 pb-8 text-lg font-bold md:text-xl lg:text-2xl'>
             최근에 등록된 공고
