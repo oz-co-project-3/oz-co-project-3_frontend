@@ -55,7 +55,7 @@ export default function SeekerProfileForm({
       email: '',
       birth: '',
       phone_number: '',
-      gender: 'none',
+      gender: undefined,
       interests: [],
       purposes: [],
       sources: [],
