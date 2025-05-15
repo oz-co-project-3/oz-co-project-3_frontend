@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import useSWR from 'swr';
 import { ChevronLeft, Menu } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
@@ -14,8 +13,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '../ui/dropdown-menu';
-import { UserProfileResponse } from '@/types/user';
-import { fetchOnClient } from '@/api/clientFetcher';
+// import useSWR from 'swr';
+// import { UserProfileResponse } from '@/types/user';
+// import { fetchOnClient } from '@/api/clientFetcher';
 import { useAuthStore } from '@/store/useAuthStore';
 import { businessNavItems, seekerNavItems } from '@/constants/nav';
 import { logoutUser } from '@/api/user';
@@ -25,19 +25,20 @@ export default function MobileTopBar() {
   const { user, logout } = useAuthStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const { data: profile } = useSWR<UserProfileResponse | null>(
-    user ? '/api/user/profile/' : null,
-    fetchOnClient,
-  );
-  const isBusiness = profile?.base.user_type?.includes('business');
+  // const { data: profile } = useSWR<UserProfileResponse | null>(
+  //   user ? '/api/user/profile/' : null,
+  //   fetchOnClient,
+  // );
+  const isBusiness = user?.user_type?.includes('business');
 
   const handleLogout = async () => {
     try {
-      logout(); // Zustand 상태 초기화
       await logoutUser();
+      logout(); // Zustand 상태 초기화
       router.push('/');
     } catch (err) {
       console.log('로그아웃 실패:', err);
+      logout(); // Zustand 상태 초기화
       router.refresh();
     }
   };
@@ -76,7 +77,7 @@ export default function MobileTopBar() {
         </DropdownMenuTrigger>
         <DropdownMenuContent className='z-2000 -translate-x-2 translate-y-1 p-4'>
           {/* 로그아웃 상태 */}
-          {!profile && (
+          {!user && (
             <>
               <DropdownMenuItem
                 className='cursor-pointer'
@@ -102,7 +103,7 @@ export default function MobileTopBar() {
           )}
 
           {/* 로그인 상태 */}
-          {profile &&
+          {user &&
             seekerNavItems.map((item) => (
               <DropdownMenuItem
                 key={item.name}
@@ -138,7 +139,7 @@ export default function MobileTopBar() {
           )}
 
           {/* 로그인 상태 */}
-          {profile && !isBusiness ? (
+          {user && !isBusiness ? (
             <>
               <DropdownMenuSeparator />
               <Link href='/user/register-company' className='block px-2 py-3 text-base'>
@@ -146,7 +147,7 @@ export default function MobileTopBar() {
               </Link>
             </>
           ) : null}
-          {profile && (
+          {user && (
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem

@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BriefcaseBusiness, Landmark, User } from 'lucide-react';
+import { useAuthStore } from '@/store/useAuthStore';
 
 export default function MobileBottomHeader() {
   const pathname = usePathname();
+  const { user } = useAuthStore();
 
   return (
     <header className='bg-background-ivory fixed bottom-0 left-0 z-100 flex h-[80px] w-full items-center justify-center border-t text-sm sm:hidden'>
@@ -37,7 +39,7 @@ export default function MobileBottomHeader() {
         draggable={false}
       >
         <User className={`size-6 ${pathname.includes('/dashboard') ? 'text-main-light' : ''}`} />
-        마이페이지
+        {user ? '마이페이지' : '로그인'}
       </Link>
     </header>
   );

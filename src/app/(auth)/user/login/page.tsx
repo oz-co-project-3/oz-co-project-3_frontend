@@ -18,6 +18,12 @@ interface LoginFormData {
 export default function LoginPage() {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
+  const { user } = useAuthStore();
+
+  // TODO: 로그인 가드 문제점 임시 방편 (리팩토링시 제거)
+  if (user) {
+    router.push('/dashboard/job-seeker/profile');
+  }
 
   const {
     register,
