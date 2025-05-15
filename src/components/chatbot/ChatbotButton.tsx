@@ -10,14 +10,14 @@ const ChatbotButton = () => {
   return (
     <TooltipProvider delayDuration={100}>
       <Sheet>
-        <div className='fixed right-10 bottom-28 z-50 sm:right-20 sm:bottom-15 md:right-25 md:bottom-17 lg:right-30 lg:bottom-20'>
+        <div className='fixed right-6 bottom-25 z-50 sm:right-20 sm:bottom-15 md:right-25 md:bottom-17 lg:right-30 lg:bottom-20'>
           <Tooltip>
             <TooltipTrigger asChild>
               <SheetTrigger asChild>
                 <button
                   aria-label='챗봇 열기'
                   className={cn(
-                    'h-20 w-20 rounded-full border border-gray-300 bg-white shadow-md',
+                    'h-20 w-20 rounded-full border border-gray-300 bg-white shadow-md max-sm:h-14 max-sm:w-14',
                     'flex items-center justify-center transition-all hover:scale-105',
                   )}
                 >
