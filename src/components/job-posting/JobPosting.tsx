@@ -20,14 +20,14 @@ import Map from '../map/map';
 export default async function JobPosting({ jobPosting }: { jobPosting: JobPostingResponse }) {
   return (
     <article className='flex flex-col gap-4'>
-      <div className='flex items-center justify-between border-b pb-4'>
-        <h2 className='text-2xl font-bold'>{jobPosting.title}</h2>
+      <div className='flex items-center justify-between border-b pb-4 max-sm:flex-col max-sm:items-start max-sm:gap-4'>
+        <h2 className='text-2xl font-bold max-sm:text-xl'>{jobPosting.title}</h2>
         <span className='rounded-lg bg-zinc-100 px-3 py-1 text-zinc-800'>
           {jobPosting.employment_type}
         </span>
       </div>
 
-      <div className='flex items-center justify-between rounded-md border px-8 py-6'>
+      <div className='flex items-center justify-between rounded-md border px-8 py-6 max-sm:flex-col max-sm:items-start max-sm:gap-4'>
         <div className='flex flex-col gap-4'>
           <span className='text-xl font-bold text-zinc-800'>{jobPosting.company}</span>
           <div className='flex gap-2'>
@@ -140,7 +140,7 @@ export default async function JobPosting({ jobPosting }: { jobPosting: JobPostin
           <FileStack className='size-4' />
           <span className='text-main-light'>회사 약력</span>
         </h3>
-        <pre className='text-zinc-800'>{jobPosting.history}</pre>
+        <pre className='break-words whitespace-pre-wrap text-zinc-800'>{jobPosting.history}</pre>
       </div>
 
       {/* 주요 업무 */}
@@ -149,7 +149,7 @@ export default async function JobPosting({ jobPosting }: { jobPosting: JobPostin
           <Info className='size-4' />
           <span className='text-main-light'>주요 업무</span>
         </h3>
-        <pre className='text-zinc-800'>{jobPosting.summary}</pre>
+        <pre className='break-words whitespace-pre-wrap text-zinc-800'>{jobPosting.summary}</pre>
       </div>
 
       {/* 근무지 정보 */}

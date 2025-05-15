@@ -112,7 +112,7 @@ export default function Header() {
           ) : (
             <>
               <Link href='/user/login'>
-                <Button className='bg-main hover:bg-main-light cursor-pointer text-white'>
+                <Button className='bg-main-light hover:bg-main-dark w-20 cursor-pointer text-white'>
                   로그인
                 </Button>
               </Link>
