@@ -54,7 +54,7 @@ export default function MobileTopBar() {
         <ChevronLeft />
       </Button>
 
-      <h1 className='h-[70px] w-[150px]'>
+      <h1 className='h-[68px] w-[150px]'>
         <Link href='/' className='relative block h-full w-full'>
           <Image
             src='/logo/logo.gif'
