@@ -54,7 +54,7 @@ function SheetContent({
           'bg-background fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out',
           'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:duration-300',
           'data-[state=closed]:opacity-0 data-[state=closed]:duration-100',
-          'inset-x-0 bottom-[110px] !h-[460px] w-full !max-w-xs rounded-2xl border bg-white p-4',
+          'inset-x-0 bottom-[110px] h-[360px] w-full !max-w-xs rounded-2xl border bg-white p-4 max-sm:w-[280px] sm:!h-[460px]',
 
           className,
         )}
