@@ -2,7 +2,7 @@
 
 import { fetchOnClient } from '@/api/clientFetcher';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { redirect, usePathname, useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import { useAuthStore } from '@/store/useAuthStore';
 import { UserProfileResponse } from '@/types/user';
@@ -24,6 +24,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     fetchOnClient,
   );
   const isBusiness = profile?.base.user_type?.includes('business');
+
+  // TODO: 로그인 가드 문제점 임시 방편 (리팩토링시 제거)
+  if (!user) {
+    redirect('/user/login');
+  }
 
   useEffect(() => {
     if (!user) {
