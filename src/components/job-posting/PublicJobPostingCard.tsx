@@ -27,7 +27,7 @@ export default async function PublicJobPostingCard({
         </div>
       </div>
 
-      <div className='flex flex-wrap gap-2'>
+      <div className='flex flex-wrap gap-2 max-sm:hidden'>
         <span className='py-1 font-bold'>지역: </span>
         {publicJobPosting.location?.split(',').map((location) => (
           <span key={location} className='rounded-md bg-zinc-100 px-2 py-1'>
@@ -35,7 +35,7 @@ export default async function PublicJobPostingCard({
           </span>
         ))}
       </div>
-      <div className='flex flex-wrap gap-2'>
+      <div className='flex flex-wrap gap-2 max-sm:hidden'>
         <span className='py-1 font-bold'>분야: </span>
         {publicJobPosting.job?.split(',').map((job) => (
           <span key={job} className='rounded-md bg-zinc-100 px-2 py-1'>
@@ -45,23 +45,24 @@ export default async function PublicJobPostingCard({
       </div>
 
       <div className='flex justify-between gap-4'>
-        <span>
+        <span className='max-sm:hidden'>
           <span className='py-1 font-bold'>마감일: </span>
           {formatPublicJobDate(publicJobPosting.deadline)}
         </span>
-        <span>
+        <span className='max-sm:hidden'>
           <span className='py-1 font-bold'>게시일: </span>
           {formatPublicJobDate(publicJobPosting.postedAt)}
         </span>
-      </div>
 
-      {/* 목록 조회용 카드에선 불필요 */}
-      {/* <p>{publicJobPosting.education}</p> */}
-      {/* <p>{publicJobPosting.qualification}</p> */}
-      {/* <p>{publicJobPosting.disqualification}</p> */}
-      {/* <p>{publicJobPosting.preference}</p> */}
-      {/* <p>{publicJobPosting.preferenceDetail}</p> */}
-      {/* <p>{publicJobPosting.hiringProcess}</p> */}
+        <span className='sm:hidden'>
+          <span className='py-1 font-bold'>마감: </span>
+          {formatPublicJobDate(publicJobPosting.deadline).slice(6)}
+        </span>
+        <span className='sm:hidden'>
+          <span className='py-1 font-bold'>게시: </span>
+          {formatPublicJobDate(publicJobPosting.postedAt).slice(6)}
+        </span>
+      </div>
     </li>
   );
 }
