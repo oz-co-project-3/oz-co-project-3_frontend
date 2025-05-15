@@ -1,8 +1,20 @@
 import DeleteAccountFlow from '@/app/(auth)/user/deleteAccount/deleteAccount';
 import SeekerProfile from '@/components/profile/SeekerProfile';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export default async function ProfilePage() {
+  const cookieStore = await cookies();
+
+  // TODO: 로그인 가드 문제점 임시 방편 (리팩토링시 제거)
+  const accessToken = cookieStore.get('access_token');
+  const refreshToken = cookieStore.get('refresh_token');
+
+  if (!accessToken || !refreshToken) {
+    redirect('/user/login');
+  }
+
   return (
     <>
       <section className='flex flex-col gap-4 rounded-md bg-white px-8 py-10'>
