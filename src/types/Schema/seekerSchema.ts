@@ -5,7 +5,11 @@ export const seekerProfileSchema = z.object({
   email: z.string().email('올바른 이메일 형식을 입력하세요.'),
   birth: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD 형식으로 입력해주세요'),
   phone_number: z.string().min(9, '전화번호는 - 제외 한 9자 이상 입력해주세요.'),
-  gender: z.enum(['male', 'female', 'none']),
+  gender: z.enum(['male', 'female'], {
+    errorMap: () => ({
+      message: '성별을 선택해주세요.',
+    }),
+  }),
   interests: z.array(z.string()).optional(),
   purposes: z.array(z.string()).optional(),
   sources: z.array(z.string()).optional(),

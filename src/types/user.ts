@@ -5,7 +5,7 @@ export interface SeekerFormData {
   password?: string;
   password_check?: string;
   phone_number: string;
-  gender?: 'male' | 'female' | 'none';
+  gender?: 'male' | 'female';
   interests?: string[];
   purposes?: string[];
   sources?: string[];
@@ -71,7 +71,7 @@ export interface UserBaseProfile {
   signinMethod: 'email' | 'naver' | 'kakao';
   status: 'active' | 'inactive';
   email_verified: boolean;
-  gender: 'male' | 'female' | 'none';
+  gender: 'male' | 'female';
   leave_reason: string | null;
   created_at: string;
   deleted_at: string | null;
