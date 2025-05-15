@@ -13,7 +13,7 @@ export default async function ProfilePage() {
         <div className='z-10 flex min-w-32 gap-2 py-4 max-lg:flex-col max-lg:pt-2'>
           <DeleteAccountFlow />
           <Link
-            href='/user/edit'
+            href='/dashboard/job-seeker/profile/edit'
             className='bg-main-light hover:bg-main-dark grow cursor-pointer rounded-md py-1.5 text-center text-white'
           >
             회원정보 수정

@@ -57,12 +57,12 @@ export default function DropDownFilter({
   };
 
   return (
-    <div>
-      <div>
+    <>
+      <div className='w-full'>
         {/* 지역 드롭다운 */}
         {isRegionOpen && (
           <div
-            className='flex w-[1136px] rounded-2xl border bg-white'
+            className='flex w-full rounded-2xl border bg-white'
             onClick={(e) => e.stopPropagation()}
           >
             {/* 시/도 리스트 */}
@@ -87,7 +87,7 @@ export default function DropDownFilter({
             <div className='w-2/3 px-4 py-2'>
               {selectedRegion ? (
                 <div>
-                  <div className='grid grid-cols-4 gap-2'>
+                  <div className='grid grid-cols-4 gap-2 max-sm:grid-cols-2'>
                     {/* 전체 선택 체크박스 */}
                     <div key={selectedRegion}>
                       <label>
@@ -131,7 +131,7 @@ export default function DropDownFilter({
         {/* 직업 드롭다운 */}
         {isJobOpen && (
           <div
-            className='flex w-[1136px] rounded-2xl border bg-white'
+            className='flex w-full rounded-2xl border bg-white'
             onClick={(e) => e.stopPropagation()}
           >
             <div className='w-1/3 border-r'>
@@ -153,7 +153,7 @@ export default function DropDownFilter({
               {selectedJob ? (
                 <div>
                   <div className='mb-2 font-semibold'>{selectedJob} 전체</div>
-                  <div className='grid grid-cols-4 gap-2'>
+                  <div className='grid grid-cols-4 gap-2 max-sm:grid-cols-2'>
                     {JOB_CATEGORIES[selectedJob].map((subcategory: string) => (
                       <div key={subcategory} className='flex gap-1'>
                         <label>
@@ -178,10 +178,7 @@ export default function DropDownFilter({
 
         {/* 상세조건 드롭다운 */}
         {isDetailOpen && (
-          <div
-            className='w-[1136px] rounded-2xl border bg-white'
-            onClick={(e) => e.stopPropagation()}
-          >
+          <div className='w-full rounded-2xl border bg-white' onClick={(e) => e.stopPropagation()}>
             <div className='px-4 py-2'>
               <div className='font-semibold'>고용형태</div>
               <div className='flex flex-wrap gap-2'>
@@ -230,6 +227,7 @@ export default function DropDownFilter({
           </div>
         )}
       </div>
+
       {/* 선택 뜨는 곳 */}
       <div className='flex flex-wrap gap-2 p-4'>
         {/* 지역 */}
@@ -248,6 +246,7 @@ export default function DropDownFilter({
             </button>
           </span>
         ))}
+
         {/* 직업 */}
         {selectedSubcategories.map((subcategory) => (
           <span
@@ -264,6 +263,7 @@ export default function DropDownFilter({
             </button>
           </span>
         ))}
+
         {/* 상세조건 */}
         {selectedMethod.map((method) => (
           <span
@@ -311,6 +311,8 @@ export default function DropDownFilter({
           </span>
         ))}
       </div>
+
+      {/* 검색 초기화 버튼 */}
       <div className='flex flex-col sm:flex-row'>
         <SearchBarSuspense />
         <button
@@ -323,6 +325,6 @@ export default function DropDownFilter({
           </div>
         </button>
       </div>
-    </div>
+    </>
   );
 }

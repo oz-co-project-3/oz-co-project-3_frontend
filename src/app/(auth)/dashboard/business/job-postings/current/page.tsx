@@ -40,9 +40,11 @@ export default async function CurrentJobPostingsPage() {
             <p className='text-lg text-gray-500'>현재 진행중인 채용공고가 없습니다.</p>
           </div>
         ) : (
-          currentJobPostings.map((jobPosting) => (
-            <JobPostingBusinessCard key={jobPosting.id} jobPosting={jobPosting} type='current' />
-          ))
+          <div className='grid grid-cols-1 gap-4 py-4 md:grid-cols-2 lg:grid-cols-3'>
+            {currentJobPostings.map((jobPosting) => (
+              <JobPostingBusinessCard key={jobPosting.id} jobPosting={jobPosting} type='current' />
+            ))}
+          </div>
         )}
       </section>
     </>

@@ -47,8 +47,10 @@ export default function RecommendedJobCard({ jobPosting }: Props) {
       </div>
 
       {/* 공고 정보 */}
-      <div className='flex flex-col gap-1 px-4 py-2'>
-        <h3 className='line-clamp-2 h-16 text-lg font-bold'>{jobPosting?.title ?? '제목 없음'}</h3>
+      <div className='flex flex-col items-start gap-1 px-4 py-2'>
+        <h3 className='line-clamp-2 h-16 w-full text-center text-lg font-bold'>
+          {jobPosting?.title ?? '제목 없음'}
+        </h3>
         <span className='text-sm text-gray-500'>{jobPosting?.company ?? '회사명'}</span>
         <span className='text-sm text-gray-500'>
           {getBriefLocation(jobPosting?.location ?? '')}
