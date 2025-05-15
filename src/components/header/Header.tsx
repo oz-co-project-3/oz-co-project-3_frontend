@@ -36,7 +36,8 @@ export default function Header() {
       await logoutUser();
       router.push('/');
     } catch (err) {
-      console.error('로그아웃 실패:', err);
+      console.log('로그아웃 실패:', err);
+      router.refresh();
     }
   };
 
@@ -111,7 +112,7 @@ export default function Header() {
           ) : (
             <>
               <Link href='/user/login'>
-                <Button className='bg-main hover:bg-main-light cursor-pointer text-white'>
+                <Button className='bg-main-light hover:bg-main-dark w-20 cursor-pointer text-white'>
                   로그인
                 </Button>
               </Link>

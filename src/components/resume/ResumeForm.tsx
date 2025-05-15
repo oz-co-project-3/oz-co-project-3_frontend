@@ -179,7 +179,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
                     className='cursor-pointer'
                   />
                 </FormControl>
-                <div className='relative h-87 w-full'>
+                <div className='relative h-48 w-full md:h-87'>
                   <Image
                     src={previewUrl ? previewUrl : (defaultResume?.image_url ?? '/Character2.png')}
                     alt='이력서 이미지'
@@ -313,7 +313,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
 
           {workExperience.fields.length > 0 &&
             workExperience.fields.map((field, index) => (
-              <div key={field.id} className='flex items-end gap-4'>
+              <div key={field.id} className='flex items-end gap-4 max-sm:grid max-sm:grid-cols-2'>
                 {/* 회사명 */}
                 <FormField
                   control={form.control}
@@ -386,13 +386,13 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
             ))}
         </div>
 
-        <div className='flex gap-4'>
+        <div className='flex flex-col gap-4 max-sm:flex-col'>
           {/* 최종 학력 */}
           <FormField
             control={form.control}
             name='education'
             render={({ field }) => (
-              <FormItem className='relative w-[33%]'>
+              <FormItem className='relative w-[33%] max-sm:w-full'>
                 <FormLabel className='text-base font-semibold'>최종 학력</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
@@ -420,7 +420,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
             control={form.control}
             name='school_name'
             render={({ field }) => (
-              <FormItem className='relative w-[33%]'>
+              <FormItem className='relative w-[33%] max-sm:w-full'>
                 <FormLabel className='text-base font-semibold'>학교 이름</FormLabel>
                 <FormControl>
                   <Input placeholder='학교 이름을 입력하세요.' {...field} />
@@ -435,7 +435,7 @@ export default function ResumeForm({ defaultResume }: { defaultResume?: ResumeRe
             control={form.control}
             name='graduation_status'
             render={({ field }) => (
-              <FormItem className='relative w-[33%]'>
+              <FormItem className='relative w-[33%] max-sm:w-full'>
                 <FormLabel className='text-base font-semibold'>졸업 여부</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
