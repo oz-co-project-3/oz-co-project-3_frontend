@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import UserEditPageClient from './_components/UserEditPageClient';
+import UserEditPageClient from '@/components/common/userForms/UserEditPageClient';
 
 export default function UserEditPage() {
   return (

@@ -204,7 +204,7 @@ export default function JobPostingForm({
         />
 
         <div className='flex justify-between gap-8 max-md:flex-col'>
-          <div className='flex w-[48%] flex-col gap-8'>
+          <div className='flex flex-col gap-8 sm:w-[48%]'>
             {/* 썸네일 이미지 */}
             <FormField
               control={form.control}
@@ -321,7 +321,7 @@ export default function JobPostingForm({
             />
           </div>
 
-          <div className='flex w-[48%] flex-col gap-8'>
+          <div className='flex flex-col gap-8 sm:w-[48%]'>
             {/* 자격 요건 */}
             <FormField
               control={form.control}

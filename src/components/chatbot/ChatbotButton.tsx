@@ -10,7 +10,7 @@ const ChatbotButton = () => {
   return (
     <TooltipProvider delayDuration={100}>
       <Sheet>
-        <div className='fixed right-15 bottom-12 z-50 sm:right-20 sm:bottom-15 md:right-25 md:bottom-17 lg:right-30 lg:bottom-20'>
+        <div className='fixed right-10 bottom-28 z-50 sm:right-20 sm:bottom-15 md:right-25 md:bottom-17 lg:right-30 lg:bottom-20'>
           <Tooltip>
             <TooltipTrigger asChild>
               <SheetTrigger asChild>

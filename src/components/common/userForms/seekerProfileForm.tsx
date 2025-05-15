@@ -359,7 +359,7 @@ export default function SeekerProfileForm({
           )}
         </form>
       </Form>
-      <div className='text-center'>
+      <div className='mt-4 text-center'>
         {type === 'edit' && (
           <button
             type='button'

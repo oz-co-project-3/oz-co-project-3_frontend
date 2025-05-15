@@ -82,7 +82,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className='bg-background-ivory flex min-h-screen flex-col items-center justify-center p-6'>
+    <div className='bg-background-ivory flex min-h-screen flex-col items-center justify-center p-6 max-sm:-translate-y-30'>
       <div className='w-full max-w-md rounded-xl bg-white p-8 shadow-md'>
         <h2 className='mb-6 text-center text-2xl font-bold'>로그인</h2>
 

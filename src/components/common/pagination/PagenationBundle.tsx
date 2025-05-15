@@ -50,7 +50,7 @@ export default async function PagenationBundle({
         )}
 
         {!mobile && currentPage > 3 && (
-          <PaginationItem>
+          <PaginationItem className='max-sm:hidden'>
             <PaginationLink href={`${url}${currentPage - 2}`}>{currentPage - 2}</PaginationLink>
           </PaginationItem>
         )}
@@ -70,7 +70,7 @@ export default async function PagenationBundle({
           </PaginationItem>
         )}
         {!mobile && currentPage < totalPages - 2 && (
-          <PaginationItem>
+          <PaginationItem className='max-sm:hidden'>
             <PaginationLink href={`${url}${currentPage + 2}`}>{currentPage + 2}</PaginationLink>
           </PaginationItem>
         )}

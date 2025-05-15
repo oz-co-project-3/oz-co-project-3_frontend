@@ -17,7 +17,7 @@ export default async function JobPostingSeekerCard({
   // 여기선 intanceof 사용할 수 없음. (여긴 런타임이라서 타입 체크 불가능)
 
   return (
-    <div className='relative flex w-[32%] cursor-pointer flex-col overflow-hidden rounded-md border transition-all duration-150 hover:scale-105'>
+    <div className='relative flex cursor-pointer flex-col overflow-hidden rounded-md border transition-all duration-150 hover:scale-105'>
       <Link
         href={`/dashboard/job-seeker/job-postings/${path}/${jobPosting.id}`}
         className='absolute inset-0 z-10 grow'

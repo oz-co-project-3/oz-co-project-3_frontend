@@ -38,9 +38,11 @@ export default async function PreviousJobPostingsPage() {
             <p className='text-lg text-gray-500'>마감일이 지난 채용공고가 없습니다.</p>
           </div>
         ) : (
-          expiredJobPostings.map((jobPosting) => (
-            <JobPostingBusinessCard key={jobPosting.id} jobPosting={jobPosting} type='expired' />
-          ))
+          <div className='grid grid-cols-1 gap-4 py-4 md:grid-cols-2 lg:grid-cols-3'>
+            {expiredJobPostings.map((jobPosting) => (
+              <JobPostingBusinessCard key={jobPosting.id} jobPosting={jobPosting} type='expired' />
+            ))}
+          </div>
         )}
       </section>
     </>

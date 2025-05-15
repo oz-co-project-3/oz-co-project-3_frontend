@@ -15,11 +15,18 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import SeekerProfileForm from '@/components/common/userForms/seekerProfileForm';
 import CompanyProfileForm from '@/components/common/userForms/companyProfileForm';
 
-import { fetchUserProfile, updateSeekerProfile, updateBusinessProfile } from '@/api/user';
+import {
+  fetchUserProfile,
+  // updateSeekerProfile,
+  // updateBusinessProfile,
+  updateProfile,
+} from '@/api/user';
 import { CorpProfile, CompanyFormData, SeekerFormData } from '@/types/user';
 import useSWR from 'swr';
 import { useAuthStore } from '@/store/useAuthStore';
 import dayjs from 'dayjs';
+import useSWRMutation from 'swr/mutation';
+// import { fetchOnClient } from '@/api/clientFetcher';
 
 export default function UserEditPageClient() {
   const searchParams = useSearchParams();
@@ -34,6 +41,12 @@ export default function UserEditPageClient() {
   const { mutate } = useSWR('/api/user/profile/', fetchUserProfile);
   const setUser = useAuthStore((state) => state.setUser);
   const router = useRouter();
+
+  const { trigger } = useSWRMutation(
+    `/api/user/profile/update/?target_type=${tab === 'seeker' ? 'normal' : 'business'}`,
+    // TODO: arg 타입 수정
+    (url: string, { arg }: { arg: Record<string, unknown> }) => updateProfile(url, arg),
+  );
 
   useEffect(() => {
     const loadData = async () => {
@@ -84,7 +97,7 @@ export default function UserEditPageClient() {
     console.log('수정 요청 데이터:', cleaned);
 
     try {
-      await updateSeekerProfile(cleaned);
+      await trigger(cleaned);
       await mutate();
 
       const profile = await fetchUserProfile();
@@ -100,6 +113,7 @@ export default function UserEditPageClient() {
       });
 
       setShowSuccessDialog(true);
+      router.push('/dashboard/job-seeker/profile');
     } catch (err) {
       console.error('Seeker 수정 실패:', err);
       alert('회원정보 수정 중 오류가 발생했습니다.');
@@ -108,7 +122,7 @@ export default function UserEditPageClient() {
 
   const handleCompanySubmit = async (data: CompanyFormData) => {
     try {
-      await updateBusinessProfile(data as unknown as Record<string, unknown>);
+      await trigger(data as unknown as Record<string, unknown>);
       await mutate();
 
       const profile = await fetchUserProfile();
@@ -124,6 +138,7 @@ export default function UserEditPageClient() {
       });
 
       setShowSuccessDialog(true);
+      router.push('/dashboard/business/profile');
     } catch (err) {
       console.error('Company 수정 실패:', err);
       alert('회원정보 수정 중 오류가 발생했습니다.');
@@ -156,16 +171,16 @@ export default function UserEditPageClient() {
   return (
     <main className='px-4 py-10'>
       <Tabs value={tab} onValueChange={(value) => setTab(value as 'seeker' | 'company')}>
-        <TabsList className='mb-4'>
+        <TabsList className='m-auto mb-4'>
           <TabsTrigger
             value='seeker'
-            className='data-[state=active]:bg-main-light border-main-light rounded-md border px-6 py-2 text-base data-[state=active]:text-white'
+            className='data-[state=active]:bg-main-light border-main-light cursor-pointer rounded-md border px-16 py-4 text-base data-[state=active]:text-white'
           >
             일반 회원
           </TabsTrigger>
           <TabsTrigger
             value='company'
-            className='data-[state=active]:bg-main-light border-main-light rounded-md border px-6 py-2 text-base data-[state=active]:text-white'
+            className='data-[state=active]:bg-main-light border-main-light cursor-pointer rounded-md border px-16 py-4 text-base data-[state=active]:text-white'
             onClick={handleCompanyTabClick}
           >
             기업 회원

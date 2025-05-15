@@ -1,4 +1,3 @@
-import ScrollShowSearchBar from '@/components/common/searchbar/ScrollShowSearchbar';
 import SearchBarSuspense from '@/components/common/searchbar/Searchbar';
 import Link from 'next/link';
 import { MdOutlineWorkOutline } from 'react-icons/md';
@@ -42,7 +41,6 @@ export default async function Home() {
 
   return (
     <>
-      <ScrollShowSearchBar />
       <main className='relative mx-auto max-w-[1200px] text-center'>
         {/* Hero 섹션 컨테이너 */}
         <div className='relative h-[750px]'>
@@ -87,23 +85,23 @@ export default async function Home() {
 
         <div className='bg-white pt-32 pb-48'>
           <div className='pb-6 text-lg font-bold md:text-xl lg:text-2xl'>주요 서비스</div>
-          <nav className='mb-44 flex flex-row justify-center space-x-4'>
+          <nav className='mb-44 flex flex-row justify-center space-x-4 max-sm:space-x-2'>
             <Link href='/public-jobs?page=1'>
-              <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
+              <div className='flex h-[70px] w-[105px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[160px] lg:w-[240px] lg:gap-8'>
                 <AiOutlineFileSearch className='text-[#2B90D9]' />
-                <span className='text-sm sm:text-base md:text-lg lg:text-xl'>공공 공고</span>
+                <span className='text-base md:text-lg lg:text-xl'>공공 공고</span>
               </div>
             </Link>
             <Link href='/private-jobs'>
-              <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
+              <div className='flex h-[70px] w-[105px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[160px] lg:w-[240px] lg:gap-8'>
                 <MdOutlineWorkOutline className='text-[#22C55E]' />
-                <span className='text-sm sm:text-base md:text-lg lg:text-xl'>일반 공고</span>
+                <span className='text-base md:text-lg lg:text-xl'>일반 공고</span>
               </div>
             </Link>
             <Link href='/dashboard'>
-              <div className='flex h-[60px] w-[80px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 sm:h-[80px] sm:w-[120px] sm:gap-3 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[120px] lg:w-[180px] lg:gap-5'>
+              <div className='flex h-[70px] w-[105px] flex-col gap-2 rounded-md border bg-white p-3 text-center shadow-md hover:bg-gray-100 md:h-[100px] md:w-[150px] md:gap-4 lg:h-[160px] lg:w-[240px] lg:gap-8'>
                 <VscAccount className='text-[#A881AF]' />
-                <span className='text-sm sm:text-base md:text-lg lg:text-xl'>이력서</span>
+                <span className='text-base md:text-lg lg:text-xl'>이력서</span>
               </div>
             </Link>
           </nav>
