@@ -35,7 +35,8 @@ export default function MobileTopBar() {
       await logoutUser();
       router.push('/');
     } catch (err) {
-      console.error('로그아웃 실패:', err);
+      console.log('로그아웃 실패:', err);
+      router.refresh();
     }
   };
 
@@ -65,10 +66,10 @@ export default function MobileTopBar() {
       </h1>
 
       <DropdownMenu>
-        <DropdownMenuTrigger className='cursor-pointer'>
+        <DropdownMenuTrigger className='flex h-9 w-9 cursor-pointer items-center justify-center rounded-md border'>
           <Menu />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className='z-2000 p-2'>
+        <DropdownMenuContent className='z-2000 -translate-x-2 translate-y-1 p-4'>
           {/* 로그아웃 상태 */}
           {!profile && (
             <>
@@ -110,6 +111,14 @@ export default function MobileTopBar() {
           )}
 
           {/* 로그인 상태 */}
+          {profile && !isBusiness ? (
+            <>
+              <DropdownMenuSeparator />
+              <Link href='/user/register-company' className='block px-2 py-3 text-base'>
+                기업 회원 업그레이드
+              </Link>
+            </>
+          ) : null}
           {profile && (
             <>
               <DropdownMenuSeparator />
@@ -118,7 +127,7 @@ export default function MobileTopBar() {
                   <Button
                     variant='outline'
                     onClick={handleLogout}
-                    className='bg-danger w-full cursor-pointer text-white hover:bg-amber-700 hover:text-white'
+                    className='bg-danger mt-3 w-full cursor-pointer text-white hover:bg-amber-700 hover:text-white'
                   >
                     로그아웃
                   </Button>

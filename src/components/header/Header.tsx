@@ -36,7 +36,8 @@ export default function Header() {
       await logoutUser();
       router.push('/');
     } catch (err) {
-      console.error('로그아웃 실패:', err);
+      console.log('로그아웃 실패:', err);
+      router.refresh();
     }
   };
 
