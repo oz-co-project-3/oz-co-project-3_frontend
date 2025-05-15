@@ -1,17 +1,18 @@
 'use client';
 
-import { fetchOnClient } from '@/api/clientFetcher';
 import Link from 'next/link';
-import { redirect, usePathname, useRouter } from 'next/navigation';
-import useSWR from 'swr';
+import { usePathname, useRouter } from 'next/navigation';
+// import { fetchOnClient } from '@/api/clientFetcher';
+// import useSWR from 'swr';
+// import { UserProfileResponse } from '@/types/user';
 import { useAuthStore } from '@/store/useAuthStore';
-import { UserProfileResponse } from '@/types/user';
 import { Button } from '@/components/ui/button';
 import { useLoginModalStore } from '@/store/useLoginModalStore'; // 이거까지 포함 해야함~
 import LoginRequiredModal from '@/components/common/modals/LoginRequiredModal';
 import { useEffect } from 'react';
 import { businessNavItems } from '@/constants/nav';
 import { seekerNavItems } from '@/constants/nav';
+import Loading from '@/components/common/Loading';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,22 +20,22 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const router = useRouter();
   const { open } = useLoginModalStore();
 
-  const { data: profile } = useSWR<UserProfileResponse | null>(
-    user ? '/api/user/profile/' : null,
-    fetchOnClient,
-  );
-  const isBusiness = profile?.base.user_type?.includes('business');
-
-  // TODO: 로그인 가드 문제점 임시 방편 (리팩토링시 제거)
-  if (!user) {
-    redirect('/user/login');
-  }
+  // const { data: profile } = useSWR<UserProfileResponse | null>(
+  //   user ? '/api/user/profile/' : null,
+  //   fetchOnClient,
+  // );
+  const isBusiness = user?.user_type?.includes('business');
 
   useEffect(() => {
     if (!user) {
+      router.push('/user/login');
       open();
     }
-  }, [user, open]);
+  }, [user, open, router]);
+
+  if (!user) {
+    return <Loading />;
+  }
 
   return (
     <main className='flex h-full w-full flex-col overflow-y-auto'>

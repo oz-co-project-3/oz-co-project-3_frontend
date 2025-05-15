@@ -11,7 +11,7 @@ export default async function ProfilePage() {
   const accessToken = cookieStore.get('access_token');
   const refreshToken = cookieStore.get('refresh_token');
 
-  if (!accessToken || !refreshToken) {
+  if (!accessToken && !refreshToken) {
     redirect('/user/login');
   }
 

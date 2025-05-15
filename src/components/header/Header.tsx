@@ -32,11 +32,12 @@ export default function Header() {
 
   const handleLogout = async () => {
     try {
-      logout(); // Zustand 상태 초기화
       await logoutUser();
+      logout(); // Zustand 상태 초기화
       router.push('/');
     } catch (err) {
       console.log('로그아웃 실패:', err);
+      logout(); // Zustand 상태 초기화
       router.refresh();
     }
   };
